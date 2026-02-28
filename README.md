@@ -256,7 +256,8 @@ clawdbot doctor
 
 ## 相关链接
 
-- [AI 朝廷 Skill（一键安装）](https://github.com/wanikua/ai-court-skill)
+- [AI 朝廷 Skill — 中文版](https://github.com/wanikua/ai-court-skill)
+- [AI Team Skill — English](https://github.com/wanikua/ai-team-skill)
 
 - [Clawdbot 官方文档](https://docs.clawd.bot)
 - [Clawdbot GitHub](https://github.com/clawdbot/clawdbot)
