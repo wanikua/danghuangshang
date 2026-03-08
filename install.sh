@@ -16,39 +16,140 @@ echo -e "${BLUE}AI 朝廷一键部署${NC}"
 echo "================================"
 echo ""
 
+# ============================================
+# 检测操作系统和包管理器
+# ============================================
+detect_os() {
+    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        if [ -f /etc/debian_version ]; then
+            echo "debian"
+        elif [ -f /etc/redhat-release ]; then
+            echo "redhat"
+        elif [ -f /etc/alpine-release ]; then
+            echo "alpine"
+        else
+            echo "linux_unknown"
+        fi
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        echo "macos"
+    else
+        echo "unknown"
+    fi
+}
+
+OS_TYPE=$(detect_os)
+
+# 设置包管理器命令
+case "$OS_TYPE" in
+    debian)
+        PKG_UPDATE="sudo apt-get update -qq"
+        PKG_INSTALL="sudo apt-get install -y -qq"
+        ;;
+    redhat)
+        PKG_UPDATE="sudo dnf check-update -qq || sudo yum check-update -qq || true"
+        PKG_INSTALL="sudo dnf install -y -q || sudo yum install -y -q"
+        ;;
+    alpine)
+        PKG_UPDATE="sudo apk update"
+        PKG_INSTALL="sudo apk add --quiet --no-cache"
+        ;;
+    macos)
+        if ! command -v brew &>/dev/null; then
+            echo -e "${RED}✗ macOS 系统需要先安装 Homebrew${NC}"
+            echo "请运行: /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+            exit 1
+        fi
+        PKG_UPDATE="brew update > /dev/null 2>&1 || true"
+        PKG_INSTALL="brew install --quiet"
+        ;;
+    *)
+        echo -e "${RED}✗ 不支持的操作系统: $OSTYPE${NC}"
+        echo "本脚本仅支持: Ubuntu/Debian、CentOS/RHEL、macOS、Alpine"
+        echo "其他系统请手动安装: Node.js 22+、GitHub CLI、Chromium、OpenClaw"
+        exit 1
+        ;;
+esac
+
+echo -e "${GREEN}✓ 检测到系统: $OS_TYPE${NC}"
+
 # ---- 1. 系统更新 ----
 echo -e "${YELLOW}[1/8] 系统更新...${NC}"
-sudo apt-get update -qq
+eval "$PKG_UPDATE"
 
 # ---- 2. 防火墙 ----
 echo -e "${YELLOW}[2/8] 配置防火墙...${NC}"
 # 云服务商 默认 iptables 有一条 REJECT 规则会阻断非 SSH 流量，只删这条
 # 注意：不能 flush 整个链，否则在 DROP 策略下会丢失 SSH 连接
-sudo iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited 2>/dev/null || true
-sudo iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited 2>/dev/null || true
-sudo netfilter-persistent save 2>/dev/null || true
-echo -e "  ${GREEN}✓ 防火墙已配置${NC}"
+if [[ "$OS_TYPE" != "macos" ]]; then
+    sudo iptables -D INPUT -j REJECT --reject-with icmp-host-prohibited 2>/dev/null || true
+    sudo iptables -D FORWARD -j REJECT --reject-with icmp-host-prohibited 2>/dev/null || true
+    sudo netfilter-persistent save 2>/dev/null || true
+    echo -e "  ${GREEN}✓ 防火墙已配置${NC}"
+else
+    echo -e "  ${YELLOW}⚠ macOS 跳过防火墙配置${NC}"
+fi
 
 # ---- 3. Swap（小内存机器需要）----
 echo -e "${YELLOW}[3/8] 配置 Swap...${NC}"
-if [ ! -f /swapfile ]; then
-    sudo fallocate -l 4G /swapfile
-    sudo chmod 600 /swapfile
-    sudo mkswap /swapfile
-    sudo swapon /swapfile
-    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null
-    echo -e "  ${GREEN}✓ 4GB Swap 已创建${NC}"
+if [[ "$OS_TYPE" != "macos" ]]; then
+    if [ ! -f /swapfile ]; then
+        sudo fallocate -l 4G /swapfile 2>/dev/null || sudo dd if=/dev/zero of=/swapfile bs=1G count=4 2>/dev/null
+        sudo chmod 600 /swapfile
+        sudo mkswap /swapfile
+        sudo swapon /swapfile
+        echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null
+        echo -e "  ${GREEN}✓ 4GB Swap 已创建${NC}"
+    else
+        echo -e "  ${GREEN}✓ Swap 已存在，跳过${NC}"
+    fi
 else
-    echo -e "  ${GREEN}✓ Swap 已存在，跳过${NC}"
+    echo -e "  ${YELLOW}⚠ macOS 跳过 Swap 配置${NC}"
 fi
 
 # ---- 4. Node.js ----
-echo -e "${YELLOW}[4/8] 安装 Node.js 22...${NC}"
-if command -v node &>/dev/null && [[ "$(node -v)" == v22* ]]; then
-    echo -e "  ${GREEN}✓ Node.js $(node -v) 已安装${NC}"
+echo -e "${YELLOW}[4/8] 安装 Node.js 22+...${NC}"
+if command -v node &>/dev/null; then
+    NODE_MAJOR_VERSION=$(node -v | cut -d. -f1 | sed 's/v//')
+    if [[ "$NODE_MAJOR_VERSION" -ge 22 ]]; then
+        echo -e "  ${GREEN}✓ Node.js $(node -v) 已安装（版本 >= 22）${NC}"
+    else
+        echo -e "  ${YELLOW}⚠ Node.js $(node -v) 版本过低（需要 >= 22），正在升级...${NC}"
+        case "$OS_TYPE" in
+        debian)
+            curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - > /dev/null 2>&1
+            sudo apt-get install -y nodejs -qq
+            ;;
+        redhat)
+            curl -fsSL https://rpm.nodesource.com/setup_22.x | sudo bash - > /dev/null 2>&1
+            sudo dnf install -y nodejs || sudo yum install -y nodejs
+            ;;
+        alpine)
+            sudo apk add --no-cache nodejs npm
+            ;;
+        macos)
+            brew install node@22
+            ;;
+    esac
+    echo -e "  ${GREEN}✓ Node.js $(node -v) 安装完成${NC}"
+    fi
 else
-    curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - > /dev/null 2>&1
-    sudo apt-get install -y nodejs -qq
+    echo -e "  ${YELLOW}Node.js 未安装，正在安装...${NC}"
+    case "$OS_TYPE" in
+        debian)
+            curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - > /dev/null 2>&1
+            sudo apt-get install -y nodejs -qq
+            ;;
+        redhat)
+            curl -fsSL https://rpm.nodesource.com/setup_22.x | sudo bash - > /dev/null 2>&1
+            sudo dnf install -y nodejs || sudo yum install -y nodejs
+            ;;
+        alpine)
+            sudo apk add --no-cache nodejs npm
+            ;;
+        macos)
+            brew install node@22
+            ;;
+    esac
     echo -e "  ${GREEN}✓ Node.js $(node -v) 安装完成${NC}"
 fi
 
@@ -57,28 +158,76 @@ echo -e "${YELLOW}[5/8] 安装 GitHub CLI...${NC}"
 if command -v gh &>/dev/null; then
     echo -e "  ${GREEN}✓ gh $(gh --version | head -1 | awk '{print $3}') 已安装${NC}"
 else
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg 2>/dev/null
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-    sudo apt-get update -qq && sudo apt-get install gh -y -qq
+    case "$OS_TYPE" in
+        debian)
+            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg 2>/dev/null
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+            sudo apt-get update -qq && sudo apt-get install gh -y -qq
+            ;;
+        redhat)
+            sudo dnf install 'dnf-command(config-manager)' || sudo yum install 'yum-plugin-config-manager'
+            sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo || sudo yum-config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+            sudo dnf install gh || sudo yum install gh
+            ;;
+        alpine)
+            sudo apk add --no-cache gh
+            ;;
+        macos)
+            brew install gh
+            ;;
+    esac
     echo -e "  ${GREEN}✓ gh CLI 安装完成${NC}"
 fi
 
 # ---- 6. Chromium（浏览器，Agent 搜索/截图用）----
 echo -e "${YELLOW}[6/8] 安装 Chromium 浏览器...${NC}"
-if command -v chromium &>/dev/null || command -v chromium-browser &>/dev/null || snap list chromium &>/dev/null 2>&1; then
+if command -v chromium &>/dev/null || command -v chromium-browser &>/dev/null || snap list chromium &>/dev/null 2>&1 || [ -d "/Applications/Chromium.app" ]; then
     echo -e "  ${GREEN}✓ Chromium 已安装，跳过${NC}"
 else
-    # Debian 12+ 包名是 chromium，Ubuntu 用 chromium-browser，snap 作为兜底
-    sudo apt-get install -y chromium -qq 2>/dev/null || sudo apt-get install -y chromium-browser -qq 2>/dev/null || sudo snap install chromium 2>/dev/null
+    case "$OS_TYPE" in
+        debian)
+            # Debian 12+ 包名是 chromium，Ubuntu 用 chromium-browser，snap 作为兜底
+            sudo apt-get install -y chromium -qq 2>/dev/null || sudo apt-get install -y chromium-browser -qq 2>/dev/null || sudo snap install chromium 2>/dev/null
+            ;;
+        redhat)
+            # CentOS/RHEL 需要先启用 EPEL 仓库和 CRB
+            sudo dnf install -y epel-release || sudo yum install -y epel-release
+            sudo dnf config-manager --set-enabled crb 2>/dev/null || sudo yum-config-manager --enable crb 2>/dev/null || true
+            # EPEL 仓库的包名是 chromium-headless
+            sudo dnf install -y chromium-headless || sudo yum install -y chromium-headless
+            ;;
+        alpine)
+            sudo apk add --no-cache chromium
+            ;;
+        macos)
+            brew install --cask chromium
+            ;;
+    esac
     echo -e "  ${GREEN}✓ Chromium 安装完成${NC}"
 fi
+
 # 设置 Puppeteer 浏览器路径（OpenClaw 的浏览器 skill 需要）
 if ! grep -q PUPPETEER_EXECUTABLE_PATH ~/.bashrc 2>/dev/null; then
-    # 按优先级查找：chromium（Debian）→ chromium-browser（Ubuntu）→ snap
-    CHROME_BIN=$(which chromium 2>/dev/null || which chromium-browser 2>/dev/null || echo "/snap/chromium/current/usr/lib/chromium-browser/chrome")
-    if [ ! -f "$CHROME_BIN" ]; then
-        CHROME_BIN="/snap/chromium/current/usr/lib/chromium-browser/chrome"
-    fi
+    case "$OS_TYPE" in
+        macos)
+            CHROME_BIN="/Applications/Chromium.app/Contents/MacOS/Chromium"
+            ;;
+        debian|alpine)
+            # 按优先级查找：chromium（Debian/Alpine）→ chromium-browser（Ubuntu）→ snap
+            CHROME_BIN=$(which chromium 2>/dev/null || which chromium-browser 2>/dev/null || echo "/snap/chromium/current/usr/lib/chromium-browser/chrome")
+            if [ ! -f "$CHROME_BIN" ]; then
+                CHROME_BIN="/snap/chromium/current/usr/lib/chromium-browser/chrome"
+            fi
+            ;;
+        redhat)
+            # CentOS/RHEL 使用 chromium-headless
+            CHROME_BIN="/usr/lib64/chromium-browser/headless_shell"
+            if [ ! -f "$CHROME_BIN" ]; then
+                # 兜底：查找 google-chrome
+                CHROME_BIN=$(which google-chrome 2>/dev/null || which google-chrome-stable 2>/dev/null || echo "/usr/bin/google-chrome-stable")
+            fi
+            ;;
+    esac
     echo "export PUPPETEER_EXECUTABLE_PATH=\"$CHROME_BIN\"" >> ~/.bashrc
     echo -e "  ${GREEN}✓ 浏览器路径已配置 ($CHROME_BIN)${NC}"
 fi
@@ -89,7 +238,15 @@ if command -v openclaw &>/dev/null; then
     CURRENT_VER=$(openclaw --version 2>/dev/null || echo "unknown")
     echo -e "  ${GREEN}✓ OpenClaw 已安装 ($CURRENT_VER)，更新中...${NC}"
 fi
-sudo npm install -g openclaw --loglevel=error
+
+# 检测包管理器：优先使用 pnpm，其次 npm
+if command -v pnpm &>/dev/null; then
+    echo -e "  ${BLUE}使用 pnpm 安装...${NC}"
+    pnpm add -g openclaw --loglevel=error
+else
+    echo -e "  ${BLUE}使用 npm 安装...${NC}"
+    sudo npm install -g openclaw --loglevel=error
+fi
 echo -e "  ${GREEN}✓ OpenClaw $(openclaw --version 2>/dev/null) 安装完成${NC}"
 
 # ---- 8. 初始化工作区 ----
@@ -313,9 +470,13 @@ mkdir -p memory
 
 # ---- 安装 Gateway 服务（开机自启）----
 echo -e "${YELLOW}安装 Gateway 服务...${NC}"
-openclaw gateway install 2>/dev/null \
-    && echo -e "  ${GREEN}✓ Gateway 服务已安装（开机自启）${NC}" \
-    || echo -e "  ${YELLOW}⚠ Gateway 服务安装跳过（配置填好后运行 openclaw gateway install）${NC}"
+if [[ "$OS_TYPE" != "macos" ]]; then
+    openclaw gateway install 2>/dev/null \
+        && echo -e "  ${GREEN}✓ Gateway 服务已安装（开机自启）${NC}" \
+        || echo -e "  ${YELLOW}⚠ Gateway 服务安装跳过（配置填好后运行 openclaw gateway install）${NC}"
+else
+    echo -e "  ${YELLOW}⚠ macOS 跳过 Gateway 服务安装${NC}"
+fi
 
 echo ""
 echo "================================"
@@ -338,10 +499,18 @@ echo "     e) 每个 Bot 都要开启 Message Content Intent"
 echo "     f) 邀请所有 Bot 到你的 Discord 服务器"
 echo ""
 echo -e "  ${YELLOW}3. 启动朝廷${NC}"
-echo "     systemctl --user start openclaw-gateway"
+if [[ "$OS_TYPE" != "macos" ]]; then
+    echo "     systemctl --user start openclaw-gateway"
+else
+    echo "     openclaw gateway start"
+fi
 echo ""
 echo -e "  ${YELLOW}4. 验证${NC}"
-echo "     systemctl --user status openclaw-gateway"
+if [[ "$OS_TYPE" != "macos" ]]; then
+    echo "     systemctl --user status openclaw-gateway"
+else
+    echo "     openclaw gateway status"
+fi
 echo "     然后在 Discord @你的Bot 说话试试"
 echo ""
 echo -e "  ${YELLOW}5. 添加定时任务（可选）${NC}"
