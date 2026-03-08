@@ -175,7 +175,7 @@ openclaw cron add \
 
 | 类别 | Skill |
 |------|-------|
-| 开发 | GitHub（Issue/PR/CI）、Coding Agent（Coding Agent） |
+| 开发 | GitHub（Issue/PR/CI）、Coding Agent（代码生成与重构） |
 | 文档 | Notion（数据库/页面/自动汇报） |
 | 信息 | 浏览器自动化、Web 搜索、Web 抓取 |
 | 自动化 | Cron 定时任务、心跳自检 |
