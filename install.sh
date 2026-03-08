@@ -65,17 +65,19 @@ fi
 
 # ---- 6. Chromium（浏览器，Agent 搜索/截图用）----
 echo -e "${YELLOW}[6/8] 安装 Chromium 浏览器...${NC}"
-if command -v chromium-browser &>/dev/null || snap list chromium &>/dev/null 2>&1; then
+if command -v chromium &>/dev/null || command -v chromium-browser &>/dev/null || snap list chromium &>/dev/null 2>&1; then
     echo -e "  ${GREEN}✓ Chromium 已安装，跳过${NC}"
 else
-    sudo snap install chromium 2>/dev/null || sudo apt-get install -y chromium-browser -qq
+    # Debian 12+ 包名是 chromium，Ubuntu 用 chromium-browser，snap 作为兜底
+    sudo apt-get install -y chromium -qq 2>/dev/null || sudo apt-get install -y chromium-browser -qq 2>/dev/null || sudo snap install chromium 2>/dev/null
     echo -e "  ${GREEN}✓ Chromium 安装完成${NC}"
 fi
 # 设置 Puppeteer 浏览器路径（OpenClaw 的浏览器 skill 需要）
 if ! grep -q PUPPETEER_EXECUTABLE_PATH ~/.bashrc 2>/dev/null; then
-    CHROME_BIN="/snap/chromium/current/usr/lib/chromium-browser/chrome"
+    # 按优先级查找：chromium（Debian）→ chromium-browser（Ubuntu）→ snap
+    CHROME_BIN=$(which chromium 2>/dev/null || which chromium-browser 2>/dev/null || echo "/snap/chromium/current/usr/lib/chromium-browser/chrome")
     if [ ! -f "$CHROME_BIN" ]; then
-        CHROME_BIN=$(which chromium-browser 2>/dev/null || echo "/snap/chromium/current/usr/lib/chromium-browser/chrome")
+        CHROME_BIN="/snap/chromium/current/usr/lib/chromium-browser/chrome"
     fi
     echo "export PUPPETEER_EXECUTABLE_PATH=\"$CHROME_BIN\"" >> ~/.bashrc
     echo -e "  ${GREEN}✓ 浏览器路径已配置 ($CHROME_BIN)${NC}"
