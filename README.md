@@ -7,7 +7,7 @@
 ### 30 分钟搭建 · 多 Agent 协作 · 零代码 · 古代治国智慧 × 现代 AI 管理
 
 > **以明朝三省六部制为蓝本，用 [OpenClaw](https://github.com/openclawai/openclaw) 框架构建的多 Agent 协作系统。**
-> 一台免费服务器 + OpenClaw = 一支 7×24 在线的 AI 朝廷。
+> 一台服务器 + OpenClaw = 一支 7×24 在线的 AI 朝廷。
 
 <p align="center">
   <img src="https://img.shields.io/badge/架构灵感-三省六部制-gold?style=for-the-badge" />

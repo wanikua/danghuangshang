@@ -7,7 +7,7 @@
 ### 30-Minute Setup · Multi-Agent Collaboration · Zero Code · Ancient Governance Wisdom × Modern AI Management
 
 > **Modeled after the Ming Dynasty's Three Departments and Six Ministries (三省六部制), built on the [OpenClaw](https://github.com/openclawai/openclaw) framework.**
-> One free server + OpenClaw = A 24/7 AI imperial court at your command.
+> One server + OpenClaw = A 24/7 AI imperial court at your command.
 
 <p align="center">
   <img src="https://img.shields.io/badge/Inspired_By-Six_Ministries_System-gold?style=for-the-badge" />

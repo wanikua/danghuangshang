@@ -204,7 +204,7 @@ cat > "$CONFIG_DIR/openclaw.json" << CONFIG_EOF
         "id": "bingbu",
         "name": "兵部",
         "model": { "primary": "your-provider/strong-model" },
-        "identity": { "theme": "你是兵部尚书，专精软件工程、系统架构、代码审查。回答用中文，直接给方案。任务完成后主动汇报结果摘要。如需其他部门配合（如工部部署、刑部合规审查），通过 sessions_send 通知对方。" },
+        "identity": { "theme": "你是兵部尚书，专精软件工程、系统架构、代码审查。回答用中文，直接给方案。任务完成后主动汇报结果摘要。如需其他部门配合，通过 sessions_send 通知对方。" },
         "sandbox": { "mode": "all", "scope": "agent" },
         "runTimeoutSeconds": 300
       },
