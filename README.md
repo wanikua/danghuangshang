@@ -1,10 +1,74 @@
-[English Version](./README_EN.md)
+[English Version](./README_EN.md) | [🏢 企业版 Become CEO (English)](https://github.com/wanikua/become-ceo)
 
-# 🏛️ 30 分钟搭建你的 AI 朝廷
+<!-- SEO 关键词 / Keywords：三省六部、明朝、六部制、中书省、门下省、尚书省、司礼监、兵部、户部、礼部、工部、刑部、吏部、AI朝廷、AI Agent、多Agent协作、人工智能管理、古代治国、现代管理、组织架构、OpenClaw、multi-agent、ancient-china -->
 
-> 一台免费服务器 + [OpenClaw](https://github.com/openclawai/openclaw) = 一支 7×24 在线的 AI 团队
+# 🏛️ AI 朝廷 — 用三省六部制管理你的 AI Agent 团队
 
-写代码、管财务、搞营销、写日报、运维部署——你只需要在 Discord 里发一条消息。
+### 30 分钟搭建 · 多 Agent 协作 · 零代码 · 古代治国智慧 × 现代 AI 管理
+
+> **以明朝三省六部制为蓝本，用 [OpenClaw](https://github.com/openclawai/openclaw) 框架构建的多 Agent 协作系统。**
+> 一台免费服务器 + OpenClaw = 一支 7×24 在线的 AI 朝廷。
+
+<p align="center">
+  <img src="https://img.shields.io/badge/架构灵感-三省六部制-gold?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/框架-OpenClaw-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Agent数-7+-green?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/内置Skill-60+-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/部署-5分钟-red?style=for-the-badge" />
+</p>
+
+---
+
+## 📜 这个项目是什么？
+
+**AI 朝廷**是一个开箱即用的多 AI Agent 协作系统，将中国古代的**三省六部制**（中书省 · 门下省 · 尚书省 → 吏部 · 户部 · 礼部 · 兵部 · 刑部 · 工部）映射为现代 AI Agent 的组织架构。
+
+**简单来说：** 你是皇帝 👑，AI 是你的大臣。每位大臣各司其职——写代码的、管财务的、搞营销的、做运维的——你只需要在 Discord 里下一道「圣旨」（@某个 Agent），大臣们就会立刻执行。
+
+### 🤔 为什么用古代朝廷架构？
+
+古代三省六部制是人类历史上运行时间最久的组织管理体系之一（隋唐至清末，超过 1300 年）。它的核心设计理念：
+
+- **🏛️ 职责分明** — 六部各司其职，互不越权（= AI Agent 各有专长）
+- **📋 流程标准化** — 奏折制度、批红制度（= Prompt 模板 + SOUL.md 人格注入）
+- **🔄 权力制衡** — 三省互相制约（= Agent 互审、多步确认）
+- **📜 档案留存** — 起居注、实录制度（= Memory 持久化、Notion 自动归档）
+
+这些思想完美映射到现代多 Agent 系统的设计需求。**古代治国的智慧，就是现代管理 AI 团队的最佳实践。**
+
+### 🎯 核心能力一览
+
+| 能力 | 描述 |
+|------|------|
+| 🤖 **多 Agent 协作** | 7 个独立 AI Agent（六部 + 司礼监），各有专长，协同工作 |
+| 🧠 **独立记忆** | 每个 Agent 有独立工作区和 memory 文件，越用越懂你 |
+| 🛠️ **60+ 内置 Skill** | GitHub、Notion、浏览器、Cron、TTS 等开箱即用 |
+| ⏰ **自动化任务** | Cron 定时任务 + 心跳自检，7×24 无人值守 |
+| 🔒 **沙箱隔离** | Docker 容器隔离，Agent 代码执行互不干扰 |
+| 💬 **Discord 原生** | 手机电脑都能用，@mention 即可调用，零学习成本 |
+| 🖥️ **Web 管理后台** | React + TypeScript 构建的 Dashboard，可视化管理 |
+| 🌐 **OpenClaw 生态** | 基于 [OpenClaw](https://github.com/openclawai/openclaw) 框架，可使用 [OpenClaw Hub](https://github.com/openclawai/openclaw) 的 Skill 生态 |
+
+### 🏢 想要企业版？
+
+如果你更熟悉现代企业管理概念，我们有**英文企业版**：
+
+👉 **[Become CEO](https://github.com/wanikua/become-ceo)** — 同一套架构，用 CEO / CTO / CFO / CMO 等企业角色代替朝廷六部
+
+| 🏛️ 朝廷角色 | 🏢 企业角色 | 职责 |
+|:---:|:---:|:---:|
+| 皇帝 👑 | CEO | 最高决策者 |
+| 司礼监 | COO / 首席运营官 | 日常调度、任务分配 |
+| 兵部 | CTO / 工程VP | 软件工程、技术架构 |
+| 户部 | CFO / 财务VP | 财务分析、成本管控 |
+| 礼部 | CMO / 营销VP | 品牌营销、内容策划 |
+| 工部 | VP Infra / SRE | DevOps、基础设施 |
+| 吏部 | VP Product / PMO | 项目管理、团队协调 |
+| 刑部 | General Counsel | 法务合规、合同审查 |
+
+> 💡 两个项目基于相同的 [OpenClaw](https://github.com/openclawai/openclaw) 框架，架构完全一致，只是角色命名和文化背景不同。选你喜欢的风格即可！
+
+---
 
 ![系统架构](./images/flow-architecture.png)
 
@@ -27,6 +91,8 @@
 | 界面 | 网页 | 命令行 / 自建 UI | ✅ Discord 原生（手机电脑都能用） |
 | 部署难度 | 无需部署 | 需 Docker + 编码 | ✅ 一键脚本，5 分钟跑起来 |
 | 24h 在线 | ❌ 需手动对话 | ✅ | ✅ 定时任务 + 心跳自检 |
+| 组织架构隐喻 | ❌ 无 | ❌ 无 | ✅ 三省六部制，职责分明 |
+| 框架生态 | 封闭 | 自建 | ✅ OpenClaw Hub Skill 生态 |
 
 **核心优势：不是框架，是成品。** 跑个脚本就能用，在 Discord 里 @谁谁回复。
 
@@ -35,25 +101,39 @@
 ## 技术架构
 
 ```
-Discord 消息
-    ↓
-OpenClaw Gateway（Node.js 守护进程）
-    ├── 消息路由：@mention → 匹配 binding → 分发到对应 Agent
-    ├── 会话隔离：每个 Agent 独立会话、独立工作目录
-    ├── 自动 Thread：大任务自动开 Thread，频道不刷屏
-    └── Cron 调度：定时触发 Agent 执行任务
-         ↓
-    ┌─────────┐  ┌─────────┐  ┌─────────┐
-    │ 兵部    │  │ 户部    │  │ 礼部    │  ... (可扩展)
-    │ 强力模型    │  │ 强力模型    │  │ 快速模型  │
-    │ 编码专家│  │ 财务专家│  │ 营销专家│
-    └────┬────┘  └────┬────┘  └────┬────┘
-         │            │            │
-    ┌────┴────────────┴────────────┴────┐
-    │         Skill 工具层（60+）        │
-    │  GitHub · Notion · 浏览器 · Cron  │
-    │  TTS · 天气 · 截图 · 视频处理 …  │
-    └───────────────────────────────────┘
+                        ┌─────────────────────┐
+                        │   👑 皇帝（你）      │
+                        │   Discord / Web UI   │
+                        └──────────┬──────────┘
+                                   │ 圣旨（@mention）
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │   OpenClaw Gateway（中书省）    │
+                    │   Node.js 守护进程             │
+                    │   ┌────────────────────────┐  │
+                    │   │ 📨 消息路由（门下省审核）  │  │
+                    │   │ @mention → 匹配 → 分发   │  │
+                    │   │ 会话隔离 · 自动Thread    │  │
+                    │   │ Cron调度 · 心跳自检      │  │
+                    │   └────────────────────────┘  │
+                    └──────┬───┬───┬───┬───┬───┬───┘
+                           │   │   │   │   │   │
+              ┌────────────┘   │   │   │   │   └────────────┐
+              ▼                ▼   ▼   ▼   ▼                ▼
+        ┌──────────┐  ┌────┐ ┌────┐ ┌────┐ ┌────┐  ┌──────────┐
+        │ 司礼监   │  │兵部│ │户部│ │礼部│ │工部│  │  刑部    │
+        │ 总管调度 │  │编码│ │财务│ │营销│ │运维│  │  法务    │
+        └──────────┘  └────┘ └────┘ └────┘ └────┘  └──────────┘
+              │          │      │      │      │          │
+              └──────────┴──────┴──────┴──────┴──────────┘
+                                   │
+                    ┌──────────────┴──────────────┐
+                    │    尚书省（Skill 执行层）      │
+                    │    60+ 内置 Skill 工具        │
+                    │  GitHub · Notion · 浏览器     │
+                    │  Cron · TTS · 截图 · 视频     │
+                    │  OpenClaw Hub 扩展 Skill      │
+                    └──────────────────────────────┘
 ```
 
 每个 Agent 是一个独立的 Discord Bot，绑定独立的 AI 身份：
@@ -61,6 +141,62 @@ OpenClaw Gateway（Node.js 守护进程）
 - **独立模型**：重活用 强力模型，轻活用 快速模型，省钱又高效
 - **独立沙箱**：Agent 代码执行互不干扰，安全隔离
 - **身份注入**：OpenClaw 自动将 SOUL.md + IDENTITY.md + 工作区文件组装为系统提示
+
+---
+
+## 🎬 效果展示
+
+### Discord 对话示例
+
+```
+👑 皇帝：@兵部 帮朕写一个用户登录的 REST API，用 Node.js + Express
+
+🏛️ 兵部：遵旨，臣即刻动手。
+  📁 已创建 auth-api/ 项目结构
+  ✅ POST /api/login — JWT 认证
+  ✅ POST /api/register — 用户注册
+  ✅ middleware/auth.js — Token 验证中间件
+  ✅ 已提交至 GitHub：wanikua/auth-api#1
+  臣已完工，请陛下御览。
+
+👑 皇帝：@户部 这个月 API 花了多少钱？
+
+🏛️ 户部：启禀陛下，本月 API 支出如下：
+  💰 总计：$23.47
+  ├── 兵部（强力模型）：$15.20（编码任务 142 次）
+  ├── 礼部（快速模型）：$3.80（文案任务 89 次）
+  ├── 司礼监（快速模型）：$2.12（日常对话 203 次）
+  └── 其他：$2.35
+  📊 环比上月 -12%，主要因兵部优化了 Prompt 长度。
+
+👑 皇帝：@礼部 写条小红书文案，推荐 AI 工具搭建
+
+🏛️ 礼部：遵旨！文案如下：
+  📝 标题：「普通人也能当AI皇帝？我用6个AI管理整个团队」
+  正文：还在一个个对话框里跟AI聊天？我直接搭了个AI朝廷...
+  🏷️ #AI工具 #效率提升 #多Agent #AI朝廷 #三省六部
+
+👑 皇帝：@everyone 明天下午三点开会，各部门准备周报
+
+🏛️ 司礼监：遵旨，臣已记录会议安排。
+🏛️ 兵部：臣收到，将整理本周代码产出。
+🏛️ 户部：臣收到，将备好财务报表。
+🏛️ 礼部：臣收到，将汇总营销数据。
+🏛️ 工部：臣收到，将备好服务器运行报告。
+```
+
+---
+
+## 使用场景
+
+| 场景 | 描述 | 涉及部门 |
+|------|------|----------|
+| 🚀 **独立开发者** | 一个人拥有完整技术团队，编码 + 运维 + 营销全覆盖 | 兵部 + 工部 + 礼部 |
+| 🏫 **学生学习** | AI 导师团队，不同科目不同 Agent，各有记忆 | 全六部可自定义 |
+| 🏢 **创业团队** | 低成本 AI 助手矩阵，覆盖产品、技术、运营 | 全六部 |
+| 📱 **自媒体运营** | 内容创作 + 数据分析 + 财务管理一体化 | 礼部 + 户部 |
+| 🔬 **科研项目** | 文献搜索 + 代码实验 + 论文写作 | 兵部 + 礼部 |
+| 🎮 **AI 实验/娱乐** | Agent 互相对话、成语接龙、模拟朝会 | 全六部 |
 
 ---
 
@@ -144,19 +280,26 @@ openclaw cron add \
 
 ---
 
-## 朝廷架构——六部制
+## 朝廷架构——三省六部制
 
-灵感来自明朝六部制度，每个"部门"是一个独立的 AI Agent + Discord Bot：
+### 历史背景
 
-| 部门 | 职责 | 推荐模型 | 典型场景 |
-|------|------|----------|----------|
-| **司礼监** | 总管调度 | 快速模型 | 日常对话、任务分配、自动汇报 |
-| **兵部** | 软件工程 | 强力模型 | 写代码、架构设计、代码审查、Bug 调试 |
-| **户部** | 财务运营 | 强力模型 | 成本分析、预算管控、电商运营 |
-| **礼部** | 品牌营销 | 快速模型 | 文案创作、社媒运营、内容策划 |
-| **工部** | 运维部署 | 快速模型 | DevOps、CI/CD、服务器管理 |
-| **吏部** | 项目管理 | 快速模型 | 创业孵化、任务追踪、团队协调 |
-| **刑部** | 法务合规 | 快速模型 | 合同审查、知识产权、合规检查 |
+三省六部制是中国古代的中央官制体系：
+- **中书省**：起草诏令（= 接收用户指令、生成计划）
+- **门下省**：审核驳回（= 消息路由、权限校验）
+- **尚书省**：执行落实（= Skill 工具层、实际执行）
+
+尚书省下设**六部**，各管一摊。在本项目中，OpenClaw Gateway 扮演三省的角色，六个 AI Agent 对应六部：
+
+| 部门 | 古代职责 | AI 职责 | 推荐模型 | 典型场景 |
+|------|----------|---------|----------|----------|
+| **司礼监** | 皇帝近侍、批红 | 总管调度 | 快速模型 | 日常对话、任务分配、自动汇报 |
+| **兵部** | 军事武备 | 软件工程 | 强力模型 | 写代码、架构设计、代码审查、Bug 调试 |
+| **户部** | 户籍财税 | 财务运营 | 强力模型 | 成本分析、预算管控、电商运营 |
+| **礼部** | 礼仪外交 | 品牌营销 | 快速模型 | 文案创作、社媒运营、内容策划 |
+| **工部** | 工程营造 | 运维部署 | 快速模型 | DevOps、CI/CD、服务器管理 |
+| **吏部** | 官员选拔 | 项目管理 | 快速模型 | 创业孵化、任务追踪、团队协调 |
+| **刑部** | 司法刑狱 | 法务合规 | 快速模型 | 合同审查、知识产权、合规检查 |
 
 > 💡 模型分层策略：重活（编码/分析）用 强力模型，轻活（文案/管理）用 快速模型，能省 5 倍成本。也可以接入 经济模型 等国产模型进一步降本。
 
@@ -171,8 +314,8 @@ openclaw cron add \
 ### 🧠 独立记忆系统
 每个 Agent 有独立的工作区和 `memory/` 目录。对话积累的项目知识会持久化到文件，跨会话保留。Agent 越用越懂你的项目。
 
-### 🛠️ 60+ 内置 Skill
-不只是聊天——内置的工具覆盖开发全流程：
+### 🛠️ 60+ 内置 Skill（基于 OpenClaw 生态）
+不只是聊天——内置的工具覆盖开发全流程，且可通过 [OpenClaw Hub](https://github.com/openclawai/openclaw) 扩展更多 Skill：
 
 | 类别 | Skill |
 |------|-------|
@@ -183,6 +326,7 @@ openclaw cron add \
 | 媒体 | TTS 语音、截图、视频帧提取 |
 | 运维 | tmux 远程控制、Shell 命令执行 |
 | 通信 | Discord、Slack、Telegram、WhatsApp、Signal… |
+| 扩展 | OpenClaw Hub 社区 Skill、自定义 Skill |
 
 ### ⏰ 定时任务（Cron）
 内置 Cron 调度器，让 Agent 定时自动执行：
@@ -238,7 +382,7 @@ Discord 本身就是最佳的 GUI 管理界面：
 
 ### Notion 作为数据可视化补充
 
-通过 Notion Skill 集成，朝廷的数据可以自动同步到 Notion：
+通过 OpenClaw 的 Notion Skill 集成，朝廷的数据可以自动同步到 Notion：
 - **起居注（日报）**、**朔望录（周报）**自动生成
 - **食货表（财务）**自动记录 API 消耗
 - **列传（项目）**追踪各项目进展
@@ -273,6 +417,9 @@ ChatGPT 是一个通才，对话结束就失忆。这套系统是多个专家—
 **Q: 每月 API 费用大概多少？**
 看使用强度。轻度使用 $10-15/月，中度 $20-30/月。省钱技巧：重活用 强力模型，轻活用 快速模型（便宜约 5 倍），简单任务可接入 经济模型 等国产模型进一步降本。
 
+**Q: 和 Become CEO 项目有什么关系？**
+[Become CEO](https://github.com/wanikua/become-ceo) 是本项目的英文企业版，使用相同的 OpenClaw 框架和架构，只是将朝廷角色换成了现代企业角色（CTO、CFO 等）。喜欢中国古代风格选 AI 朝廷，喜欢现代企业风格选 Become CEO。
+
 ### 技术问题
 
 **Q: @everyone 不触发 Agent 回复？**
@@ -302,7 +449,7 @@ sandbox mode 设成 `all` 会把 Agent 跑在 Docker 容器里，默认只读文
 能。Agent 可以通过 `sessions_spawn` 产生子任务给其他 Agent，也可以通过 `sessions_send` 发消息给其他 Agent 的会话。比如司礼监可以把编码任务派给兵部。
 
 **Q: 怎么自定义 Skill？**
-OpenClaw 有内置的 Skill Creator 工具，可以创建自定义 Skill。每个 Skill 是一个包含 `SKILL.md`（指令）+ 脚本 + 资源的目录。放到工作区的 `skills/` 目录下即可被 Agent 使用。
+OpenClaw 有内置的 Skill Creator 工具，可以创建自定义 Skill。每个 Skill 是一个包含 `SKILL.md`（指令）+ 脚本 + 资源的目录。放到工作区的 `skills/` 目录下即可被 Agent 使用。也可以从 [OpenClaw Hub](https://github.com/openclawai/openclaw) 获取社区共享的 Skill。
 
 **Q: 怎么接入私有模型（Ollama 等）？**
 在 `openclaw.json` 的 `models.providers` 中添加兼容 OpenAI API 格式的 provider，指定 `baseUrl` 到你的 Ollama 地址即可。Ollama 本地模型零 API 费用。
@@ -331,10 +478,10 @@ openclaw doctor
 
 ## 相关链接
 
-- [AI 朝廷 Skill — 中文版](https://github.com/wanikua/ai-court-skill)
-- [Become CEO — English](https://github.com/wanikua/become-ceo)
-- [OpenClaw 官方文档](https://docs.openclaw.ai)
-- [OpenClaw GitHub](https://github.com/openclawai/openclaw)
+- 🏢 [Become CEO — 企业版（English）](https://github.com/wanikua/become-ceo) — 同一架构的现代企业版
+- 🎭 [AI 朝廷 Skill — 中文版](https://github.com/wanikua/ai-court-skill)
+- 🔧 [OpenClaw 框架](https://github.com/openclawai/openclaw) — 本项目的底层框架
+- 📖 [OpenClaw 官方文档](https://docs.openclaw.ai)
 
 ## ⚠️ 免责声明 / Disclaimer
 
@@ -366,6 +513,6 @@ openclaw doctor
 
 ---
 
-v3.4 | MIT License
+v3.5 | MIT License
 
 > 📜 This project is licensed under MIT. If you create derivative works or projects inspired by this architecture, please credit the original: [boluobobo-ai-court-tutorial](https://github.com/wanikua/boluobobo-ai-court-tutorial) by [@wanikua](https://github.com/wanikua)

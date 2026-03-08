@@ -1,10 +1,74 @@
-[中文版](./README.md)
+[中文版](./README.md) | [🏢 Corporate Edition: Become CEO](https://github.com/wanikua/become-ceo)
 
-# 🏛️ Build Your AI Court in 30 Minutes
+<!-- SEO Keywords: Three Departments and Six Ministries, Ming Dynasty, Six Ministries System, Zhongshu Province, Menxia Province, Shangshu Province, AI Court, AI Agent, Multi-Agent Collaboration, AI Management, Ancient China Governance, Modern Management, Organization Architecture, OpenClaw, multi-agent, ancient-china -->
 
-> One free server + [OpenClaw](https://github.com/openclawai/openclaw) = A 24/7 AI team at your command
+# 🏛️ AI Court — Manage Your AI Agent Team with China's Imperial Six Ministries System
 
-Writing code, managing finances, running marketing campaigns, generating daily reports, handling DevOps — all you need to do is send a message in Discord.
+### 30-Minute Setup · Multi-Agent Collaboration · Zero Code · Ancient Governance Wisdom × Modern AI Management
+
+> **Modeled after the Ming Dynasty's Three Departments and Six Ministries (三省六部制), built on the [OpenClaw](https://github.com/openclawai/openclaw) framework.**
+> One free server + OpenClaw = A 24/7 AI imperial court at your command.
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Inspired_By-Six_Ministries_System-gold?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Framework-OpenClaw-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Agents-7+-green?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Built--in_Skills-60+-orange?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Deploy-5_min-red?style=for-the-badge" />
+</p>
+
+---
+
+## 📜 What Is This?
+
+**AI Court** is a ready-to-use multi-AI-agent collaboration system that maps China's ancient **Three Departments and Six Ministries** (中书省 Zhongshu · 门下省 Menxia · 尚书省 Shangshu → 吏部 Personnel · 户部 Revenue · 礼部 Rites · 兵部 War · 刑部 Justice · 工部 Works) onto a modern AI agent organization.
+
+**In plain terms:** You are the Emperor 👑, and AI agents are your ministers. Each minister has a clear role — one writes code, one manages finances, one handles marketing, one runs DevOps — all you do is issue an "imperial decree" (@mention an agent in Discord), and they execute immediately.
+
+### 🤔 Why an Ancient Court Architecture?
+
+The Three Departments and Six Ministries system was one of the longest-running organizational frameworks in human history (Sui/Tang to Qing dynasty, over 1,300 years). Its core design principles:
+
+- **🏛️ Clear Separation of Duties** — Each ministry handles its own domain, no overstepping (= each AI Agent has its specialty)
+- **📋 Standardized Processes** — Memorial submission and imperial review systems (= Prompt templates + SOUL.md persona injection)
+- **🔄 Checks and Balances** — Three Departments cross-verify (= Agent cross-review, multi-step confirmation)
+- **📜 Record Keeping** — Court diaries and historical records (= Memory persistence, Notion auto-archival)
+
+These concepts map perfectly to modern multi-agent system design needs. **Ancient governance wisdom is the best practice for modern AI team management.**
+
+### 🎯 Core Capabilities at a Glance
+
+| Capability | Description |
+|-----------|-------------|
+| 🤖 **Multi-Agent Collaboration** | 7 independent AI Agents (Six Ministries + Chief Steward), each specialized, working in concert |
+| 🧠 **Independent Memory** | Each agent has its own workspace and memory files — the more you use it, the better it knows you |
+| 🛠️ **60+ Built-in Skills** | GitHub, Notion, Browser, Cron, TTS and more, ready out of the box |
+| ⏰ **Automated Tasks** | Cron scheduling + heartbeat self-checks, 24/7 unattended operation |
+| 🔒 **Sandbox Isolation** | Docker container isolation, agent code runs independently |
+| 💬 **Native Discord** | Works on phone & desktop, @mention to invoke, zero learning curve |
+| 🖥️ **Web Dashboard** | React + TypeScript dashboard for visual management |
+| 🌐 **OpenClaw Ecosystem** | Built on [OpenClaw](https://github.com/openclawai/openclaw), access the [OpenClaw Hub](https://github.com/openclawai/openclaw) Skill ecosystem |
+
+### 🏢 Prefer a Corporate Edition?
+
+If you're more familiar with modern corporate management concepts, we have an **English corporate version**:
+
+👉 **[Become CEO](https://github.com/wanikua/become-ceo)** — Same architecture, using CEO / CTO / CFO / CMO roles instead of imperial ministries
+
+| 🏛️ Court Role | 🏢 Corporate Role | Responsibility |
+|:---:|:---:|:---:|
+| Emperor 👑 | CEO | Ultimate decision maker |
+| 司礼监 Chief Steward | COO | Daily coordination, task delegation |
+| 兵部 War Ministry | CTO / VP Engineering | Software engineering, architecture |
+| 户部 Revenue Ministry | CFO / VP Finance | Financial analysis, cost management |
+| 礼部 Rites Ministry | CMO / VP Marketing | Brand marketing, content strategy |
+| 工部 Works Ministry | VP Infra / SRE | DevOps, infrastructure |
+| 吏部 Personnel Ministry | VP Product / PMO | Project management, team coordination |
+| 刑部 Justice Ministry | General Counsel | Legal compliance, contract review |
+
+> 💡 Both projects are built on the same [OpenClaw](https://github.com/openclawai/openclaw) framework with identical architecture — only the role names and cultural context differ. Pick the style you prefer!
+
+---
 
 ![System Architecture](./images/flow-architecture.png)
 
@@ -26,6 +90,8 @@ Writing code, managing finances, running marketing campaigns, generating daily r
 | Interface | Web | CLI / Self-hosted UI | ✅ Native Discord (works on phone & desktop) |
 | Deployment difficulty | No deployment needed | Docker + coding required | ✅ One-line script, up in 5 minutes |
 | 24h availability | ❌ Manual conversations only | ✅ | ✅ Cron jobs + heartbeat self-checks |
+| Organizational metaphor | ❌ None | ❌ None | ✅ Six Ministries system, clear separation of duties |
+| Framework ecosystem | Closed | Build your own | ✅ OpenClaw Hub Skill ecosystem |
 
 **The key advantage: it's not a framework — it's a finished product.** Run a script, start chatting in Discord by @mentioning your agents.
 
@@ -34,25 +100,40 @@ Writing code, managing finances, running marketing campaigns, generating daily r
 ## Architecture
 
 ```
-Discord Message
-    ↓
-OpenClaw Gateway (Node.js daemon)
-    ├── Message routing: @mention → match binding → dispatch to agent
-    ├── Session isolation: each agent has its own session & workspace
-    ├── Auto-threading: large tasks automatically spawn Threads
-    └── Cron scheduler: time-triggered agent tasks
-         ↓
-    ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-    │ 兵部 bingbu  │  │ 户部 hubu    │  │ 礼部 libu    │  ... (extensible)
-    │ Power Model  │  │ Power Model  │  │ Fast Model   │
-    │ Code Expert  │  │ Finance Pro  │  │ Marketing Pro│
-    └──────┬───────┘  └──────┬───────┘  └──────┬───────┘
-           │                 │                  │
-    ┌──────┴─────────────────┴──────────────────┴──────┐
-    │              Skill Layer (60+)                    │
-    │  GitHub · Notion · Browser · Cron                │
-    │  TTS · Weather · Screenshots · Video …           │
-    └──────────────────────────────────────────────────┘
+                        ┌───────────────────────────┐
+                        │   👑 Emperor (You)         │
+                        │   Discord / Web UI         │
+                        └─────────────┬─────────────┘
+                                      │ Imperial Decree (@mention)
+                                      ▼
+                    ┌──────────────────────────────────────┐
+                    │   OpenClaw Gateway (Zhongshu Province)│
+                    │   Node.js Daemon                      │
+                    │   ┌────────────────────────────────┐  │
+                    │   │ 📨 Message Routing (Menxia)     │  │
+                    │   │ @mention → match → dispatch     │  │
+                    │   │ Session isolation · Auto-Thread  │  │
+                    │   │ Cron scheduling · Heartbeat      │  │
+                    │   └────────────────────────────────┘  │
+                    └───┬────┬────┬────┬────┬────┬─────────┘
+                        │    │    │    │    │    │
+           ┌────────────┘    │    │    │    │    └────────────┐
+           ▼                 ▼    ▼    ▼    ▼                ▼
+     ┌──────────┐  ┌──────┐ ┌────┐ ┌────┐ ┌──────┐  ┌──────────┐
+     │ Steward  │  │ War  │ │Rev.│ │Rite│ │Works │  │ Justice  │
+     │ 司礼监   │  │ 兵部 │ │户部│ │礼部│ │ 工部 │  │  刑部    │
+     │Scheduler │  │Code  │ │$$$│  │Mktg│ │DevOps│  │ Legal    │
+     └──────────┘  └──────┘ └────┘ └────┘ └──────┘  └──────────┘
+           │          │       │      │       │            │
+           └──────────┴───────┴──────┴───────┴────────────┘
+                                  │
+                   ┌──────────────┴──────────────┐
+                   │  Shangshu Province (Exec)    │
+                   │  60+ Built-in Skills         │
+                   │  GitHub · Notion · Browser   │
+                   │  Cron · TTS · Screenshot     │
+                   │  OpenClaw Hub Extensions     │
+                   └──────────────────────────────┘
 ```
 
 Each agent is a standalone Discord Bot bound to its own AI identity:
@@ -60,6 +141,60 @@ Each agent is a standalone Discord Bot bound to its own AI identity:
 - **Independent models**: Use power models for heavy lifting, fast models for light work — save money without sacrificing quality
 - **Sandboxed execution**: Agent code runs in isolation, no cross-contamination
 - **Identity injection**: OpenClaw automatically assembles SOUL.md + IDENTITY.md + workspace files into the system prompt
+
+---
+
+## 🎬 Demo: Discord Conversations
+
+```
+👑 Emperor: @bingbu Write me a user login REST API with Node.js + Express
+
+🏛️ 兵部 bingbu: As Your Majesty commands. I'll get to work immediately.
+  📁 Created auth-api/ project structure
+  ✅ POST /api/login — JWT authentication
+  ✅ POST /api/register — User registration
+  ✅ middleware/auth.js — Token verification middleware
+  ✅ Pushed to GitHub: wanikua/auth-api#1
+  The work is complete. Please review, Your Majesty.
+
+👑 Emperor: @hubu How much did we spend on APIs this month?
+
+🏛️ 户部 hubu: Your Majesty, here is this month's API expenditure:
+  💰 Total: $23.47
+  ├── 兵部 bingbu (Power Model): $15.20 (142 coding tasks)
+  ├── 礼部 libu (Fast Model): $3.80 (89 copywriting tasks)
+  ├── 司礼监 silijian (Fast Model): $2.12 (203 daily conversations)
+  └── Others: $2.35
+  📊 Down 12% month-over-month, mainly due to bingbu optimizing prompt length.
+
+👑 Emperor: @libu Write a Xiaohongshu post recommending AI tool setups
+
+🏛️ 礼部 libu: As you wish! Here's the copy:
+  📝 Title: "Regular People Can Be AI Emperors? I Manage My Whole Team with 6 AIs"
+  Body: Still chatting with AI one conversation at a time? I built an entire AI court...
+  🏷️ #AITools #Productivity #MultiAgent #AICourt #SixMinistries
+
+👑 Emperor: @everyone Meeting tomorrow at 3 PM — all departments prepare weekly reports
+
+🏛️ 司礼监: As commanded. Meeting scheduled.
+🏛️ 兵部: Acknowledged. Will compile this week's code output.
+🏛️ 户部: Acknowledged. Will prepare financial statements.
+🏛️ 礼部: Acknowledged. Will summarize marketing metrics.
+🏛️ 工部: Acknowledged. Will prepare server status report.
+```
+
+---
+
+## Use Cases
+
+| Scenario | Description | Departments Involved |
+|----------|-------------|---------------------|
+| 🚀 **Solo Developer** | One person, complete tech team — coding + DevOps + marketing covered | 兵部 + 工部 + 礼部 |
+| 🏫 **Student Learning** | AI tutor team — different subjects, different agents, each with memory | All Six customizable |
+| 🏢 **Startup Team** | Low-cost AI assistant matrix covering product, tech, and operations | All Six Ministries |
+| 📱 **Content Creator** | Content creation + data analytics + finance management all-in-one | 礼部 + 户部 |
+| 🔬 **Research Project** | Literature search + code experiments + paper writing | 兵部 + 礼部 |
+| 🎮 **AI Experiments** | Agent-to-agent conversations, simulated court sessions | All Six Ministries |
 
 ---
 
@@ -82,6 +217,12 @@ The script automatically handles:
 - ✅ Gateway systemd service (auto-starts on boot)
 
 The install script features color-coded output with progress indicators and ✓ success markers for each step.
+
+> 💡 **Already have OpenClaw/Clawdbot installed?** Use the lite script — skips system dependencies, only initializes workspace and config templates:
+> ```bash
+> bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install-lite.sh)
+> ```
+> Supports two modes: Discord multi-Bot mode or pure WebUI mode (no Discord needed).
 
 ### Step 2: Add Your Keys (10 minutes)
 
@@ -137,19 +278,26 @@ openclaw cron add \
 
 ---
 
-## Court Architecture — The Six Ministries
+## Court Architecture — The Three Departments and Six Ministries
 
-Inspired by the Ming Dynasty's six-ministry system, each "department" is an independent AI Agent + Discord Bot:
+### Historical Background
 
-| Ministry | Role | Recommended Model | Typical Use Cases |
-|----------|------|-------------------|-------------------|
-| **司礼监 silijian** — Chief Steward | Central coordination | Fast Model | Daily chat, task delegation, automated reporting |
-| **兵部 bingbu** — Engineering | Software engineering | Power Model | Coding, architecture design, code review, debugging |
-| **户部 hubu** — Finance | Finance & operations | Power Model | Cost analysis, budgeting, e-commerce operations |
-| **礼部 libu** — Marketing | Brand & marketing | Fast Model | Copywriting, social media, content strategy |
-| **工部 gongbu** — DevOps | Infrastructure | Fast Model | DevOps, CI/CD, server management |
-| **吏部 libu** — Projects | Project management | Fast Model | Startup incubation, task tracking, team coordination |
-| **刑部 xingbu** — Legal | Legal & compliance | Fast Model | Contract review, intellectual property, compliance checks |
+The Three Departments and Six Ministries (三省六部制) was the central government system of imperial China:
+- **中书省 Zhongshu Province**: Drafting imperial edicts (= receiving user commands, generating plans)
+- **门下省 Menxia Province**: Review and rejection (= message routing, permission verification)
+- **尚书省 Shangshu Province**: Execution and implementation (= Skill tool layer, actual execution)
+
+Under Shangshu Province were the **Six Ministries**, each managing its own domain. In this project, OpenClaw Gateway plays the role of the Three Departments, while six AI Agents correspond to the Six Ministries:
+
+| Ministry | Historical Role | AI Role | Recommended Model | Typical Use Cases |
+|----------|----------------|---------|-------------------|-------------------|
+| **司礼监 silijian** — Chief Steward | Emperor's attendant, imperial review | Central coordination | Fast Model | Daily chat, task delegation, automated reporting |
+| **兵部 bingbu** — War | Military affairs | Software engineering | Power Model | Coding, architecture design, code review, debugging |
+| **户部 hubu** — Revenue | Census & taxation | Finance & operations | Power Model | Cost analysis, budgeting, e-commerce operations |
+| **礼部 libu** — Rites | Ceremonies & diplomacy | Brand & marketing | Fast Model | Copywriting, social media, content strategy |
+| **工部 gongbu** — Works | Engineering & construction | Infrastructure | Fast Model | DevOps, CI/CD, server management |
+| **吏部 libu** — Personnel | Official selection | Project management | Fast Model | Startup incubation, task tracking, team coordination |
+| **刑部 xingbu** — Justice | Law & punishment | Legal & compliance | Fast Model | Contract review, intellectual property, compliance checks |
 
 > 💡 Model tiering strategy: Use power models for heavy tasks (coding/analysis), fast models for light tasks (copywriting/management) — saves roughly 5× on costs. You can also plug in economy models for further savings.
 
@@ -164,8 +312,8 @@ Each department is its own Bot. @mention one and it responds; @everyone triggers
 ### 🧠 Independent Memory System
 Each agent has its own workspace and `memory/` directory. Project knowledge accumulated through conversations is persisted to files and retained across sessions. The more you use an agent, the better it understands your project.
 
-### 🛠️ 60+ Built-in Skills
-It's not just a chatbot — the built-in toolset covers the entire development lifecycle:
+### 🛠️ 60+ Built-in Skills (Powered by OpenClaw Ecosystem)
+It's not just a chatbot — the built-in toolset covers the entire development lifecycle, and you can extend with more Skills from [OpenClaw Hub](https://github.com/openclawai/openclaw):
 
 | Category | Skills |
 |----------|--------|
@@ -176,6 +324,7 @@ It's not just a chatbot — the built-in toolset covers the entire development l
 | Media | TTS voice, Screenshots, Video frame extraction |
 | Operations | tmux remote control, Shell command execution |
 | Communication | Discord, Slack, Telegram, WhatsApp, Signal… |
+| Extensions | OpenClaw Hub community Skills, Custom Skills |
 
 ### ⏰ Scheduled Tasks (Cron)
 Built-in Cron scheduler lets agents run tasks on autopilot:
@@ -224,14 +373,14 @@ Access at: `http://your-server-ip:18790`
 
 Discord itself is the best GUI management interface:
 - **Phone + Desktop** sync — manage from anywhere
-- **Channel categories** naturally map to departments (bingbu, hubu, libu…)
+- **Channel categories** naturally map to departments (兵部, 户部, 礼部…)
 - **Message history** permanently saved with built-in search
 - **Permission management** with fine-grained control over who sees and does what
 - **@mention** any agent to invoke it — zero learning curve
 
 ### Notion as Data Visualization
 
-Through Notion Skill integration, court data auto-syncs to Notion:
+Through OpenClaw's Notion Skill integration, court data auto-syncs to Notion:
 - **Daily Reports** and **Weekly Summaries** auto-generated
 - **Finance Tracking** automatically records API consumption
 - **Project Archives** track progress across all projects
@@ -266,6 +415,9 @@ Yes. OpenClaw supports Anthropic, OpenAI, Google Gemini, and any other provider 
 **Q: How much does the API cost per month?**
 Depends on usage intensity. Light usage: $10–15/month, moderate: $20–30/month. Cost-saving tip: use power models for heavy tasks, fast models for light tasks (roughly 5× cheaper), and plug in economy models for simple tasks to save even more.
 
+**Q: What's the relationship with Become CEO?**
+[Become CEO](https://github.com/wanikua/become-ceo) is the English corporate edition of this project, using the same OpenClaw framework and architecture but with modern corporate roles (CTO, CFO, etc.) instead of imperial court titles. Prefer ancient Chinese aesthetics? Choose AI Court. Prefer modern corporate style? Choose Become CEO.
+
 ### Technical
 
 **Q: @everyone doesn't trigger agent responses?**
@@ -295,7 +447,7 @@ No. OpenClaw maintains independent sessions for each user × agent combination. 
 Yes. Agents can use `sessions_spawn` to delegate sub-tasks to other agents, or `sessions_send` to message another agent's session. For example, 司礼监 (Chief Steward) can assign coding tasks to 兵部 bingbu.
 
 **Q: How do I create custom Skills?**
-OpenClaw has a built-in Skill Creator tool for creating custom Skills. Each Skill is a directory containing `SKILL.md` (instructions) + scripts + resources. Place it in the `skills/` directory of your workspace, and agents can use it immediately.
+OpenClaw has a built-in Skill Creator tool for creating custom Skills. Each Skill is a directory containing `SKILL.md` (instructions) + scripts + resources. Place it in the `skills/` directory of your workspace, and agents can use it immediately. You can also find community-shared Skills on [OpenClaw Hub](https://github.com/openclawai/openclaw).
 
 **Q: How do I connect private models (Ollama, etc.)?**
 Add an OpenAI API-compatible provider in the `models.providers` section of `openclaw.json`, pointing `baseUrl` to your Ollama address. Local Ollama models have zero API costs.
@@ -324,10 +476,10 @@ openclaw doctor
 
 ## Related Links
 
-- [AI Court Skill — Chinese](https://github.com/wanikua/ai-court-skill)
-- [Become CEO — English](https://github.com/wanikua/become-ceo)
-- [OpenClaw Official Documentation](https://docs.openclaw.ai)
-- [OpenClaw GitHub](https://github.com/openclawai/openclaw)
+- 🏢 [Become CEO — Corporate Edition](https://github.com/wanikua/become-ceo) — Same architecture, modern corporate roles
+- 🎭 [AI Court Skill — Chinese](https://github.com/wanikua/ai-court-skill)
+- 🔧 [OpenClaw Framework](https://github.com/openclawai/openclaw) — The underlying framework for this project
+- 📖 [OpenClaw Official Documentation](https://docs.openclaw.ai)
 
 ## ⚠️ 免责声明 / Disclaimer
 
@@ -359,6 +511,6 @@ openclaw doctor
 
 ---
 
-v3.4 | MIT License
+v3.5 | MIT License
 
 > 📜 This project is licensed under MIT. If you create derivative works or projects inspired by this architecture, please credit the original: [boluobobo-ai-court-tutorial](https://github.com/wanikua/boluobobo-ai-court-tutorial) by [@wanikua](https://github.com/wanikua)
