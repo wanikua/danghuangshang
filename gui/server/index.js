@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { readFileSync, readdirSync, existsSync, statSync } from 'fs';
+import { readFileSync, readdirSync, existsSync, statSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -16,7 +16,49 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = 18790;
 
-const AUTH_TOKEN = process.env.BOLUO_AUTH_TOKEN || '';
+// AUTH_TOKEN 管理：优先使用环境变量，否则从文件读取或生成新 token
+function getOrCreateAuthToken() {
+  // 1. 检查环境变量
+  if (process.env.BOLUO_AUTH_TOKEN) {
+    return process.env.BOLUO_AUTH_TOKEN;
+  }
+
+  // 2. 定义 token 存储路径
+  const tokenFilePath = join(HOME || process.env.HOME || '/home/ubuntu', '.openclaw/gui-auth-token.txt');
+
+  // 3. 尝试从文件读取
+  try {
+    if (existsSync(tokenFilePath)) {
+      const savedToken = readFileSync(tokenFilePath, 'utf-8').trim();
+      if (savedToken) {
+        return savedToken;
+      }
+    }
+  } catch (err) {
+    console.warn('[Auth] 读取保存的 token 失败，将生成新 token');
+  }
+
+  // 4. 生成新的随机 token（64 位十六进制）
+  const crypto = require('crypto');
+  const newToken = crypto.randomBytes(32).toString('hex');
+
+  // 5. 确保 .openclaw 目录存在
+  try {
+    const configDir = join(HOME || process.env.HOME || '/home/ubuntu', '.openclaw');
+    if (!existsSync(configDir)) {
+      mkdirSync(configDir, { recursive: true });
+    }
+
+    // 6. 保存 token 到文件
+    writeFileSync(tokenFilePath, newToken, 'utf-8');
+  } catch (err) {
+    console.error('[Auth] 保存 token 失败:', err.message);
+  }
+
+  return newToken;
+}
+
+const AUTH_TOKEN = getOrCreateAuthToken();
 
 const AGENT_DEPT_MAP = {
   'main': '司礼监', 'gongbu': '工部', 'hubu': '户部', 'libu': '吏部',
@@ -1660,4 +1702,18 @@ setInterval(() => {
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Boluo GUI running on http://0.0.0.0:${PORT} (HTTP + WebSocket)`);
+
+  // 打印 AUTH_TOKEN 信息
+  const tokenSource = process.env.BOLUO_AUTH_TOKEN ? '环境变量' : '持久化文件';
+  console.log('');
+  console.log('========================================');
+  console.log('  🔐 GUI 认证令牌 (AUTH_TOKEN)');
+  console.log('========================================');
+  console.log(`  来源: ${tokenSource}`);
+  console.log(`  Token: ${AUTH_TOKEN}`);
+  console.log('');
+  console.log('  💡 使用方法:');
+  console.log(`  在请求头中添加: Authorization: Bearer ${AUTH_TOKEN}`);
+  console.log('========================================');
+  console.log('');
 });
