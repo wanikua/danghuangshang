@@ -13,6 +13,7 @@ Writing code, managing finances, running marketing campaigns, generating daily r
 > **Reposts welcome — please credit the source.**
 >
 > 📕 Original Xiaohongshu series: [Day 3 of Being an AI Emperor — I'm Already Hooked](https://www.xiaohongshu.com/discovery/item/6998638f000000000d0092fe) | [Life of a Cyber Emperor: Give Orders Before Bed, AI Cranks Out Code Overnight](https://www.xiaohongshu.com/discovery/item/69a95dc3000000002801e886)
+
 ---
 
 ## Why This Setup?

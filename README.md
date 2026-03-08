@@ -14,6 +14,7 @@
 > **欢迎转载，请注明出处。**
 >
 > 📕 小红书原创系列：[用AI当上皇帝的第3天，我已经欲罢不能了](https://www.xiaohongshu.com/discovery/item/6998638f000000000d0092fe) | [赛博皇帝的日常：睡前下旨，AI连夜肝完代码](https://www.xiaohongshu.com/discovery/item/69a95dc3000000002801e886)
+
 ---
 
 ## 为什么选这套方案？
