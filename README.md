@@ -83,6 +83,12 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-t
 
 安装脚本带彩色输出和进度提示，每一步都有 ✓ 成功标记。
 
+> 💡 **已经装好 OpenClaw/Clawdbot？** 用精简版脚本，跳过系统依赖安装，只初始化工作区和配置模板：
+> ```bash
+> bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install-lite.sh)
+> ```
+> 支持两种模式：Discord 多Bot模式 或 纯 WebUI 模式（不需要Discord）。
+
 ### 第二步：填 Key 上线（10 分钟）
 
 跑完脚本，你只需要填两样东西：
