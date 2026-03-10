@@ -1,0 +1,7 @@
+node_modules
+.git
+*.log
+gui/node_modules
+gui/dist
+evidence/
+images/

@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  court:
+    build: .
+    image: ai-court:latest
+    container_name: ai-court
+    restart: unless-stopped
+    ports:
+      - "18789:18789"   # Gateway WebUI
+    volumes:
+      # 配置文件（必须挂载）
+      - ./openclaw.json:/root/.openclaw/openclaw.json
+      # 工作区持久化（记忆、日志等）
+      - court-workspace:/root/clawd
+      # OpenViking 数据持久化（可选）
+      - court-openviking:/root/.openviking
+    environment:
+      # LLM API Key（也可以写在 openclaw.json 里）
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      # OpenViking 配置（可选）
+      - OPENVIKING_CONFIG_FILE=${OPENVIKING_CONFIG_FILE:-}
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:18789/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  court-workspace:
+  court-openviking:
