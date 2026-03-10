@@ -26,7 +26,7 @@ echo "================================"
 echo ""
 
 # ---- 检测 CLI ----
-echo -e "${YELLOW}[1/7] 检查安装...${NC}"
+echo -e "${YELLOW}[1/8] 检查安装...${NC}"
 
 if command -v openclaw &>/dev/null; then
     CLI_CMD="openclaw"
@@ -52,7 +52,7 @@ fi
 
 # ---- 检测配置文件 ----
 echo ""
-echo -e "${YELLOW}[2/7] 检查配置文件...${NC}"
+echo -e "${YELLOW}[2/8] 检查配置文件...${NC}"
 
 # 查找配置文件
 CONFIG_FILE=""
@@ -84,7 +84,7 @@ fi
 
 # ---- 检测 API Key ----
 echo ""
-echo -e "${YELLOW}[3/7] 检查模型配置...${NC}"
+echo -e "${YELLOW}[3/8] 检查模型配置...${NC}"
 
 # 检查是否有placeholder
 if grep -q "YOUR_LLM_API_KEY\|YOUR_API_KEY\|your-api-key\|sk-xxx\|your-provider" "$CONFIG_FILE" 2>/dev/null; then
@@ -104,7 +104,7 @@ fi
 
 # ---- 检测 Discord 配置 ----
 echo ""
-echo -e "${YELLOW}[4/7] 检查 Discord 配置...${NC}"
+echo -e "${YELLOW}[4/8] 检查 Discord 配置...${NC}"
 
 if grep -q '"discord"' "$CONFIG_FILE" 2>/dev/null; then
     # 检查是否启用
@@ -154,9 +154,44 @@ else
     info "Discord 未配置（如果不用 Discord 可忽略）"
 fi
 
+# ---- 检测 Docker / Sandbox 权限 ----
+echo ""
+echo -e "${YELLOW}[5/8] 检查 Docker / Sandbox 权限...${NC}"
+
+if command -v docker &>/dev/null; then
+    pass "Docker 已安装"
+    # 检查当前用户是否有 docker.sock 权限
+    if docker info &>/dev/null 2>&1; then
+        pass "Docker 权限正常（可以连接 docker.sock）"
+    else
+        if [ "$(id -u)" -eq 0 ]; then
+            fail "Docker 已安装但无法连接 — 检查 Docker daemon 是否启动: systemctl start docker"
+        else
+            fail "Docker 权限不足 — 非 root 用户无法连接 docker.sock"
+            info "修复方法: sudo usermod -aG docker \$USER && newgrp docker"
+            info "或重新登录后生效"
+            info "这会导致 sandbox 模式（子代理沙箱）无法工作"
+        fi
+    fi
+else
+    # 检查配置中是否用了 sandbox
+    if grep -q '"sandbox"' "$CONFIG_FILE" 2>/dev/null; then
+        SANDBOX_MODE=$(grep -o '"mode": "[^"]*"' "$CONFIG_FILE" | head -1 | sed 's/"mode": "//;s/"//')
+        if [ "$SANDBOX_MODE" = "off" ]; then
+            info "Docker 未安装，sandbox 已关闭，无影响"
+        else
+            warn "Docker 未安装但配置了 sandbox — 子代理沙箱将无法工作"
+            info "安装 Docker: curl -fsSL https://get.docker.com | sh"
+            info "或关闭 sandbox: 把 agents.defaults.sandbox.mode 设为 \"off\""
+        fi
+    else
+        info "Docker 未安装（sandbox 未配置，可忽略）"
+    fi
+fi
+
 # ---- 检测 Agents 配置 ----
 echo ""
-echo -e "${YELLOW}[5/7] 检查 Agent 配置...${NC}"
+echo -e "${YELLOW}[6/8] 检查 Agent 配置...${NC}"
 
 AGENT_COUNT=$(grep -c '"id":' "$CONFIG_FILE" 2>/dev/null || echo 0)
 if [ "$AGENT_COUNT" -gt 0 ]; then
@@ -182,7 +217,7 @@ fi
 
 # ---- 检测工作区 ----
 echo ""
-echo -e "${YELLOW}[6/7] 检查工作区...${NC}"
+echo -e "${YELLOW}[7/8] 检查工作区...${NC}"
 
 # 查找工作区路径
 WORKSPACE=$(grep -o '"workspace": "[^"]*"' "$CONFIG_FILE" 2>/dev/null | head -1 | sed 's/"workspace": "//;s/"//' | sed "s|\$HOME|$HOME|;s|~|$HOME|")
@@ -203,7 +238,7 @@ fi
 
 # ---- 检测 Notion ----
 echo ""
-echo -e "${YELLOW}[7/7] 检查可选集成...${NC}"
+echo -e "${YELLOW}[8/8] 检查可选集成...${NC}"
 
 if [ -f "$HOME/.config/notion/api_key" ]; then
     NOTION_KEY=$(cat "$HOME/.config/notion/api_key" 2>/dev/null)
