@@ -5,10 +5,9 @@ import {
 } from "recharts"
 import type { SystemStatus } from "../types"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface Props { data: SystemStatus }
-
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
 
 interface MetricPoint {
   timestamp: string
@@ -76,7 +75,7 @@ export default function SystemHealth({ data }: Props) {
 
   const fetchMetrics = async () => {
     try {
-      const h = { headers: { Authorization: `Bearer ${AUTH_TOKEN}` } }
+      const h = { headers: { Authorization: `Bearer ${getAuthToken()}` } }
       const [mRes, hRes] = await Promise.all([
         fetch('/api/system/metrics', h),
         fetch('/api/health', h),

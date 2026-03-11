@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface Session {
   id: string; agentId: string; agentName: string; channel: string
@@ -26,8 +27,6 @@ interface Message { id: string; role: string; content: string; timestamp: string
 interface Props {
   initialFilter?: string
 }
-
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
 
 function fmt(n: number): string {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + "M"
@@ -150,7 +149,7 @@ export default function Sessions({ initialFilter }: Props) {
 
   const fetchSessions = async () => {
     try {
-      const r = await fetch('/api/sessions?limit=100', { headers: { Authorization: `Bearer ${AUTH_TOKEN}` } })
+      const r = await fetch('/api/sessions?limit=100', { headers: { Authorization: `Bearer ${getAuthToken()}` } })
       if (r.ok) { const d = await r.json(); setSessions(d.sessions || []) }
     } catch { }
     setLoading(false)
@@ -159,7 +158,7 @@ export default function Sessions({ initialFilter }: Props) {
   const fetchMessages = async (sessionId: string) => {
     setMsgsLoading(true)
     try {
-      const r = await fetch(`/api/sessions/${encodeURIComponent(sessionId)}/messages?limit=50`, { headers: { Authorization: `Bearer ${AUTH_TOKEN}` } })
+      const r = await fetch(`/api/sessions/${encodeURIComponent(sessionId)}/messages?limit=50`, { headers: { Authorization: `Bearer ${getAuthToken()}` } })
       if (r.ok) { const d = await r.json(); setSelectedSession(prev => prev ? { ...prev, messages: d.messages || [] } : null) }
       else setSelectedSession(prev => prev ? { ...prev, messages: [] } : null)
     } catch { setSelectedSession(prev => prev ? { ...prev, messages: [] } : null) }
@@ -170,7 +169,7 @@ export default function Sessions({ initialFilter }: Props) {
     if (expandedSummary[sessionId] !== undefined) return // already loaded
     setExpandedLoading(prev => ({ ...prev, [sessionId]: true }))
     try {
-      const r = await fetch(`/api/sessions/${encodeURIComponent(sessionId)}/summary`, { headers: { Authorization: `Bearer ${AUTH_TOKEN}` } })
+      const r = await fetch(`/api/sessions/${encodeURIComponent(sessionId)}/summary`, { headers: { Authorization: `Bearer ${getAuthToken()}` } })
       if (r.ok) {
         const d = await r.json()
         setExpandedSummary(prev => ({ ...prev, [sessionId]: d }))

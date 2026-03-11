@@ -5,10 +5,10 @@ import {
 } from "recharts"
 import type { SystemStatus } from "../types"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface Props { data: SystemStatus }
 
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
 const COLORS = ["#d4a574", "#c9a96e", "#22c55e", "#3b82f6", "#ef4444", "#8b5cf6", "#f59e0b", "#ec4899"]
 
 function fmt(n: number): string {
@@ -31,7 +31,7 @@ export default function TokenStats({ data }: Props) {
   const sub = theme === 'light' ? 'text-gray-500' : 'text-[#a3a3a3]'
 
   useEffect(() => {
-    fetch('/api/tokens', { headers: { Authorization: `Bearer ${AUTH_TOKEN}` } })
+    fetch('/api/tokens', { headers: { Authorization: `Bearer ${getAuthToken()}` } })
       .then(r => r.json())
       .then(d => {
         setDeptTokens(d.byDepartment || [])

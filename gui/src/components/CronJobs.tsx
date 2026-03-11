@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface CronJob {
   id: string
@@ -12,8 +13,6 @@ interface CronJob {
   agent: string
 }
 
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
-
 export default function CronJobs() {
   const [jobs, setJobs] = useState<CronJob[]>([])
   const [loading, setLoading] = useState(true)
@@ -23,7 +22,7 @@ export default function CronJobs() {
   const fetchJobs = async () => {
     try {
       const res = await fetch("/api/cron", {
-        headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
       })
       if (res.ok) {
         const data = await res.json()
@@ -40,7 +39,7 @@ export default function CronJobs() {
     try {
       await fetch(`/api/cron/run/${id}`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
       })
     } catch (e) {
       console.error('Failed to run job:', e)

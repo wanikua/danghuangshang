@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface PendingItem {
   id: string
@@ -15,8 +16,6 @@ interface ProcessedItem extends PendingItem {
   processedAt: string
 }
 
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
-
 export default function MemorialHall() {
   const [pending, setPending] = useState<PendingItem[]>([])
   const [processed, setProcessed] = useState<ProcessedItem[]>([])
@@ -29,7 +28,7 @@ export default function MemorialHall() {
     try {
       // 获取 Cron 任务状态
       const cronRes = await fetch('/api/cron', {
-        headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
       })
       
       const pendingItems: PendingItem[] = []
@@ -55,7 +54,7 @@ export default function MemorialHall() {
 
       // 获取会话状态
       const sessionsRes = await fetch('/api/sessions?limit=20', {
-        headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
       })
       
       if (sessionsRes.ok) {
@@ -81,7 +80,7 @@ export default function MemorialHall() {
 
       // 获取节点状态
       const nodesRes = await fetch('/api/nodes', {
-        headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
       })
       
       if (nodesRes.ok) {

@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react"
 import type { SystemStatus } from "../types"
+import { getAuthToken } from '../auth'
 
 const REFRESH_INTERVAL = 30000
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
 
 export function useStatus() {
   const [data, setData] = useState<SystemStatus | null>(null)
@@ -14,7 +14,7 @@ export function useStatus() {
     try {
       const res = await fetch("/api/status", {
         headers: {
-          'Authorization': `Bearer ${AUTH_TOKEN}`
+          'Authorization': `Bearer ${getAuthToken()}`
         }
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`)

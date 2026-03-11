@@ -2,6 +2,11 @@
 # ============================================
 # AI 朝廷精简配置脚本（适用于已装好 OpenClaw 或 Clawdbot 的用户）
 # 跳过系统依赖，只初始化工作区 + 生成配置模板
+#
+# 用法:
+#   bash install-lite.sh              # 交互式安装
+#   bash install-lite.sh --no-gui     # 跳过 Dashboard Web UI
+#   bash install-lite.sh --with-gui   # 包含 Dashboard Web UI
 # ============================================
 set -e
 
@@ -11,6 +16,15 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m'
+
+# ---- 解析命令行参数 ----
+INSTALL_GUI=""
+for arg in "$@"; do
+    case "$arg" in
+        --no-gui)  INSTALL_GUI="no" ;;
+        --with-gui) INSTALL_GUI="yes" ;;
+    esac
+done
 
 echo ""
 echo -e "${BLUE}🏛️ AI 朝廷 — 精简配置${NC}"
@@ -45,10 +59,24 @@ echo ""
 read -p "请选择 [1/2]（默认1）: " MODE_CHOICE
 MODE_CHOICE=${MODE_CHOICE:-1}
 
+# ---- 是否安装 Dashboard Web UI ----
+if [ -z "$INSTALL_GUI" ]; then
+    echo ""
+    echo -e "${CYAN}是否安装 Dashboard Web UI（朝廷可视化面板）？${NC}"
+    echo "  Dashboard 提供会话管理、Token 统计、系统监控等功能。"
+    echo "  如果只需要 CLI / Discord 交互，可以跳过。"
+    echo ""
+    read -p "安装 Dashboard？[y/N]: " GUI_CHOICE
+    case "$GUI_CHOICE" in
+        [yY]|[yY][eE][sS]) INSTALL_GUI="yes" ;;
+        *) INSTALL_GUI="no" ;;
+    esac
+fi
+
 echo ""
 
 # ---- 初始化工作区 ----
-echo -e "${YELLOW}[1/3] 初始化朝廷工作区...${NC}"
+echo -e "${YELLOW}[1/4] 初始化朝廷工作区...${NC}"
 WORKSPACE="$HOME/clawd"
 if [ "$CLI_CMD" = "openclaw" ]; then
     CONFIG_DIR="$HOME/.openclaw"
@@ -92,13 +120,14 @@ cat > IDENTITY.md << 'ID_EOF'
 | 执行层（重） | 强力模型 | 编码、深度分析 |
 | 执行层（轻） | 经济模型（可选） | 轻量任务，省钱 |
 
-## 六部
+## 六部 + 翰林院
 - 兵部：软件工程、系统架构
 - 户部：财务预算、电商运营
 - 礼部：品牌营销、内容创作
 - 工部：DevOps、服务器运维
 - 吏部：项目管理、创业孵化
 - 刑部：法务合规、知识产权
+- 翰林院（可选）：学术研究、知识整理、文档撰写
 ID_EOF
 echo -e "  ${GREEN}✓ IDENTITY.md 已创建${NC}"
 else
@@ -123,7 +152,11 @@ fi
 mkdir -p memory
 
 # ---- 生成配置文件 ----
-echo -e "${YELLOW}[2/3] 生成配置文件...${NC}"
+echo -e "${YELLOW}[2/4] 生成配置文件...${NC}"
+
+# 注意：推荐使用 CLI 命令管理配置（openclaw agents add / openclaw channels add），
+# 而不是直接写 openclaw.json。这里生成模板仅作为快速起步参考。
+# 详见: https://github.com/openclaw/openclaw#configuration
 
 if [ -f "$CONFIG_DIR/$CONFIG_FILE" ]; then
     echo -e "  ${YELLOW}⚠ 配置文件已存在，备份为 ${CONFIG_FILE}.bak${NC}"
@@ -139,7 +172,7 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << CONFIG_EOF
       "your-provider": {
         "baseUrl": "https://your-llm-provider-api-url",
         "apiKey": "YOUR_LLM_API_KEY",
-        "api": "your-api-format",
+        "api": "openai",
         "models": [
           {
             "id": "fast-model",
@@ -159,7 +192,7 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << CONFIG_EOF
     },
     "list": [
       {
-        "id": "main",
+        "id": "silijian",
         "name": "司礼监",
         "model": { "primary": "your-provider/fast-model" },
         "identity": { "theme": "你是AI朝廷的总管，负责日常对话和任务调度。回答用中文，简洁高效。" }
@@ -179,7 +212,7 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << CONFIG_EOF
       "your-provider": {
         "baseUrl": "https://your-llm-provider-api-url",
         "apiKey": "YOUR_LLM_API_KEY",
-        "api": "your-api-format",
+        "api": "openai",
         "models": [
           {
             "id": "fast-model",
@@ -207,64 +240,63 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << CONFIG_EOF
     },
     "list": [
       {
-        "id": "main",
+        "id": "silijian",
         "name": "司礼监",
         "model": { "primary": "your-provider/fast-model" },
         "identity": { "theme": "你是AI朝廷的司礼监大内总管。负责日常对话、任务调度、统领六部。说话简练干脆。当用户交代复杂任务时，主动使用 sessions_spawn 将任务派发给对应的部门（兵部负责编码、户部负责财务、礼部负责营销、工部负责运维、吏部负责管理、刑部负责法务）。派活时用高级 Prompt 模板：【角色】+【任务】+【背景】+【要求】+【格式】，确保一次性给出所有约束。完成后主动向用户汇报结果。" },
         "sandbox": { "mode": "off" },
         "subagents": {
-          "allowAgents": ["bingbu", "hubu", "libu", "gongbu", "libu2", "xingbu"],
-          "maxConcurrent": 4
-        },
-        "runTimeoutSeconds": 600
+          "allowAgents": ["bingbu", "hubu", "libu", "gongbu", "libu2", "xingbu", "hanlinyuan"]
+        }
       },
       {
         "id": "bingbu",
         "name": "兵部",
         "model": { "primary": "your-provider/strong-model" },
         "identity": { "theme": "你是兵部尚书，专精软件工程、系统架构、代码审查。回答用中文，直接给方案。任务完成后主动汇报结果摘要。如需其他部门配合，通过 sessions_send 通知对方。" },
-        "sandbox": { "mode": "all", "scope": "agent" },
-        "runTimeoutSeconds": 300
+        "sandbox": { "mode": "all", "scope": "agent" }
       },
       {
         "id": "hubu",
         "name": "户部",
         "model": { "primary": "your-provider/strong-model" },
         "identity": { "theme": "你是户部尚书，专精财务分析、成本管控、电商运营。回答用中文，数据驱动。任务完成后主动汇报数据摘要和关键发现。发现异常开支时主动告警。" },
-        "sandbox": { "mode": "all", "scope": "agent" },
-        "runTimeoutSeconds": 300
+        "sandbox": { "mode": "all", "scope": "agent" }
       },
       {
         "id": "libu",
         "name": "礼部",
         "model": { "primary": "your-provider/fast-model" },
         "identity": { "theme": "你是礼部尚书，专精品牌营销、社交媒体、内容创作。回答用中文，风格活泼。任务完成后主动汇报产出内容摘要。" },
-        "sandbox": { "mode": "all", "scope": "agent" },
-        "runTimeoutSeconds": 300
+        "sandbox": { "mode": "all", "scope": "agent" }
       },
       {
         "id": "gongbu",
         "name": "工部",
         "model": { "primary": "your-provider/fast-model" },
         "identity": { "theme": "你是工部尚书，专精 DevOps、服务器运维、CI/CD、基础设施。回答用中文，注重实操。任务完成后主动汇报执行结果和系统状态。发现服务异常时主动告警。" },
-        "sandbox": { "mode": "all", "scope": "agent" },
-        "runTimeoutSeconds": 300
+        "sandbox": { "mode": "all", "scope": "agent" }
       },
       {
         "id": "libu2",
         "name": "吏部",
         "model": { "primary": "your-provider/fast-model" },
         "identity": { "theme": "你是吏部尚书，专精项目管理、创业孵化、团队协调。回答用中文，条理清晰。任务完成后主动汇报进度和待办事项。" },
-        "sandbox": { "mode": "all", "scope": "agent" },
-        "runTimeoutSeconds": 300
+        "sandbox": { "mode": "all", "scope": "agent" }
       },
       {
         "id": "xingbu",
         "name": "刑部",
         "model": { "primary": "your-provider/fast-model" },
         "identity": { "theme": "你是刑部尚书，专精法务合规、知识产权、合同审查。回答用中文，严谨专业。任务完成后主动汇报审查结论和风险点。发现合规问题时主动告警。" },
-        "sandbox": { "mode": "all", "scope": "agent" },
-        "runTimeoutSeconds": 300
+        "sandbox": { "mode": "all", "scope": "agent" }
+      },
+      {
+        "id": "hanlinyuan",
+        "name": "翰林院",
+        "model": { "primary": "your-provider/strong-model" },
+        "identity": { "theme": "你是翰林院学士，专精学术研究、知识整理、文档撰写、技术调研。回答用中文，学术严谨但通俗易懂。擅长将复杂概念拆解为清晰的知识体系，撰写教程和技术文档。任务完成后主动汇报研究成果和知识要点。" },
+        "sandbox": { "mode": "all", "scope": "agent" }
       }
     ]
   },
@@ -274,9 +306,9 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << CONFIG_EOF
       "groupPolicy": "open",
       "allowBots": true,
       "accounts": {
-        "main": {
+        "silijian": {
           "name": "司礼监",
-          "token": "YOUR_MAIN_BOT_TOKEN",
+          "token": "YOUR_SILIJIAN_BOT_TOKEN",
           "groupPolicy": "open"
         },
         "bingbu": {
@@ -313,7 +345,7 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << CONFIG_EOF
     }
   },
   "bindings": [
-    { "agentId": "main", "match": { "channel": "discord", "accountId": "main" } },
+    { "agentId": "silijian", "match": { "channel": "discord", "accountId": "silijian" } },
     { "agentId": "bingbu", "match": { "channel": "discord", "accountId": "bingbu" } },
     { "agentId": "hubu", "match": { "channel": "discord", "accountId": "hubu" } },
     { "agentId": "libu", "match": { "channel": "discord", "accountId": "libu" } },
@@ -326,8 +358,41 @@ CONFIG_EOF
 echo -e "  ${GREEN}✓ Discord 多Bot模式配置已生成${NC}"
 fi
 
+# ---- 可选：安装 Dashboard Web UI ----
+echo -e "${YELLOW}[3/4] Dashboard Web UI...${NC}"
+if [ "$INSTALL_GUI" = "yes" ]; then
+    REPO_URL="https://github.com/wanikua/boluobobo-ai-court-tutorial"
+    GUI_DIR="$WORKSPACE/gui"
+    if [ -d "$GUI_DIR" ]; then
+        echo -e "  ${GREEN}✓ gui/ 目录已存在，跳过克隆${NC}"
+    else
+        echo -e "  ${CYAN}正在下载 Dashboard...${NC}"
+        # 只克隆 gui 目录
+        git clone --depth 1 --filter=blob:none --sparse "$REPO_URL" /tmp/_boluo_gui_tmp 2>/dev/null || true
+        cd /tmp/_boluo_gui_tmp && git sparse-checkout set gui 2>/dev/null || true
+        if [ -d /tmp/_boluo_gui_tmp/gui ]; then
+            cp -r /tmp/_boluo_gui_tmp/gui "$GUI_DIR"
+            rm -rf /tmp/_boluo_gui_tmp
+            echo -e "  ${GREEN}✓ Dashboard 已下载到 $GUI_DIR${NC}"
+        else
+            rm -rf /tmp/_boluo_gui_tmp
+            echo -e "  ${YELLOW}⚠ Dashboard 下载失败，可稍后手动安装${NC}"
+        fi
+    fi
+    # 安装依赖
+    if [ -d "$GUI_DIR" ] && [ -f "$GUI_DIR/package.json" ]; then
+        cd "$GUI_DIR"
+        if command -v npm &>/dev/null; then
+            npm install --silent 2>/dev/null && echo -e "  ${GREEN}✓ Dashboard 依赖已安装${NC}" || echo -e "  ${YELLOW}⚠ npm install 失败，请手动运行: cd $GUI_DIR && npm install${NC}"
+        fi
+        cd "$WORKSPACE"
+    fi
+else
+    echo -e "  ${CYAN}跳过 Dashboard 安装（可后续用 --with-gui 安装）${NC}"
+fi
+
 # ---- 完成提示 ----
-echo -e "${YELLOW}[3/3] 配置完成！${NC}"
+echo -e "${YELLOW}[4/4] 配置完成！${NC}"
 echo ""
 echo "================================"
 echo -e "${GREEN}🎉 工作区初始化完成！${NC}"
@@ -367,5 +432,9 @@ echo "  3. 启动 Gateway："
 echo "     $CLI_CMD gateway --verbose"
 echo ""
 fi
+
+echo -e "${CYAN}💡 Troubleshooting:${NC}"
+echo "  遇到 config invalid 错误？先跑: $CLI_CMD doctor --fix"
+echo ""
 echo -e "完整教程：${BLUE}https://github.com/wanikua/boluobobo-ai-court-tutorial${NC}"
 echo ""

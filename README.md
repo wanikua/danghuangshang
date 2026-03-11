@@ -855,6 +855,17 @@ openclaw doctor
 # 常见原因：API Key 未填、JSON 格式错误、Bot Token 无效
 ```
 
+**Q: 报 config invalid 错误？**
+新版 OpenClaw 移除了一些过期字段（如 `runTimeoutSeconds`、`subagents.maxConcurrent`），如果你的配置文件里还有这些字段，会报验证错误。解决方法：
+```bash
+# 自动修复配置
+openclaw doctor --fix
+```
+手动检查：确保 `models.providers` 中的 `api` 字段值为有效格式（如 `"openai"`、`"anthropic"` 等），而不是占位符。
+
+**Q: Windows 能用吗？**
+可以！通过 WSL2（Windows Subsystem for Linux）运行。详见 [Windows WSL2 安装指南](./docs/windows-wsl.md)。
+
 ---
 
 ## 加入朝会

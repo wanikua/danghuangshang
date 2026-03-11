@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react"
 import type { SystemStatus, BotAccount } from "../types"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface Props { data: SystemStatus }
-
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
 
 function fmt(n: number): string {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + "M"
@@ -41,7 +40,7 @@ export default function Departments({ data }: Props) {
 
   // Fetch activity data from sessions
   useEffect(() => {
-    fetch('/api/sessions?limit=100', { headers: { Authorization: `Bearer ${AUTH_TOKEN}` } })
+    fetch('/api/sessions?limit=100', { headers: { Authorization: `Bearer ${getAuthToken()}` } })
       .then(r => r.json())
       .then(d => {
         const map: Record<string, DeptActivity> = {}
@@ -67,12 +66,12 @@ export default function Departments({ data }: Props) {
       setMsgsLoading(botName)
       try {
         // Find the session ID for this bot
-        const r = await fetch('/api/sessions?limit=100', { headers: { Authorization: `Bearer ${AUTH_TOKEN}` } })
+        const r = await fetch('/api/sessions?limit=100', { headers: { Authorization: `Bearer ${getAuthToken()}` } })
         const d = await r.json()
         const session = (d.sessions || []).find((s: DeptActivity & { id: string }) => s.agentId === botName)
         if (session) {
           const mr = await fetch(`/api/sessions/${encodeURIComponent(session.id)}/messages?limit=6`, {
-            headers: { Authorization: `Bearer ${AUTH_TOKEN}` }
+            headers: { Authorization: `Bearer ${getAuthToken()}` }
           })
           const md = await mr.json()
           setRecentMsgs(prev => ({ ...prev, [botName]: md.messages || [] }))

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface Platform {
   name: string; status: 'connected' | 'disconnected'; channels: number; accounts?: number
@@ -9,8 +10,6 @@ interface BotChannel {
   id: string; name: string; displayName: string; status: string
   sessions: number; model: string; channel: string
 }
-
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
 
 export default function Channels() {
   const [platforms, setPlatforms] = useState<Platform[]>([])
@@ -24,7 +23,7 @@ export default function Channels() {
   const fetchData = async () => {
     setLoading(true)
     try {
-      const headers = { Authorization: `Bearer ${AUTH_TOKEN}` }
+      const headers = { Authorization: `Bearer ${getAuthToken()}` }
       const [platformsRes, statusRes] = await Promise.all([
         fetch('/api/platforms', { headers }),
         fetch('/api/status', { headers })

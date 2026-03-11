@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface NotionStatus {
   status: string
@@ -7,8 +8,6 @@ interface NotionStatus {
   pagesLinked: number
   lastError: string | null
 }
-
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
 
 export default function NotionStatus() {
   const [status, setStatus] = useState<NotionStatus | null>(null)
@@ -18,7 +17,7 @@ export default function NotionStatus() {
   const fetchStatus = async () => {
     try {
       const res = await fetch("/api/notion", {
-        headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
       })
       if (res.ok) {
         const data = await res.json()
@@ -34,7 +33,7 @@ export default function NotionStatus() {
     try {
       await fetch("/api/notion/sync", {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
       })
       await fetchStatus()
     } catch (e) {

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 type SearchType = 'all' | 'logs' | 'messages' | 'sessions'
 
@@ -10,8 +11,6 @@ interface SearchResult {
   timestamp: string
   source?: string
 }
-
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
 
 export default function Search() {
   const [query, setQuery] = useState('')
@@ -33,7 +32,7 @@ export default function Search() {
       if (searchType === 'all' || searchType === 'logs') {
         try {
           const logsRes = await fetch('/api/logs?limit=200', {
-            headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+            headers: { 'Authorization': `Bearer ${getAuthToken()}` }
           })
           const logsData = await logsRes.json()
           const logs = logsData.logs || []
@@ -56,7 +55,7 @@ export default function Search() {
       if (searchType === 'all' || searchType === 'messages') {
         try {
           const msgsRes = await fetch('/api/messages?limit=100', {
-            headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+            headers: { 'Authorization': `Bearer ${getAuthToken()}` }
           })
           const msgsData = await msgsRes.json()
           const messages = msgsData.messages || []
@@ -79,7 +78,7 @@ export default function Search() {
       if (searchType === 'all' || searchType === 'sessions') {
         try {
           const sessionsRes = await fetch('/api/sessions?limit=50', {
-            headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+            headers: { 'Authorization': `Bearer ${getAuthToken()}` }
           })
           const sessionsData = await sessionsRes.json()
           const sessions = sessionsData.sessions || []

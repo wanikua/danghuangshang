@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import type { SystemStatus } from "../types"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface Props { data: SystemStatus }
 
@@ -8,7 +9,6 @@ interface LogEntry {
   id: number; timestamp: string; level: string; message: string; source?: string
 }
 
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
 const PAGE_SIZE = 50
 
 export default function MessageLogs({ data }: Props) {
@@ -31,7 +31,7 @@ export default function MessageLogs({ data }: Props) {
       // Try /api/logs/list first (has filtering), fallback to /api/logs
       let allLogs: LogEntry[] = []
       try {
-        const r = await fetch(`/api/logs/list?${params}`, { headers: { Authorization: `Bearer ${AUTH_TOKEN}` } })
+        const r = await fetch(`/api/logs/list?${params}`, { headers: { Authorization: `Bearer ${getAuthToken()}` } })
         if (r.ok) {
           const d = await r.json()
           allLogs = d.logs || []
@@ -40,7 +40,7 @@ export default function MessageLogs({ data }: Props) {
 
       if (allLogs.length === 0) {
         // Fallback to /api/logs
-        const r = await fetch(`/api/logs?limit=500`, { headers: { Authorization: `Bearer ${AUTH_TOKEN}` } })
+        const r = await fetch(`/api/logs?limit=500`, { headers: { Authorization: `Bearer ${getAuthToken()}` } })
         const d = await r.json()
         allLogs = d.logs || []
       }

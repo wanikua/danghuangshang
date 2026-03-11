@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface CronJob {
   id: string
@@ -11,8 +12,6 @@ interface CronJob {
   status: string
   agent: string
 }
-
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
 
 function relTime(ts: string) {
   if (!ts) return '未运行'
@@ -50,7 +49,7 @@ export default function CronJobs() {
 
   const fetchJobs = async () => {
     try {
-      const r = await fetch('/api/cron', { headers: { Authorization: `Bearer ${AUTH_TOKEN}` } })
+      const r = await fetch('/api/cron', { headers: { Authorization: `Bearer ${getAuthToken()}` } })
       if (r.ok) {
         const d = await r.json()
         setJobs(d.jobs || [])
@@ -66,7 +65,7 @@ export default function CronJobs() {
     try {
       const r = await fetch(`/api/cron/${jobId}/run`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${AUTH_TOKEN}` },
+        headers: { Authorization: `Bearer ${getAuthToken()}` },
       })
       if (r.ok) {
         showToast(`✅ ${jobName} 已触发运行`)
@@ -85,7 +84,7 @@ export default function CronJobs() {
     try {
       const r = await fetch(`/api/cron/${jobId}/toggle`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${AUTH_TOKEN}`, 'Content-Type': 'application/json' },
+        headers: { Authorization: `Bearer ${getAuthToken()}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ enabled: !currentEnabled }),
       })
       if (r.ok) {

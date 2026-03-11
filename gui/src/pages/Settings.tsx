@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface Settings {
   refreshInterval: number
@@ -12,7 +13,6 @@ const DEFAULT_SETTINGS: Settings = {
   refreshInterval: 30000, theme: 'dark', weatherLocation: 'Beijing', tokenAlertThreshold: 2000000
 }
 
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
 const INTERVAL_OPTIONS = [
   { value: 15000, label: '15秒' }, { value: 30000, label: '30秒' },
   { value: 60000, label: '1分钟' }, { value: 300000, label: '5分钟' }
@@ -32,7 +32,7 @@ export default function Settings() {
     if (saved) try { setSettings({ ...DEFAULT_SETTINGS, ...JSON.parse(saved) }) } catch { }
 
     // Fetch gateway config
-    fetch('/api/config', { headers: { Authorization: `Bearer ${AUTH_TOKEN}` } })
+    fetch('/api/config', { headers: { Authorization: `Bearer ${getAuthToken()}` } })
       .then(r => r.json())
       .then(d => { setGatewayConfig(d.config || d); setConfigLoading(false) })
       .catch(() => setConfigLoading(false))

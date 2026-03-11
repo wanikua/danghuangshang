@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useTheme } from "../theme"
+import { getAuthToken } from '../auth'
 
 interface Session {
   id: string
@@ -17,8 +18,6 @@ interface SessionsResponse {
   total: number
 }
 
-const AUTH_TOKEN = localStorage.getItem('boluo_auth_token') || ''
-
 export default function SessionHistory() {
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(true)
@@ -27,7 +26,7 @@ export default function SessionHistory() {
   const fetchSessions = async () => {
     try {
       const res = await fetch("/api/sessions?limit=15", {
-        headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
       })
       if (res.ok) {
         const data: SessionsResponse = await res.json()
