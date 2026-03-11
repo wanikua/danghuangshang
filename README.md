@@ -748,6 +748,64 @@ openclaw pairing approve feishu <配对码>
 >
 > 📖 完整飞书文档：[docs.openclaw.ai/channels/feishu](https://docs.openclaw.ai/channels/feishu)
 
+### 飞书排查指南
+
+Bot @了不回？按这个顺序排查：
+
+**① 事件订阅（最常见原因）**
+飞书开放平台 → 你的应用 → 事件与回调：
+- 订阅方式选 **WebSocket**（不是 HTTP）
+- 已添加事件：`im.message.receive_v1`（接收消息）
+- 状态显示 **已启用**
+
+> ⚠️ 配置事件订阅前需要先启动 Gateway，否则 WebSocket 长连接可能保存失败。
+
+**② 权限检查**
+应用管理 → 权限管理，确认已开启：
+
+| 权限 | 用途 |
+|------|------|
+| `im:message` | 读取消息 |
+| `im:message:send` | 发送消息 |
+| `im:chat` | 获取群信息 |
+
+**③ 配置文件检查**
+```json
+// openclaw.json 中必须有：
+"channels": {
+  "feishu": {
+    "enabled": true,
+    "appId": "cli_你的AppID",
+    "appSecret": "你的AppSecret"
+  }
+}
+```
+
+**④ 机器人能力**
+飞书开放平台 → 应用能力 → 确认开启了 **机器人** 能力，且 Bot 已被添加到目标群聊。
+
+**⑤ @方式**
+飞书里要从弹出列表中选择机器人，不能只手打文字 "@xxx"。
+
+**⑥ 查看日志**
+```bash
+# 看 Gateway 有没有收到飞书消息
+journalctl --user -u openclaw-gateway --since "5 min ago" | grep -i "feishu\|lark"
+
+# 常见报错：
+# "feishu: not connected" → appId/appSecret 错误
+# "feishu: event not received" → 事件订阅未配置
+# 没有任何 feishu 日志 → channels.feishu 未启用
+```
+
+**⑦ 配对确认**
+首次连接需要批准配对：
+```bash
+openclaw pairing approve feishu <配对码>
+```
+
+> 💡 90% 的飞书连接问题出在事件订阅和权限配置上。按 ①→② 的顺序检查通常就能解决。
+
 </details>
 
 ---
