@@ -2,8 +2,6 @@
 
 <!-- SEO 关键词 / Keywords：三省六部、明朝、六部制、中书省、门下省、尚书省、司礼监、兵部、户部、礼部、工部、刑部、吏部、AI朝廷、AI Agent、多Agent协作、人工智能管理、古代治国、现代管理、组织架构、OpenClaw、multi-agent、ancient-china -->
 
-> **⚠️ 维权声明：** 本项目于 **2026年2月22日** 首发（[小红书推广帖更早于2月20日](https://www.xiaohongshu.com/discovery/item/6998638f000000000d0092fe?source=webshare)），是「三省六部制 × AI 多智能体」概念的原创项目。近日发现有项目在 21 小时后创建了 15/15 核心设计决策完全一致的仿品，且不注明来源。完整证据链见 [GitHub Issue](https://github.com/cft0808/edict/issues/55) | [维权文章](https://mp.weixin.qq.com/s/erVkoANrpZQFawMCNn6p9g)。我们欢迎 fork 和二次开发，但请尊重开源精神，注明出处。
-
 # 🏛️ 三省六部 ✖️ OpenClaw — 当皇上需要几步？一键部署你的 AI 朝廷
 
 ### 30 分钟搭建 · 多 Agent 协作 · 零代码 · 古代治国智慧 × 现代 AI 管理
@@ -43,25 +41,19 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-t
 
 ## 目录
 
-| | 章节 | 说明 |
-|:---:|------|------|
-| 📜 | [这个项目是什么？](#这个项目是什么) | 项目介绍、设计理念、核心能力 |
-| 🆚 | [为什么选这套方案？](#为什么选这套方案) | 与 ChatGPT / AutoGPT / CrewAI 对比 |
-| 🏗️ | [技术架构](#技术架构) | 三省六部映射、架构图 |
-| 🎬 | [效果展示](#效果展示) | Discord 真实对话示例 |
-| 🚀 | [**快速开始**](#快速开始) | **← 从这里开始安装** |
-| | ├─ [Linux 服务器安装](#第一步一键部署5-分钟) | 一键脚本，5分钟搞定 |
-| | ├─ [macOS 本地安装](#第一步一键部署5-分钟) | Homebrew 自动安装 |
-| | ├─ [精简安装（已有 OpenClaw）](#第一步一键部署5-分钟) | 只初始化配置 |
-| | ├─ [填 Key 上线](#第二步填-key-上线10-分钟) | API Key + Discord Bot Token |
-| | └─ [全六部上线](#第三步全六部上线-自动化15-分钟) | 测试 + 配置自动化 |
-| 🍍 | [实战案例：菠萝王朝](#实战案例菠萝王朝) | 14 Agent 真实运行架构 |
-| 🏛️ | [朝廷架构详解](#朝廷架构三省六部制) | 历史背景、角色对照、多模型混搭 |
-| ⚙️ | [核心能力详解](#核心能力) | 协作、记忆、Skill、Cron、沙箱 |
-| 🖥️ | [GUI 管理界面](#gui-管理界面) | Web Dashboard + Discord + Notion |
-| ❓ | [常见问题](#常见问题) | 基础 + 技术 FAQ |
-| 🏢 | [企业版 Become CEO](#想要企业版) | 同架构的英文企业版 |
-| 🔗 | [相关链接 & 社区](#加入朝会) | 小红书、公众号、微信群 |
+| 章节 | 说明 |
+|------|------|
+| 📜 [这个项目是什么？](#这个项目是什么) | 项目介绍、核心能力 |
+| 🆚 [为什么选这套方案？](#为什么选这套方案) | 与 ChatGPT / AutoGPT / CrewAI 对比 |
+| 🚀 [**快速开始**](#快速开始) | **← 从这里开始安装（5分钟）** |
+| 🏗️ [技术架构](#️-技术架构) | 三省六部映射、架构图 |
+| 🎬 [效果展示](#-效果展示) | Discord 真实对话示例 |
+| 🍍 [实战案例：菠萝王朝](#-实战案例菠萝王朝) | 14 Agent 真实运行架构 |
+| 🏛️ [朝廷架构详解](#️-朝廷架构三省六部制) | 历史背景、多模型混搭 |
+| ⚙️ [核心能力](#️-核心能力) | 协作、记忆、Skill、Cron |
+| 🖥️ [GUI 管理界面](#️-gui-管理界面) | Web Dashboard + Discord + Notion |
+| 📚 [详细教程](#-详细教程) | 飞书接入、Notion 接入、诊断、FAQ |
+| 🔗 [社区 & 链接](#加入朝会) | 小红书、公众号、微信群 |
 
 ---
 
@@ -141,7 +133,8 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-t
 
 ---
 
-## 技术架构
+<details>
+<summary><h2>🏗️ 技术架构</h2></summary>
 
 ```
                           ┌─────────────────────┐
@@ -187,9 +180,13 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-t
 - **身份注入**：Gateway 自动将 SOUL.md + IDENTITY.md + 工作区文件组装为系统提示
 - **消息路由**：通过 `bindings` 配置将 `(channel, accountId)` 映射到 `agentId`，最具体的匹配优先
 
+
+</details>
+
 ---
 
-## 效果展示
+<details>
+<summary><h2>🎬 效果展示</h2></summary>
 
 ### Discord 对话示例
 
@@ -229,6 +226,9 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-t
 🏛️ 礼部：臣收到，将汇总营销数据。
 🏛️ 工部：臣收到，将备好服务器运行报告。
 ```
+
+
+</details>
 
 ---
 
@@ -345,7 +345,8 @@ openclaw cron add \
 
 ---
 
-## 实战案例：菠萝王朝
+<details>
+<summary><h2>🍍 实战案例：菠萝王朝</h2></summary>
 
 > 以下是基于本项目搭建的**真实运行中的 AI 朝廷**——菠萝王朝，展示 14 个 Agent 协同运作的完整架构。
 
@@ -440,9 +441,14 @@ openclaw cron add \
 
 > 💡 **这不是 demo，是每天在用的生产系统。** 菠萝王朝已稳定运行数周，处理过数百个实际任务——从代码开发到内容运营，从数据分析到项目管理。
 
+
+</details>
+
 ---
 
-## 朝廷架构——三省六部制
+<details>
+<summary><h2>🏛️ 朝廷架构——三省六部制</h2></summary>
+
 
 ### 历史背景
 
@@ -504,9 +510,13 @@ openclaw cron add \
 
 > 格式：`provider名/模型id`。支持任何兼容 OpenAI API 格式的服务商（Ollama、通义千问、Gemini 等），详见 [OpenClaw 模型配置文档](https://docs.openclaw.ai/concepts/models)。
 
+
+</details>
+
 ---
 
-## 核心能力
+<details>
+<summary><h2>⚙️ 核心能力</h2></summary>
 
 ### 多 Agent 协作
 每个部门是独立 Bot，@谁谁回复，@everyone 全员响应。大任务自动新建 Thread 保持频道整洁。
@@ -542,9 +552,14 @@ openclaw cron add \
 ### 沙箱隔离
 Agent 可以运行在 Docker 沙箱中，代码执行互不干扰。支持配置网络、文件系统、环境变量的隔离级别。
 
+
+</details>
+
 ---
 
-## GUI 管理界面
+<details>
+<summary><h2>🖥️ GUI 管理界面</h2></summary>
+
 
 除了 Discord 命令行交互，AI 朝廷还提供多种图形界面（GUI）管理方式：
 
@@ -611,15 +626,20 @@ Discord 本身就是最佳的 GUI 管理界面：
 
 > 💡 三层 GUI 配合使用：**Web Dashboard** 看系统状态 → **Discord** 下达指令 → **Notion** 查看报表和历史数据。
 
+
+</details>
+
 ---
 
-## 详细教程
+<details>
+<summary><h2>📚 详细教程</h2></summary>
+
 
 基础篇（服务器申请→安装→配置→跑起来）和进阶篇（tmux、GitHub、Notion、Cron、Discord、Prompt 技巧）见小红书系列笔记。
 
 ---
 
-## 📱 接入飞书（Feishu/Lark）
+### 📱 接入飞书（Feishu/Lark）
 
 除了 Discord，AI 朝廷也支持飞书作为交互界面。飞书插件已内置在新版 OpenClaw 中，无需额外安装。
 
@@ -698,7 +718,7 @@ openclaw pairing approve feishu <配对码>
 
 ---
 
-## 📝 接入 Notion（自动归档）
+### 📝 接入 Notion（自动归档）
 
 AI 朝廷可以通过 Notion Skill 自动写日报、归档数据、管理知识库。配置只需 3 步。
 
@@ -756,7 +776,7 @@ curl -s "https://api.notion.com/v1/users/me" \
 
 ---
 
-## 🏥 配置诊断（doctor.sh）
+### 🏥 配置诊断（doctor.sh）
 
 遇到问题？跑一行命令自动检查配置：
 
@@ -791,7 +811,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-t
 
 ---
 
-## 常见问题
+### 常见问题
 
 ### 基础问题
 
@@ -868,6 +888,11 @@ openclaw doctor --fix
 
 ---
 
+
+</details>
+
+---
+
 ## 加入朝会
 
 | 小红书「菠萝菠菠🍍」 | 公众号「菠言菠语」 | 微信群「OpenClaw 皇帝交流群」 |
@@ -887,6 +912,12 @@ openclaw doctor --fix
 - 🎭 [AI 朝廷 Skill — 中文版](https://github.com/wanikua/ai-court-skill)
 - 🔧 [OpenClaw 框架](https://github.com/openclaw/openclaw) — 本项目的底层框架
 - 📖 [OpenClaw 官方文档](https://docs.openclaw.ai)
+
+---
+
+> **⚠️ 维权声明：** 本项目于 **2026年2月22日** 首发（[小红书推广帖更早于2月20日](https://www.xiaohongshu.com/discovery/item/6998638f000000000d0092fe?source=webshare)），是「三省六部制 × AI 多智能体」概念的原创项目。近日发现有项目在 21 小时后创建了 15/15 核心设计决策完全一致的仿品，且不注明来源。完整证据链见 [GitHub Issue](https://github.com/cft0808/edict/issues/55) | [维权文章](https://mp.weixin.qq.com/s/erVkoANrpZQFawMCNn6p9g)。我们欢迎 fork 和二次开发，但请尊重开源精神，注明出处。
+
+---
 
 ## 免责声明 / Disclaimer
 
