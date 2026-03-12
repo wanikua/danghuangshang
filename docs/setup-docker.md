@@ -31,7 +31,8 @@ docker compose pull && docker compose up -d
 
 ## 镜像信息
 
-- 镜像：`ghcr.io/wanikua/boluobobo-ai-court-tutorial:latest`
+- Docker Hub：`boluobobo/ai-court:latest`（国内推荐，可配镜像加速）
+- GitHub：`ghcr.io/wanikua/boluobobo-ai-court-tutorial:latest`
 - 架构：linux/arm64（amd64 计划中）
 - 内含：Node.js 22 + OpenClaw + Chromium + GitHub CLI + Python + OpenViking
 - 工作区和配置通过 volume 持久化，升级不丢数据
