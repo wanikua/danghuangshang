@@ -300,7 +300,6 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << FEISHU_EOF
       "groupPolicy": "open",
       "accounts": {
         "silijian": {
-          "name": "司礼监",
           "appId": "YOUR_FEISHU_APP_ID",
           "appSecret": "YOUR_FEISHU_APP_SECRET",
           "botName": "司礼监",
@@ -434,52 +433,52 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << CONFIG_EOF
       "allowBots": true,
       "accounts": {
         "silijian": {
-          "name": "司礼监",
+          "botName": "司礼监",
           "token": "YOUR_SILIJIAN_BOT_TOKEN",
           "groupPolicy": "open"
         },
         "bingbu": {
-          "name": "兵部",
+          "botName": "兵部",
           "token": "YOUR_BINGBU_BOT_TOKEN",
           "groupPolicy": "open"
         },
         "hubu": {
-          "name": "户部",
+          "botName": "户部",
           "token": "YOUR_HUBU_BOT_TOKEN",
           "groupPolicy": "open"
         },
         "libu": {
-          "name": "礼部",
+          "botName": "礼部",
           "token": "YOUR_LIBU_BOT_TOKEN",
           "groupPolicy": "open"
         },
         "gongbu": {
-          "name": "工部",
+          "botName": "工部",
           "token": "YOUR_GONGBU_BOT_TOKEN",
           "groupPolicy": "open"
         },
         "libu2": {
-          "name": "吏部",
+          "botName": "吏部",
           "token": "YOUR_LIBU2_BOT_TOKEN",
           "groupPolicy": "open"
         },
         "xingbu": {
-          "name": "刑部",
+          "botName": "刑部",
           "token": "YOUR_XINGBU_BOT_TOKEN",
           "groupPolicy": "open"
         },
         "neige": {
-          "name": "内阁",
+          "botName": "内阁",
           "token": "YOUR_NEIGE_BOT_TOKEN",
           "groupPolicy": "open"
         },
         "duchayuan": {
-          "name": "都察院",
+          "botName": "都察院",
           "token": "YOUR_DUCHAYUAN_BOT_TOKEN",
           "groupPolicy": "open"
         },
         "hanlinyuan": {
-          "name": "翰林院",
+          "botName": "翰林院",
           "token": "YOUR_HANLINYUAN_BOT_TOKEN",
           "groupPolicy": "open"
         }
