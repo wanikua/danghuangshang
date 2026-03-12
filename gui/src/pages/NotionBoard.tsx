@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
 import { useTheme } from "../theme"
-import {
 import { getAuthToken } from '../auth'
   PieChart,
   Pie,
