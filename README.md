@@ -231,8 +231,6 @@ systemctl --user start openclaw-gateway
 **Q: 和直接用 ChatGPT 有什么区别？**
 → ChatGPT 是单通才，关掉就失忆。这里是多专家，各有记忆和工具，能自动提交 GitHub、写 Notion、跑定时任务。
 
-**Q: 每月 API 费用？**
-→ 轻度 $10-15，中度 $20-30。重活用强力模型，轻活用快速模型（省 5 倍）。
 
 **Q: @everyone 不触发回复？**
 → 每个 Bot 要开 Message Content Intent + Server Members Intent。详见 [诊断工具](./docs/doctor.md)。
@@ -288,7 +286,6 @@ systemctl --user start openclaw-gateway
 - 🔴 **不要在个人电脑上安装**——用云服务器，出问题随时重建
 - 🔴 **workspace 设专用目录**（如 `/home/ubuntu/clawd`），不要设成家目录
 - 🔴 **API Key 不要提交到公开仓库**
-- 💡 不跑代码的部门 sandbox 设 `"off"`，跑代码的设 `"all"`
 
 ---
 
