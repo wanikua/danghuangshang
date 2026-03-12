@@ -47,4 +47,3 @@
 | [菠萝王朝案例](./pineapple-dynasty.md) | 14 Agent 真实运行的完整案例 |
 | [完整 FAQ](./faq.md) | 基础 + 技术常见问题 |
 | [飞书 Issue 回复](./feishu-issue-replies.md) | 飞书相关 GitHub Issue 汇总 |
-| [原创声明与维权](./copyright.md) | 原创证据链、维权截图 |

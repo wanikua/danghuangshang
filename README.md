@@ -265,7 +265,7 @@ systemctl --user start openclaw-gateway
 
 ## ⚠️ 维权声明
 
-本项目于 **2026年2月22日** 首发（[小红书推广帖更早于2月20日](https://www.xiaohongshu.com/discovery/item/6998638f000000000d0092fe?source=webshare)），是「三省六部制 × AI 多智能体」概念的原创项目。完整证据链见 [GitHub Issue](https://github.com/cft0808/edict/issues/55) | [维权文章](https://mp.weixin.qq.com/s/erVkoANrpZQFawMCNn6p9g) | [证据截图](./docs/copyright.md)。欢迎 fork 和二次开发，请尊重开源精神，注明出处。
+本项目于 **2026年2月22日** 首发（[小红书推广帖更早于2月20日](https://www.xiaohongshu.com/discovery/item/6998638f000000000d0092fe?source=webshare)），是「三省六部制 × AI 多智能体」概念的原创项目。完整证据链见 [GitHub Issue](https://github.com/cft0808/edict/issues/55) | [维权文章](https://mp.weixin.qq.com/s/erVkoANrpZQFawMCNn6p9g)。欢迎 fork 和二次开发，请尊重开源精神，注明出处。
 
 > 📕 小红书原创系列：[用AI当上皇帝的第3天](https://www.xiaohongshu.com/discovery/item/6998638f000000000d0092fe) | [赛博皇帝的日常](https://www.xiaohongshu.com/discovery/item/69a95dc3000000002801e886)
 
