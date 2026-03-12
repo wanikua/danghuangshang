@@ -47,12 +47,12 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-t
 | 🆚 [为什么选这套方案？](#为什么选这套方案) | 与 ChatGPT / AutoGPT / CrewAI 对比 |
 | 🏗️ [技术架构](#技术架构) | 三省六部映射、架构图 |
 | 🎬 [效果展示](#效果展示) | Discord 真实对话示例 |
-| 🚀 [**快速开始**](#快速开始) | **← 从这里开始安装** |
-| ├─ [Linux 服务器安装](#第一步一键部署5-分钟) | 一键脚本，5分钟搞定 |
-| ├─ [macOS 本地安装](#第一步一键部署5-分钟) | Homebrew 自动安装 |
-| ├─ [精简安装（已有 OpenClaw）](#第一步一键部署5-分钟) | 只初始化配置 |
-| ├─ [填 Key 上线](#第二步填-key-上线10-分钟) | API Key + Discord Bot Token |
-| └─ [全六部上线](#第三步全六部上线-自动化15-分钟) | 测试 + 配置自动化 |
+| 🚀 [**快速开始**](#快速开始) | **← 从这里开始安装（路线图引导）** |
+| ├─ [路径 A: Linux + Discord](#路径-a-linux--discord新手推荐) | 海外用户首选 |
+| ├─ [路径 B: Docker 部署](#路径-b-docker-部署) | 有 Docker 经验 |
+| ├─ [路径 C: macOS 本地](#路径-c-macos-本地) | Mac 用户 |
+| ├─ [路径 D: Linux + 飞书](#路径-d-linux--飞书国内推荐) | 国内用户首选 |
+| └─ [路径 E: 纯 WebUI](#路径-e-纯-webui) | 不需要 Bot |
 | 🍍 [实战案例：菠萝王朝](#实战案例菠萝王朝) | 14 Agent 真实运行架构 |
 | 🏛️ [朝廷架构详解](#朝廷架构三省六部制) | 历史背景、角色对照、多模型混搭 |
 | ⚙️ [核心能力详解](#核心能力) | 协作、记忆、Skill、Cron、沙箱 |
@@ -243,107 +243,250 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-t
 
 ## 快速开始
 
-### 第一步：一键部署（5 分钟）
-
-准备一台 Linux 服务器，SSH 连上，选择对应的安装方式：
-
 > 🔴 **新手请用云服务器，不要在个人电脑上安装！** Agent 拥有工作区的完整读写和命令执行权限，在云服务器上出问题随时重建，在个人电脑上可能误删文件。详见 [安全须知](#🛡️-安全须知新手必读)。
 
-#### 服务器推荐
+### 🗺️ 部署路线图 — 找到你的路径
+
+```
+                        ┌─────────────────────┐
+                        │   你想用什么平台？    │
+                        └──────────┬──────────┘
+                 ┌─────────────────┼─────────────────┐
+                 ▼                 ▼                  ▼
+          ┌────────────┐   ┌────────────┐    ┌──────────────┐
+          │  Discord   │   │    飞书    │    │ 纯 WebUI     │
+          │ 海外/全球  │   │  国内首选  │    │ 不需要Bot    │
+          └─────┬──────┘   └─────┬──────┘    └──────┬───────┘
+                │                │                   │
+       ┌────────┴────────┐      │          ┌────────┴────────┐
+       ▼        ▼        ▼      ▼          ▼                 ▼
+   ┌───────┐┌──────┐┌───────┐┌───────┐┌───────┐       ┌──────────┐
+   │ Linux ││Docker││ macOS ││ Linux ││Docker │       │install.sh│
+   │云服务器││容器化││ 本地  ││云服务器││容器化 │       │  模式3   │
+   └───┬───┘└──┬───┘└───┬───┘└───┬───┘└──┬───┘       └────┬─────┘
+       │       │        │        │       │                 │
+       ▼       ▼        ▼        ▼       ▼                 ▼
+     路径A   路径B     路径C    路径D   路径B             路径E
+```
+
+| 路径 | 适合谁 | 部署方式 | 平台 | 跳转 |
+|:---:|--------|----------|------|------|
+| **A** | 新手首选 | Linux 云服务器 + Discord | 海外 | [→ 路径 A](#路径-a-linux--discord新手推荐) |
+| **B** | 有 Docker 经验 | Docker 容器化 | 通用 | [→ 路径 B](#路径-b-docker-部署) |
+| **C** | Mac 用户 | macOS 本地 | 通用 | [→ 路径 C](#路径-c-macos-本地) |
+| **D** | 国内用户 | Linux 云服务器 + 飞书 | 国内 | [→ 路径 D](#路径-d-linux--飞书国内推荐) |
+| **E** | 极简体验 | 纯 WebUI（无 Bot） | — | [→ 路径 E](#路径-e-纯-webui) |
+
+> 💡 **不确定选哪个？** 国内用户选 **路径 D**（飞书），海外用户选 **路径 A**（Discord）。
+
+---
+
+### 路径 A: Linux + Discord（新手推荐）
+
+<details>
+<summary>📖 展开路径 A 详细步骤</summary>
+
+#### 1. 准备服务器
 
 | 平台 | 推荐配置 | 费用 | 说明 |
 |------|----------|------|------|
-| **阿里云** | ECS 2核4G / ARM | 免费试用 / 低至 ¥40/月 | [领取免费试用](https://free.aliyun.com/) |
-| **腾讯云** | 轻量应用服务器 2核4G | 免费试用 / 低至 ¥40/月 | [领取免费试用](https://cloud.tencent.com/act/free) |
-| **华为云** | HECS 2核4G | 免费试用 | [领取免费试用](https://activity.huaweicloud.com/free_test/) |
-| **AWS** | t4g.medium (ARM) | 免费套餐 12 个月 | [Free Tier](https://aws.amazon.com/free/) |
-| **GCP** | e2-medium | 免费套餐 90 天 | [Free Trial](https://cloud.google.com/free) |
-| **Oracle Cloud** | ARM 4核24G | **永久免费** | [Always Free](https://www.oracle.com/cloud/free/) |
-| **本地 Mac** | M1/M2/M3/M4 | 无需服务器 | 见下方 Mac 安装 |
+| **Oracle Cloud** | ARM 4核24G | **永久免费** ⭐ | [Always Free](https://www.oracle.com/cloud/free/) |
+| **阿里云** | ECS 2核4G | 免费试用 / ¥40/月 | [领取免费试用](https://free.aliyun.com/) |
+| **腾讯云** | 轻量 2核4G | 免费试用 / ¥40/月 | [领取免费试用](https://cloud.tencent.com/act/free) |
+| **AWS** | t4g.medium | 免费 12 个月 | [Free Tier](https://aws.amazon.com/free/) |
 
-> 💡 推荐 ARM 架构 + 4GB 以上内存。如果只跑司礼监（单 Agent），2GB 内存也够用。
+> 💡 推荐 ARM 架构 + 4GB 以上内存。只跑司礼监（单 Agent）2GB 也够。
 
-#### Linux 一键安装
+#### 2. 一键安装
+
+SSH 连上服务器，运行：
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+# 选择模式 1: Discord 多Bot模式
 ```
 
-脚本自动完成：
-- ✅ 系统更新 + 防火墙配置（自动适配阿里云/腾讯云/Oracle 等）
-- ✅ 4GB Swap（防 OOM）
-- ✅ Node.js 22 + GitHub CLI + Chromium
-- ✅ OpenClaw 全局安装
-- ✅ 工作区初始化（SOUL.md / IDENTITY.md / USER.md / openclaw.json 多 Agent 模板）
-- ✅ Gateway 系统服务安装（开机自启）
+脚本自动完成：系统更新 → 防火墙 → Swap → Node.js 22 → OpenClaw → 工作区初始化 → Gateway 系统服务
 
-安装脚本带彩色输出和进度提示，每一步都有 ✓ 成功标记。
-
-> 💡 **已经装好 OpenClaw/Clawdbot？** 用精简版脚本，跳过系统依赖安装，只初始化工作区和配置模板：
-> ```bash
-> bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install-lite.sh)
-> ```
-> 支持两种模式：Discord 多Bot模式 或 纯 WebUI 模式（不需要Discord）。
-
-> 🍎 **macOS 用户？** 用 Mac 专用脚本，自动通过 Homebrew 安装所有依赖：
-> ```bash
-> bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install-mac.sh)
-> ```
-> 支持 Intel 和 Apple Silicon (M1/M2/M3/M4)，自动检测架构。
-
-> 🐳 **Docker 用户？** 预构建镜像支持 amd64 + arm64，不污染系统环境：
-> ```bash
-> # 1. 克隆项目
-> git clone https://github.com/wanikua/boluobobo-ai-court-tutorial.git
-> cd boluobobo-ai-court-tutorial
->
-> # 2. 准备配置文件（复制模板，填入 API Key 和 Bot Token）
-> cp openclaw.example.json openclaw.json
-> nano openclaw.json
->
-> # 3. 一键启动（自动拉取预构建镜像）
-> docker compose up -d
->
-> # 查看日志
-> docker compose logs -f
->
-> # 升级
-> docker compose pull && docker compose up -d
->
-> # 停止
-> docker compose down
-> ```
-> 镜像：`ghcr.io/wanikua/boluobobo-ai-court-tutorial:latest`（支持 amd64/arm64）
-> 容器内已预装 OpenClaw + Chromium + GitHub CLI + Python。工作区和配置通过 volume 持久化。
->
-> **Docker 端口说明：**
-> | 端口 | 用途 |
-> |------|------|
-> | 18789 | Gateway Dashboard |
-> | 18795 | 菠萝 GUI（可选） |
-
-### 第二步：填 Key 上线（10 分钟）
-
-跑完脚本，你只需要填两样东西：
-
-1. **LLM API Key** → 你的 LLM 服务商控制台
-2. **Discord Bot Token**（每个部门一个）→ [discord.com/developers](https://discord.com/developers/applications)
+#### 3. 填 Key
 
 ```bash
-# 编辑配置，填入 API Key 和 Bot Token
-# 配置文件路径取决于安装的包：openclaw 用 ~/.openclaw/openclaw.json，clawdbot 用 ~/.clawdbot/clawdbot.json
 nano ~/.openclaw/openclaw.json
+```
 
-# 启动朝廷
+填两样东西：
+1. **LLM API Key** — 你的 LLM 服务商（Anthropic / OpenAI / DeepSeek 等）
+2. **Discord Bot Token** — [discord.com/developers](https://discord.com/developers/applications) 创建 Bot 获取
+
+> 💡 每个部门需要一个独立的 Discord Bot。起步可以只创建司礼监一个 Bot，后续再加。
+
+#### 4. 启动
+
+```bash
 systemctl --user start openclaw-gateway
-
-# 验证
 systemctl --user status openclaw-gateway
 ```
 
-在 Discord @你的 Bot 说句话，收到回复就成功了。
+在 Discord @你的 Bot 说句话，收到回复就成功了！🎉
 
-### 第三步：全六部上线 + 自动化（15 分钟）
+> ⚠️ 每个 Bot 都要在 Discord Developer Portal 开启 **Message Content Intent** + **Server Members Intent**。
+
+</details>
+
+---
+
+### 路径 B: Docker 部署
+
+<details>
+<summary>📖 展开路径 B 详细步骤</summary>
+
+预构建镜像支持 **amd64 + arm64**，不污染系统环境。
+
+```bash
+# 1. 克隆项目
+git clone https://github.com/wanikua/boluobobo-ai-court-tutorial.git
+cd boluobobo-ai-court-tutorial
+
+# 2. 准备配置文件（复制模板，填入 API Key 和 Bot Token）
+cp openclaw.example.json openclaw.json
+nano openclaw.json
+
+# 3. 一键启动
+docker compose up -d
+
+# 查看日志
+docker compose logs -f
+
+# 升级
+docker compose pull && docker compose up -d
+```
+
+镜像：`ghcr.io/wanikua/boluobobo-ai-court-tutorial:latest`
+容器内已预装 OpenClaw + Chromium + GitHub CLI + Python。
+
+| 端口 | 用途 |
+|------|------|
+| 18789 | Gateway Dashboard |
+| 18795 | 菠萝 GUI（可选） |
+
+> 💡 配置文件里填 Discord Bot Token 或飞书 App ID/Secret 均可。Docker 模式支持所有平台。
+
+</details>
+
+---
+
+### 路径 C: macOS 本地
+
+<details>
+<summary>📖 展开路径 C 详细步骤</summary>
+
+支持 Intel 和 Apple Silicon (M1/M2/M3/M4)，自动检测架构：
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install-mac.sh)
+```
+
+自动通过 Homebrew 安装所有依赖。装完后填 Key、启动：
+
+```bash
+nano ~/.openclaw/openclaw.json   # 填 API Key + Bot Token
+openclaw gateway --verbose       # 启动（Mac 不用 systemd）
+```
+
+> 💡 Mac 上 Agent 能访问你的本地文件系统，建议设置独立工作区目录。
+
+</details>
+
+---
+
+### 路径 D: Linux + 飞书（国内推荐）
+
+<details>
+<summary>📖 展开路径 D 详细步骤</summary>
+
+飞书无需梯子，WebSocket 长连接不需要公网 IP。
+
+#### 1. 准备服务器
+
+同路径 A，推荐阿里云/腾讯云/华为云（国内延迟更低）。
+
+#### 2. 一键安装
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+# 选择模式 2: 飞书多Bot模式
+```
+
+#### 3. 创建飞书应用
+
+1. 打开 [飞书开放平台](https://open.feishu.cn/app)，创建企业自建应用
+2. 复制 **App ID**（`cli_xxx`）和 **App Secret**
+3. **权限管理** → 添加 `im:message` 等 8 个权限
+4. **应用能力** → 开启机器人
+5. **事件订阅** → WebSocket 模式 → 添加 `im.message.receive_v1`
+6. **版本管理** → 创建版本并发布
+
+> 📖 详细步骤见 [飞书配置指南](./飞书配置指南.md)
+
+#### 4. 填 Key
+
+```bash
+nano ~/.openclaw/openclaw.json
+```
+
+填两样东西：
+1. **LLM API Key** — 你的 LLM 服务商
+2. **飞书 App ID + App Secret** — 填到 `channels.feishu.accounts` 里
+
+#### 5. 启动
+
+```bash
+systemctl --user start openclaw-gateway
+systemctl --user status openclaw-gateway
+```
+
+在飞书里给机器人发消息，收到回复就成功了！🎉
+
+> 💡 起步只需一个飞书应用（司礼监），通过 `sessions_spawn` 调度其他部门。不用一次创建 7 个应用。
+
+</details>
+
+---
+
+### 路径 E: 纯 WebUI
+
+<details>
+<summary>📖 展开路径 E 详细步骤</summary>
+
+不想配 Discord/飞书？直接通过浏览器使用：
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install-lite.sh)
+# 选择：纯 WebUI 模式
+```
+
+填入 LLM API Key 后启动 Gateway，访问 `http://你的IP:18789` 即可在浏览器里与 Agent 对话。
+
+</details>
+
+---
+
+### 🪟 Windows 用户？
+
+通过 WSL2 运行，详见 [Windows WSL2 安装指南](./docs/windows-wsl.md)。
+
+### 已有 OpenClaw/Clawdbot？
+
+用精简版脚本，跳过系统依赖安装，只初始化工作区和配置模板：
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install-lite.sh)
+```
+
+---
+
+### 安装完成后：全六部上线 + 自动化
+
+无论哪条路径，安装完成后的体验是一样的：
 
 ```
 @兵部 帮我写个用户登录的 API
@@ -361,10 +504,8 @@ systemctl --user status openclaw-gateway
 
 配置自动日报：
 ```bash
-# 获取 Gateway Token
-openclaw gateway token
+openclaw gateway token   # 获取 Token
 
-# 每天 22:00（北京时间）自动生成日报
 openclaw cron add \
   --name "每日日报" --agent main \
   --cron "0 22 * * *" --tz "Asia/Shanghai" \
