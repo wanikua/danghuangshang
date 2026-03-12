@@ -62,7 +62,9 @@ nano ~/.openclaw/openclaw.json
       "accounts": {
         "silijian": {
           "appId": "cli_你的AppID",
-          "appSecret": "你的AppSecret"
+          "appSecret": "你的AppSecret",
+          "botName": "司礼监",
+          "groupPolicy": "open"
         }
       }
     }
