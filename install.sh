@@ -314,16 +314,29 @@ if command -v openclaw &>/dev/null; then
     CURRENT_VER=$(openclaw --version 2>/dev/null || echo "unknown")
     echo -e "  ${GREEN}✓ OpenClaw 已安装 ($CURRENT_VER)，更新中...${NC}"
 fi
+# [H-01] nvm/volta 环境下不使用 sudo，避免系统 npm 与用户 npm 路径冲突
+_npm_install_global() {
+    if [ -n "$NVM_DIR" ] || [ -n "$VOLTA_HOME" ] || [ -n "$FNM_DIR" ]; then
+        npm install -g openclaw --loglevel=error
+    else
+        $SUDO npm install -g openclaw --loglevel=error
+    fi
+}
 # pnpm 优先，npm 兜底
 if command -v pnpm &>/dev/null; then
-    pnpm add -g openclaw --silent 2>/dev/null || $SUDO npm install -g openclaw --loglevel=error
+    pnpm add -g openclaw --silent 2>/dev/null || _npm_install_global
 else
-    $SUDO npm install -g openclaw --loglevel=error
+    _npm_install_global
 fi
 echo -e "  ${GREEN}✓ OpenClaw $(openclaw --version 2>/dev/null) 安装完成${NC}"
 
 # ---- 8. 初始化工作区 ----
 echo -e "${YELLOW}[8/8] 初始化朝廷工作区...${NC}"
+# [H-07] 确保 HOME 非空且路径安全（macOS 用户名可能含空格）
+HOME="${HOME:-/root}"
+if [[ "$HOME" == *" "* ]]; then
+    echo -e "  ${YELLOW}⚠ HOME 路径含空格 ($HOME)，JSON 配置中的路径请手动检查${NC}"
+fi
 WORKSPACE="$HOME/clawd"
 CONFIG_DIR="$HOME/.openclaw"
 mkdir -p "$WORKSPACE"

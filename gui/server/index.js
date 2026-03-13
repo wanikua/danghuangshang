@@ -1,9 +1,11 @@
 import express from 'express';
 import cors from 'cors';
-import { readFileSync, readdirSync, existsSync, statSync } from 'fs';
+import { readFileSync, readdirSync, existsSync, statSync, createReadStream } from 'fs';
+import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import readline from 'readline';
 import os from 'os';
 import http from 'http';
 import { createRequire } from 'module';
@@ -423,9 +425,9 @@ app.get('/api/health', authMiddleware, async (req, res) => {
       gateway: 'connected',
       endpoints: endpointCount,
       cache: { hits: cacheHits, misses: cacheMisses, keys: Object.keys(cache).length },
-      wsClients: typeof wss !== 'undefined' ? wss.clients.size : 0,
-      sseClients: typeof sseClients !== 'undefined' ? sseClients.size : 0,
-      metricsBufferSize: typeof metricsBuffer !== 'undefined' ? metricsBuffer.length : 0,
+      wsClients: wss?.clients?.size ?? 0,
+      sseClients: sseClients?.size ?? 0,
+      metricsBufferSize: metricsBuffer?.length ?? 0,
       timestamp: new Date().toISOString()
     });
   } catch (err) {
@@ -458,43 +460,26 @@ setInterval(() => {
   }
 }, 10 * 60 * 1000);
 
-// Count messages and usage from a JSONL session file (streaming, line-by-line)
-function countSessionFile(filePath) {
+// [H-09] Count messages and usage from a JSONL session file (async streaming to avoid blocking event loop)
+async function countSessionFile(filePath) {
   const result = { messages: 0, userMessages: 0, assistantMessages: 0, inputTokens: 0, outputTokens: 0 };
   try {
     if (!filePath || !existsSync(filePath)) return result;
-    // Stream read: read in chunks and process line by line to avoid loading entire file into memory
-    const fd = require('fs').openSync(filePath, 'r');
-    const CHUNK = 64 * 1024; // 64KB chunks
-    const buf = Buffer.alloc(CHUNK);
-    let leftover = '';
-    let bytesRead;
-    while ((bytesRead = require('fs').readSync(fd, buf, 0, CHUNK)) > 0) {
-      const chunk = leftover + buf.toString('utf-8', 0, bytesRead);
-      const lines = chunk.split('\n');
-      leftover = lines.pop() || ''; // last partial line
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed) continue;
-        try {
-          const entry = JSON.parse(trimmed);
-          if (entry.type === 'message' && entry.message) {
-            result.messages++;
-            if (entry.message.role === 'user') result.userMessages++;
-            else if (entry.message.role === 'assistant') result.assistantMessages++;
-            const usage = entry.message?.usage;
-            if (usage) {
-              result.inputTokens += usage.input || usage.input_tokens || usage.inputTokens || 0;
-              result.outputTokens += usage.output || usage.output_tokens || usage.outputTokens || 0;
-            }
-          }
-        } catch { }
-      }
+    const fileSize = statSync(filePath).size;
+    // Skip files larger than 50MB to avoid excessive processing
+    if (fileSize > 50 * 1024 * 1024) {
+      console.warn(`[Sessions] Skipping oversized session file (${(fileSize / 1024 / 1024).toFixed(1)}MB): ${filePath}`);
+      return result;
     }
-    // Process any remaining leftover
-    if (leftover.trim()) {
+    const rl = readline.createInterface({
+      input: createReadStream(filePath, { encoding: 'utf-8' }),
+      crlfDelay: Infinity,
+    });
+    for await (const line of rl) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
       try {
-        const entry = JSON.parse(leftover.trim());
+        const entry = JSON.parse(trimmed);
         if (entry.type === 'message' && entry.message) {
           result.messages++;
           if (entry.message.role === 'user') result.userMessages++;
@@ -507,13 +492,12 @@ function countSessionFile(filePath) {
         }
       } catch { }
     }
-    require('fs').closeSync(fd);
   } catch { }
   return result;
 }
 
-// Build all sessions data (cached)
-function buildSessionsData() {
+// [H-09] Build all sessions data (cached, async to avoid blocking event loop)
+async function buildSessionsData() {
   const cached = getCached('sessions');
   if (cached) return cached;
   
@@ -527,12 +511,16 @@ function buildSessionsData() {
       if (existsSync(sessionsPath)) {
         try {
           const data = JSON.parse(readFileSync(sessionsPath, 'utf-8'));
-          for (const [sessionKey, session] of Object.entries(data)) {
+          // Collect count promises for parallel async processing
+          const entries = Object.entries(data);
+          const countPromises = entries.map(([, session]) =>
+            countSessionFile(session.sessionFile || '')
+          );
+          const allCounts = await Promise.all(countPromises);
+          
+          entries.forEach(([sessionKey, session], i) => {
             const updatedAt = session.updatedAt || 0;
-            const sessionFile = session.sessionFile || '';
-            
-            // Count messages and tokens from the JSONL file
-            const counts = countSessionFile(sessionFile);
+            const counts = allCounts[i];
             
             // 判定渠道
             let channel = session.channel || session.lastChannel || 'unknown';
@@ -557,7 +545,7 @@ function buildSessionsData() {
               model: session.model || '',
               displayName: session.displayName || '',
             });
-          }
+          });
         } catch (e) { }
       }
     }
@@ -573,10 +561,10 @@ function buildSessionsData() {
   return result;
 }
 
-app.get('/api/sessions', authMiddleware, (req, res) => {
+app.get('/api/sessions', authMiddleware, async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 100;
-    const data = buildSessionsData();
+    const data = await buildSessionsData();
     res.json({ 
       sessions: data.sessions.slice(0, limit), 
       total: data.total,
@@ -593,7 +581,7 @@ app.get('/api/dashboard/summary', authMiddleware, async (req, res) => {
     const cached = getCached('dashboard_summary');
     if (cached) return res.json(cached);
 
-    const sessData = buildSessionsData();
+    const sessData = await buildSessionsData();
     const sessions = sessData.sessions;
     
     // Total tokens
@@ -1928,7 +1916,7 @@ wss.on('connection', (ws, req) => {
 });
 
 // Broadcast dashboard summary every 30 seconds
-setInterval(() => {
+setInterval(async () => {
   if (wss.clients.size === 0) return;
   
   try {
@@ -1936,7 +1924,7 @@ setInterval(() => {
     delete cache['dashboard_summary'];
     
     // Build fresh data using the status endpoint's logic
-    const sessData = buildSessionsData();
+    const sessData = await buildSessionsData();
     const sessions = sessData.sessions;
     let totalInput = 0, totalOutput = 0;
     const deptActivity = {};

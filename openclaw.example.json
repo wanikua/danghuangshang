@@ -26,7 +26,7 @@
   },
   "agents": {
     "defaults": {
-      "workspace": "$HOME/clawd",
+      "workspace": "/home/YOUR_USERNAME/clawd",
       "model": { "primary": "your-provider/fast-model" },
       "sandbox": { "mode": "non-main" }
     },

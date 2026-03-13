@@ -49,7 +49,7 @@
 
 ## High（11 个）
 
-### H-01 · `install.sh` 使用 `$SUDO npm install -g` 在已有 nvm/volta 环境下会破坏用户的 Node 环境
+### H-01 · ✅ `install.sh` 使用 `$SUDO npm install -g` 在已有 nvm/volta 环境下会破坏用户的 Node 环境
 - **文件**：`install.sh` L252-255
 - **描述**：`$SUDO npm install -g openclaw` 使用 sudo 安装全局 npm 包。如果用户通过 nvm/volta 管理 Node.js，sudo 调用的是系统 npm（而非 nvm 管理的 npm），安装位置与用户 PATH 不一致，导致 `openclaw` 命令找不到。
 - **严重程度**：High
@@ -91,13 +91,13 @@
   ```
   同时调整工作区和配置目录的权限。
 
-### H-05 · `gui/server/index.js` 中 `/api/health` 引用了可能未定义的 `wss` 变量
+### H-05 · ✅ `gui/server/index.js` 中 `/api/health` 引用了可能未定义的 `wss` 变量
 - **文件**：`gui/server/index.js` L426
 - **描述**：`typeof wss !== 'undefined' ? wss.clients.size : 0`。虽然使用了 `typeof` 检测，但 `wss` 是在文件后面通过 `import { WebSocketServer } from 'ws'` 导入但从未实例化为 `wss` 变量（代码中 `import { WebSocketServer } from 'ws'` 存在但 `wss` 从未被赋值），所以 `wss.clients.size` 始终为 0 或报错。这是死代码/不完整功能。
 - **严重程度**：High
 - **修复建议**：要么完成 WebSocket 服务器初始化，要么移除相关引用，避免误导。
 
-### H-06 · `openclaw.example.json` 中 `$HOME` 不会被 JSON 解析器展开
+### H-06 · ✅ `openclaw.example.json` 中 `$HOME` 不会被 JSON 解析器展开
 - **文件**：`openclaw.example.json` L29
 - **描述**：`"workspace": "$HOME/clawd"` 包含 shell 变量 `$HOME`。JSON 文件不会自动展开 shell 变量。如果用户直接复制此文件作为配置，OpenClaw 可能无法识别 `$HOME`（除非框架自身有变量替换逻辑），导致工作区路径错误。
 - **严重程度**：High（如果 OpenClaw 不支持变量展开则为 Critical）
@@ -107,7 +107,7 @@
   ```
   并添加注释说明用户需要替换。
 
-### H-07 · `install.sh` 中 heredoc 内的 `$HOME` 变量在 JSON 中不加引号
+### H-07 · ✅ `install.sh` 中 heredoc 内的 `$HOME` 变量在 JSON 中不加引号
 - **文件**：`install.sh` L297, L352 等处（CONFIG_EOF heredoc 内部）
 - **描述**：heredoc 使用 `<< CONFIG_EOF`（不带引号），所以 `$HOME` 会被当前 shell 展开。这通常是期望行为，但如果 `$HOME` 含空格（如 macOS 上 `/Users/John Smith`），生成的 JSON 会格式错误。此外，如果用户在 Docker 中以非 root 身份运行，`$HOME` 可能为空。
 - **严重程度**：High
@@ -128,7 +128,7 @@
   fi
   ```
 
-### H-09 · `gui/server/index.js` 使用 `readFileSync` 同步读取可能很大的 JSONL 文件
+### H-09 · ✅ `gui/server/index.js` 使用 `readFileSync` 同步读取可能很大的 JSONL 文件
 - **文件**：`gui/server/index.js` L354-380（`buildSessionsData` → `countSessionFile`）
 - **描述**：`buildSessionsData()` 遍历所有 Agent 的所有 session，对每个 JSONL 文件调用 `countSessionFile()` 同步读取。如果有几百个 session 文件，每个几十 MB，Node.js 事件循环会被长时间阻塞，导致所有 API 请求超时。
 - **严重程度**：High

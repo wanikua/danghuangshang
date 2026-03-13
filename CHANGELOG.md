@@ -1,5 +1,16 @@
 # 📜 Changelog
 
+## v3.5.2 (2026-03-13)
+
+### Bug 修复
+- **H-01** `install.sh` — nvm/volta/fnm 环境下不再使用 sudo 安装全局 npm 包，避免系统 npm 与用户 npm 路径冲突
+- **H-05** `gui/server/index.js` — `/api/health` 中 wss/sseClients/metricsBuffer 引用改为 optional chaining，消除死代码风险
+- **H-06** `openclaw.example.json` — `$HOME/clawd` 替换为 `/home/YOUR_USERNAME/clawd` 占位符，JSON 不再依赖 shell 变量展开
+- **H-07** `install.sh` — heredoc 中 `$HOME` 增加空值保护（`${HOME:-/root}`）及空格路径警告
+- **H-09** `gui/server/index.js` — `countSessionFile` 从同步 readSync 改为异步 readline stream，不再阻塞 Node 事件循环；新增 50MB 文件大小上限跳过
+
+---
+
 ## v3.5.1 (2026-03-12)
 
 ### 优化
