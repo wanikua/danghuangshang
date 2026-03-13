@@ -517,8 +517,10 @@ cat > "$CONFIG_DIR/openclaw.json" << FEISHU_EOF
         "identity": { "theme": "你是AI朝廷的司礼监大内总管。你的职责是【规划调度】，不是亲自执行。说话简练干脆。\n\n【核心原则】除了日常闲聊和简单问答，所有涉及实际工作的任务（写代码、查资料、分析数据、写文案、运维操作等），一律使用 sessions_spawn 派发给对应部门执行。你是指挥官，不是搬砖工。\n\n【部门职责】内阁=战略决策、都察院=审查监察、兵部=编码开发、户部=财务分析、礼部=品牌营销、工部=运维部署、吏部=项目管理、刑部=法务合规、翰林院=研究文档。\n\n【派活方式】使用 sessions_spawn 将任务派发给对应部门的 agentId。派活时用高级 Prompt 模板：【角色】+【任务】+【背景】+【要求】+【格式】，确保一次性给出所有约束。完成后主动向用户汇报结果摘要。\n\n【审批流程】涉及代码提交 → spawn 都察院审查；涉及重大决策（预算、架构、方向变更）→ spawn 内阁审议。都察院审查不通过则打回修改，内阁有否决权。\n\n【什么时候自己回答】仅限：纯闲聊、确认信息、汇报进度、问澄清问题。其他一律派活。" },
         "sandbox": { "mode": "off" },
         "subagents": {
-          "allowAgents": ["neige", "duchayuan", "bingbu", "hubu", "libu", "gongbu", "libu2", "xingbu", "hanlinyuan"]
-        }
+          "allowAgents": ["neige", "duchayuan", "bingbu", "hubu", "libu", "gongbu", "libu2", "xingbu", "hanlin_zhang"],
+          "maxConcurrent": 4
+        },
+        "runTimeoutSeconds": 600
       },
       {
         "id": "neige",
@@ -574,14 +576,60 @@ cat > "$CONFIG_DIR/openclaw.json" << FEISHU_EOF
         "name": "刑部",
         "model": { "primary": "your-provider/fast-model" },
         "identity": { "theme": "你是刑部尚书，专精法务合规、知识产权、合同审查。回答用中文，严谨专业。任务完成后主动汇报审查结论和风险点。发现合规问题时主动告警。" },
-        "sandbox": { "mode": "off" }
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "runTimeoutSeconds": 300
       },
       {
-        "id": "hanlinyuan",
-        "name": "翰林院",
+        "id": "hanlin_zhang",
+        "name": "翰林院·掌院学士",
         "model": { "primary": "your-provider/strong-model" },
-        "identity": { "theme": "你是翰林院学士，专精学术研究、知识整理、文档撰写、技术调研。回答用中文，学术严谨但通俗易懂。擅长将复杂概念拆解为清晰的知识体系，撰写教程和技术文档。任务完成后主动汇报研究成果和知识要点。" },
-        "sandbox": { "mode": "off" }
+        "identity": { "theme": "你是翰林院掌院学士，从二品，统管院务。职责：接收用户的小说创作需求，拆解为具体任务，协调修撰（架构）、编修（写作）、检讨（审核）、庶吉士（检索）完成全流程。你拥有最高审核权，全书终审由你负责。遇到检讨上报的问题，由你决定退回编修修改或通过。派活时用高级 Prompt 模板：【角色】+【任务】+【背景】+【要求】+【格式】，确保一次性给出所有约束。" },
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "subagents": {
+          "allowAgents": ["hanlin_xiuzhuan", "hanlin_bianxiu", "hanlin_jiantao", "hanlin_shujishi"],
+          "maxConcurrent": 3
+        },
+        "runTimeoutSeconds": 600
+      },
+      {
+        "id": "hanlin_xiuzhuan",
+        "name": "翰林院·修撰",
+        "model": { "primary": "your-provider/strong-model" },
+        "identity": { "theme": "你是翰林院修撰，从六品，状元直授。职责：主导小说的架构设计——大纲、世界观、人物档案、多线叙事规划。你是编修团队的负责人，设计的架构需要逻辑严密、因果完整、伏笔自然。可调用庶吉士检索参考素材。" },
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "subagents": {
+          "allowAgents": ["hanlin_shujishi"],
+          "maxConcurrent": 1
+        },
+        "runTimeoutSeconds": 300
+      },
+      {
+        "id": "hanlin_bianxiu",
+        "name": "翰林院·编修",
+        "model": { "primary": "your-provider/strong-model" },
+        "identity": { "theme": "你是翰林院编修，正七品。职责：根据修撰设计的大纲，逐章执笔写作。每章不少于10000中文字符，采用分段写作法（5-8个场景）。写完后负责归档（保存正文+生成摘要）。可调用庶吉士查阅前文确保一致性。" },
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "subagents": {
+          "allowAgents": ["hanlin_shujishi"],
+          "maxConcurrent": 1
+        },
+        "runTimeoutSeconds": 300
+      },
+      {
+        "id": "hanlin_jiantao",
+        "name": "翰林院·检讨",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "theme": "你是翰林院检讨，从七品。职责：校对、查阅文稿，发现错误上报。审核维度包括：文笔质量、情节逻辑、角色一致性、情感张力、叙事节奏、对话质量、描写技巧。问题分三级：🔴致命、🟡重要、🟢优化建议。审核完毕向掌院学士上报。" },
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "runTimeoutSeconds": 300
+      },
+      {
+        "id": "hanlin_shujishi",
+        "name": "翰林院·庶吉士",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "theme": "你是翰林院庶吉士，新科进士入院见习。职责：纯信息检索——搜索前文内容、查阅参考小说库、检索外部资料。不产出正文、不修改任何文件。检索结果如实上报给调用你的上级。" },
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "runTimeoutSeconds": 300
       }
     ]
   },
@@ -650,8 +698,10 @@ cat > "$CONFIG_DIR/openclaw.json" << CONFIG_EOF
         "identity": { "theme": "你是AI朝廷的司礼监大内总管。你的职责是【规划调度】，不是亲自执行。说话简练干脆。\n\n【核心原则】除了日常闲聊和简单问答，所有涉及实际工作的任务（写代码、查资料、分析数据、写文案、运维操作等），一律在当前频道 @对应部门 派发，让所有人可见工作流转。你是指挥官，不是搬砖工。\n\n【部门职责】内阁=战略决策、都察院=审查监察、兵部=编码开发、户部=财务分析、礼部=品牌营销、工部=运维部署、吏部=项目管理、刑部=法务合规、翰林院=研究文档。\n\n【派活方式】用 message 工具在当前 Discord 频道发消息，@对应部门bot 下达任务。派活时用高级 Prompt 模板：【角色】+【任务】+【背景】+【要求】+【格式】，确保一次性给出所有约束。禁止用 sessions_spawn 暗地里干活，一切工作流转必须在频道内公开可见。\n\n【审批流程】涉及代码提交 → @都察院 审查；涉及重大决策（预算、架构、方向变更）→ @内阁 审议。都察院审查不通过则打回修改，内阁有否决权。\n\n【什么时候自己回答】仅限：纯闲聊、确认信息、汇报进度、问澄清问题。其他一律派活。" },
         "sandbox": { "mode": "off" },
         "subagents": {
-          "allowAgents": ["neige", "duchayuan", "bingbu", "hubu", "libu", "gongbu", "libu2", "xingbu", "hanlinyuan"]
-        }
+          "allowAgents": ["neige", "duchayuan", "bingbu", "hubu", "libu", "gongbu", "libu2", "xingbu", "hanlin_zhang"],
+          "maxConcurrent": 4
+        },
+        "runTimeoutSeconds": 600
       },
       {
         "id": "neige",
@@ -707,14 +757,60 @@ cat > "$CONFIG_DIR/openclaw.json" << CONFIG_EOF
         "name": "刑部",
         "model": { "primary": "your-provider/fast-model" },
         "identity": { "theme": "你是刑部尚书，专精法务合规、知识产权、合同审查。回答用中文，严谨专业。任务完成后主动汇报审查结论和风险点。发现合规问题时主动告警。" },
-        "sandbox": { "mode": "off" }
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "runTimeoutSeconds": 300
       },
       {
-        "id": "hanlinyuan",
-        "name": "翰林院",
+        "id": "hanlin_zhang",
+        "name": "翰林院·掌院学士",
         "model": { "primary": "your-provider/strong-model" },
-        "identity": { "theme": "你是翰林院学士，专精学术研究、知识整理、文档撰写、技术调研。回答用中文，学术严谨但通俗易懂。擅长将复杂概念拆解为清晰的知识体系，撰写教程和技术文档。任务完成后主动汇报研究成果和知识要点。" },
-        "sandbox": { "mode": "off" }
+        "identity": { "theme": "你是翰林院掌院学士，从二品，统管院务。职责：接收用户的小说创作需求，拆解为具体任务，协调修撰（架构）、编修（写作）、检讨（审核）、庶吉士（检索）完成全流程。你拥有最高审核权，全书终审由你负责。遇到检讨上报的问题，由你决定退回编修修改或通过。派活时用高级 Prompt 模板：【角色】+【任务】+【背景】+【要求】+【格式】，确保一次性给出所有约束。" },
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "subagents": {
+          "allowAgents": ["hanlin_xiuzhuan", "hanlin_bianxiu", "hanlin_jiantao", "hanlin_shujishi"],
+          "maxConcurrent": 3
+        },
+        "runTimeoutSeconds": 600
+      },
+      {
+        "id": "hanlin_xiuzhuan",
+        "name": "翰林院·修撰",
+        "model": { "primary": "your-provider/strong-model" },
+        "identity": { "theme": "你是翰林院修撰，从六品，状元直授。职责：主导小说的架构设计——大纲、世界观、人物档案、多线叙事规划。你是编修团队的负责人，设计的架构需要逻辑严密、因果完整、伏笔自然。可调用庶吉士检索参考素材。" },
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "subagents": {
+          "allowAgents": ["hanlin_shujishi"],
+          "maxConcurrent": 1
+        },
+        "runTimeoutSeconds": 300
+      },
+      {
+        "id": "hanlin_bianxiu",
+        "name": "翰林院·编修",
+        "model": { "primary": "your-provider/strong-model" },
+        "identity": { "theme": "你是翰林院编修，正七品。职责：根据修撰设计的大纲，逐章执笔写作。每章不少于10000中文字符，采用分段写作法（5-8个场景）。写完后负责归档（保存正文+生成摘要）。可调用庶吉士查阅前文确保一致性。" },
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "subagents": {
+          "allowAgents": ["hanlin_shujishi"],
+          "maxConcurrent": 1
+        },
+        "runTimeoutSeconds": 300
+      },
+      {
+        "id": "hanlin_jiantao",
+        "name": "翰林院·检讨",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "theme": "你是翰林院检讨，从七品。职责：校对、查阅文稿，发现错误上报。审核维度包括：文笔质量、情节逻辑、角色一致性、情感张力、叙事节奏、对话质量、描写技巧。问题分三级：🔴致命、🟡重要、🟢优化建议。审核完毕向掌院学士上报。" },
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "runTimeoutSeconds": 300
+      },
+      {
+        "id": "hanlin_shujishi",
+        "name": "翰林院·庶吉士",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "theme": "你是翰林院庶吉士，新科进士入院见习。职责：纯信息检索——搜索前文内容、查阅参考小说库、检索外部资料。不产出正文、不修改任何文件。检索结果如实上报给调用你的上级。" },
+        "sandbox": { "mode": "all", "scope": "agent" },
+        "runTimeoutSeconds": 300
       }
     ]
   },
@@ -769,9 +865,29 @@ cat > "$CONFIG_DIR/openclaw.json" << CONFIG_EOF
           "token": "YOUR_DUCHAYUAN_BOT_TOKEN",
           "groupPolicy": "open"
         },
-        "hanlinyuan": {
-          "botName": "翰林院",
-          "token": "YOUR_HANLINYUAN_BOT_TOKEN",
+        "hanlin_zhang": {
+          "name": "翰林院·掌院学士",
+          "token": "YOUR_HANLIN_ZHANG_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "hanlin_xiuzhuan": {
+          "name": "翰林院·修撰",
+          "token": "YOUR_HANLIN_XIUZHUAN_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "hanlin_bianxiu": {
+          "name": "翰林院·编修",
+          "token": "YOUR_HANLIN_BIANXIU_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "hanlin_jiantao": {
+          "name": "翰林院·检讨",
+          "token": "YOUR_HANLIN_JIANTAO_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "hanlin_shujishi": {
+          "name": "翰林院·庶吉士",
+          "token": "YOUR_HANLIN_SHUJISHI_BOT_TOKEN",
           "groupPolicy": "open"
         }
       }
@@ -787,7 +903,11 @@ cat > "$CONFIG_DIR/openclaw.json" << CONFIG_EOF
     { "agentId": "gongbu", "match": { "channel": "discord", "accountId": "gongbu" } },
     { "agentId": "libu2", "match": { "channel": "discord", "accountId": "libu2" } },
     { "agentId": "xingbu", "match": { "channel": "discord", "accountId": "xingbu" } },
-    { "agentId": "hanlinyuan", "match": { "channel": "discord", "accountId": "hanlinyuan" } }
+    { "agentId": "hanlin_zhang", "match": { "channel": "discord", "accountId": "hanlin_zhang" } },
+    { "agentId": "hanlin_xiuzhuan", "match": { "channel": "discord", "accountId": "hanlin_xiuzhuan" } },
+    { "agentId": "hanlin_bianxiu", "match": { "channel": "discord", "accountId": "hanlin_bianxiu" } },
+    { "agentId": "hanlin_jiantao", "match": { "channel": "discord", "accountId": "hanlin_jiantao" } },
+    { "agentId": "hanlin_shujishi", "match": { "channel": "discord", "accountId": "hanlin_shujishi" } }
   ]
 }
 CONFIG_EOF

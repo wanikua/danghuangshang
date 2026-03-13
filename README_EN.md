@@ -16,7 +16,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Inspired_By-Six_Ministries_System-gold?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Framework-OpenClaw-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Agents-10+-green?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Agents-12+-green?style=for-the-badge" />
   <img src="https://img.shields.io/badge/OpenClaw_Skill_Ecosystem-60+-orange?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Deploy-5_min-red?style=for-the-badge" />
 </p>
@@ -153,6 +153,69 @@ systemctl --user start openclaw-gateway
 | ⏰ Cron Tasks | Automated scheduling | Optional | [→ Advanced Tutorial](./docs/tutorial-advanced.md) |
 | 🛡️ Security | Sandbox configuration | Recommended | [→ Security Guide](./docs/security.md) |
 | 🏥 Diagnostics | One-click troubleshooting | When needed | [→ Doctor Tool](./docs/doctor.md) |
+
+---
+
+## Hanlin Academy — AI Novel Writing
+
+The Hanlin Academy (翰林院) is a new **literary creation department** with 5 specialized agents that handle the entire AI novel writing pipeline: requirement analysis, architecture design, chapter writing, quality review, and archival management.
+
+### Hanlin Academy Architecture
+
+```
+User: "Write me a cultivation novel"
+  │
+  └→ Grand Secretary (receives order, orchestrates)
+       │
+       ├─ spawn Compiler → Design outline + worldbuilding + character profiles
+       │    └─ spawn Junior Scholar → Research reference materials
+       │
+       ├─ Grand Secretary approves outline ✅
+       │
+       ├─ spawn Editor → Write chapters per outline (≥ 10,000 chars each)
+       │    ├─ spawn Junior Scholar → Check previous chapters for consistency
+       │    └─ Finish chapter → Archive to novel/{title}/
+       │
+       ├─ spawn Reviewer → Review chapter (7 dimensions + 3-tier severity)
+       │    └─ Issues found → Report to Grand Secretary
+       │
+       ├─ Grand Secretary decides: send back for revision or approve
+       │
+       └─ Loop until book complete → Grand Secretary final review
+```
+
+### Hanlin Academy Roles
+
+| Agent ID | Role | Rank | Model | Responsibility |
+|----------|------|------|-------|---------------|
+| `hanlin_zhang` | Grand Secretary | 2nd Rank | strong | Chief orchestrator: receives requests, breaks down tasks, coordinates all roles, final review |
+| `hanlin_xiuzhuan` | Compiler | 6th Rank | strong | Architect: outlines, worldbuilding, character profiles, multi-thread narrative planning |
+| `hanlin_bianxiu` | Editor | 7th Rank | strong | Writer: chapter-by-chapter writing using segmented approach, archiving |
+| `hanlin_jiantao` | Reviewer | 7th Rank | fast | Quality control: 7-dimension review, 3-tier issue severity, reports to Grand Secretary |
+| `hanlin_shujishi` | Junior Scholar | Unranked | fast | Researcher: searches previous chapters, reference library, external resources |
+
+### Dedicated Skills
+
+| Skill | Description | Used By |
+|-------|-------------|---------|
+| `novel-worldbuilding` | Novel architecture: outlines, character profiles, worldbuilding templates | Compiler |
+| `novel-prose` | Writing techniques: segmented writing, narrative standards, word count discipline | Editor |
+| `novel-review` | Review standards: 7-dimension evaluation, 3-tier severity, report templates | Reviewer, Grand Secretary |
+| `novel-archiving` | Chapter archiving: summary generation, memory updates, status reports | Editor |
+| `novel-research` | Deep research: factual detail retrieval, logic reasoning, style reference | Junior Scholar |
+| `novel-memory` | OpenViking integration guide: 3D memory system operations | All roles |
+
+### OpenViking Integration (Optional)
+
+The Hanlin Academy can optionally mount [OpenViking](https://github.com/openviking) as an MCP server for persistent memory:
+
+| OpenViking Module | Function | Use Case |
+|------------------|----------|----------|
+| Memories | Static knowledge + dynamic logs | Chapter summaries, character states, foreshadowing tracking |
+| Resources | Reference material library | Reference novels, style samples |
+| Skills | Structured knowledge graph | Character relationships, world settings |
+
+> OpenViking installation and configuration is outside this project's scope. See `skills/novel-memory/` for usage guide.
 
 ---
 

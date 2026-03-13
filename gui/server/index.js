@@ -48,7 +48,13 @@ const AGENT_DEPT_MAP = {
   'libu': '礼部', 'libu2': '吏部',
   'xingbu': '刑部', 'bingbu': '兵部',
   'neige': '内阁', 'duchayuan': '都察院', 'neiwufu': '内务府',
-  'hanlinyuan': '翰林院', 'taiyiyuan': '太医院', 'guozijian': '国子监',
+  'hanlinyuan': '翰林院',
+  'hanlin_zhang': '翰林院·掌院学士',
+  'hanlin_xiuzhuan': '翰林院·修撰',
+  'hanlin_bianxiu': '翰林院·编修',
+  'hanlin_jiantao': '翰林院·检讨',
+  'hanlin_shujishi': '翰林院·庶吉士',
+  'taiyiyuan': '太医院', 'guozijian': '国子监',
   'yushanfang': '御膳房'
 };
 
