@@ -10,7 +10,7 @@
 
 ### 一行命令起王朝，三省六部皆AI。千里之外调百官，万事不劳御驾亲。
 
-> **以明朝三省六部制为蓝本，用 [OpenClaw](https://github.com/openclaw/openclaw) 框架构建的多 Agent 协作系统。**
+> **以明朝六部制为蓝本，用 [OpenClaw](https://github.com/openclaw/openclaw) 框架构建的多 Agent 协作系统。**
 > 一台服务器 + OpenClaw = 一支 7×24 在线的 AI 朝廷。
 
 <p align="center">
