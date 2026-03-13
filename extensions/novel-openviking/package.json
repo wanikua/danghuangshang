@@ -1,0 +1,13 @@
+{
+  "name": "novel-openviking",
+  "version": "1.0.0",
+  "description": "翰林院 OpenViking 增强插件 — 语义搜索 + 知识图谱",
+  "openclaw": {
+    "extensions": ["./src/index.ts"]
+  },
+  "files": [
+    "src/",
+    "SKILL.md",
+    "openclaw.plugin.json"
+  ]
+}

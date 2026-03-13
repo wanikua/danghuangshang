@@ -1,0 +1,21 @@
+{
+  "id": "novel-openviking",
+  "name": "翰林院 OpenViking 增强",
+  "description": "为翰林院小说记忆系统接入 OpenViking 语义搜索、自动摘要和知识图谱。需要先安装 OpenViking。",
+  "version": "1.0.0",
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "vikingScript": {
+        "type": "string",
+        "default": "skills/openviking/scripts/viking.sh",
+        "description": "OpenViking CLI 脚本路径"
+      }
+    }
+  },
+  "uiHints": {
+    "labels": {
+      "vikingScript": "Viking 脚本路径"
+    }
+  }
+}
