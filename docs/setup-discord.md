@@ -84,12 +84,12 @@ nano ~/.openclaw/openclaw.json
       "allowBots": true,
       "accounts": {
         "silijian": {
-          "botName": "司礼监",
+          "name": "司礼监",
           "token": "这里粘贴司礼监的Token",
           "groupPolicy": "open"
         },
         "bingbu": {
-          "botName": "兵部",
+          "name": "兵部",
           "token": "这里粘贴兵部的Token",
           "groupPolicy": "open"
         }
@@ -168,3 +168,40 @@ journalctl --user -u openclaw-gateway --since "5 min ago"
 ---
 
 ← [返回 README](../README.md) | [进阶配置 →](./tutorial-advanced.md)
+
+## 重要：Bot 互相 @mention 的格式
+
+> ⚠️ 这是多 Bot 协作的**核心机制**，不了解会导致 Bot 之间完全无法互相触发。
+
+Discord 的 @mention 必须使用 `<@用户ID>` 格式，**纯文本 `@兵部` 不会触发任何通知**。
+
+### 为什么需要关注这个？
+
+司礼监的 `identity.theme` 里写着"@对应部门派活"，但 LLM 不知道其他 Bot 的 Discord User ID，只会输出纯文本 `@兵部` — 这在 Discord 里只是普通字符串，不会生成蓝色 mention，其他 Bot 完全收不到。
+
+### 怎么获取 Bot 的 User ID？
+
+1. 在 Discord 中开启「开发者模式」：用户设置 → 高级 → 开发者模式 ✅
+2. 右键点击 Bot 头像 → 「复制用户 ID」
+3. 得到一串数字（如 `1482327799279652974`）
+
+### 怎么配置？
+
+在司礼监的 `identity.theme` 中写入每个 Bot 的 Discord User ID：
+
+```
+【@mention 格式（最重要！）】
+在 Discord 中 @其他部门时，必须使用 <@数字ID> 格式：
+- 兵部 = <@这里填兵部的User ID>
+- 户部 = <@这里填户部的User ID>
+- 礼部 = <@这里填礼部的User ID>
+- 工部 = <@这里填工部的User ID>
+- 吏部 = <@这里填吏部的User ID>
+- 刑部 = <@这里填刑部的User ID>
+
+正确示例: <@1482327799279652974> 编写用户登录 REST API
+错误示例: @兵部 编写用户登录 REST API（对方收不到！）
+```
+
+> 💡 每个 Bot 的 User ID 在创建后就固定了，填一次即可。
+

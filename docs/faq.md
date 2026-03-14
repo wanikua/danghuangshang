@@ -88,3 +88,18 @@ openclaw doctor
 ---
 
 ← [返回 README](../README.md)
+
+### Q: Bot 之间互相 @ 不触发回复？
+
+这是多 Bot 模式最常见的坑。Discord 的 @mention 必须用 `<@用户ID>` 格式（如 `<@1482327799279652974>`），纯文本 `@兵部` 只是普通字符串，不会触发任何通知。
+
+**解决方法**：在司礼监的 `identity.theme` 中写入每个 Bot 的 Discord User ID 和正确格式。详见 [Discord Bot 配置 - @mention 格式](./setup-discord.md#重要bot-互相-mention-的格式)。
+
+### Q: 日志显示 `no-mention` 但我确实 @ 了 Bot？
+
+`no-mention` 是正常行为 — 当一条消息 @司礼监 时，其他 6 个 Bot 都会报 `no-mention`（因为确实没 @ 它们）。只要被 @ 的那个 Bot 显示 `explicitlyMentioned=true` 就说明 mention 检测正常。
+
+如果被 @ 的 Bot 也报 `no-mention`，检查：
+1. 是否用了 `<@用户ID>` 格式（不是纯文本 `@名字`）
+2. `allowBots: true` 是否已配置（Bot 间互相触发需要）
+3. Bot 的 Message Content Intent 是否已开启
