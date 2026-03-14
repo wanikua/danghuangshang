@@ -1,132 +1,96 @@
 ---
 name: novel-openviking
-description: "[扩展] 翰林院 OpenViking 增强 - 为小说记忆系统接入语义搜索、自动摘要和知识图谱。需要先安装 OpenViking。关键词：OpenViking、语义搜索、知识图谱、记忆增强。"
+description: 翰林院 OpenViking 记忆增强 — 将小说写作 pipeline 的设定、摘要、伏笔接入 OpenViking 语义记忆。关键词：OpenViking、语义搜索、记忆增强、小说设定。
 ---
 
-# 翰林院 OpenViking 增强（可选扩展）
+# 翰林院 OpenViking 记忆增强
 
-你已被注入 `novel-openviking` 技能。本技能在 `novel-memory` 的文件系统记忆之上，叠加 OpenViking 的语义搜索和知识图谱能力。
+本技能在 `novel-memory` 的文件系统记忆之上，将写作 pipeline 接入 OpenViking 语义记忆。
 
-> 本技能是**可选增强**，不是必需品。没有本技能时，翰林院使用文件系统正常工作。
+> 前置：`memory-openviking` 插件已启用（提供 `memory_recall` / `memory_store` / `memory_forget` 工具）。
 
 ---
 
-## 启用条件
+## 核心原则
 
-本技能仅在 OpenViking MCP server 已配置并可用时生效。检测方法：
+**文件是 source of truth，OpenViking 是语义索引层。**
 
-```bash
-bash skills/openviking/scripts/viking.sh info
+- 所有设定、摘要、伏笔先写入文件（按 `novel-memory` 技能规范）
+- 再通过 `memory_store` 同步关键信息到 OpenViking
+- 查询时优先用 `memory_recall` 语义搜索，比 grep 更精准
+- OpenViking 数据丢失时，可从文件重建
+
+---
+
+## 写入同步：什么信息要 memory_store
+
+### 新书初始化后
+
+```
+memory_store: "{角色名}的人物档案：{性格}、{背景}、{动机}、{能力}"
+memory_store: "世界观核心规则：{力量体系}、{社会结构}、{地理环境}"
+memory_store: "故事主线：{核心冲突}、{主角目标}、{主要矛盾}"
 ```
 
-如果命令报错，说明 OpenViking 未安装，忽略本技能的全部指令，回退到 `novel-memory` 的纯文件模式。
+### 每章归档后（配合 novel-archiving）
+
+文件归档完成后，追加同步：
+
+```
+memory_store: "第X章摘要：{核心事件}；{角色状态变化}"
+memory_store: "伏笔F{XXX}：{描述}，第X章埋设，预计第Y章回收"
+memory_store: "{角色名}当前状态：位于{地点}，情绪{状态}，与{角色}关系变为{关系}"
+```
+
+### 设定变更时
+
+```
+memory_store: "{角色名}获得新能力：{能力描述}，来源：第X章{事件}"
+memory_store: "新势力出现：{势力名}，{立场}，与{现有势力}的关系"
+```
 
 ---
 
-## 增强能力
+## 语义查询：什么时候用 memory_recall
 
-| 能力 | 纯文件模式 | + OpenViking |
+### 写作前（novel-prose）
+
+```
+memory_recall: "{角色名}的性格特征和当前状态"     → 确保人设一致
+memory_recall: "第X章到第Y章的情节发展"           → 回顾上下文
+memory_recall: "与{场景关键词}相关的世界设定"      → 确认设定细节
+```
+
+### 审核时（novel-review）
+
+```
+memory_recall: "{角色名}在前文中的行为模式"       → 验证角色一致性
+memory_recall: "未回收的伏笔"                    → 检查伏笔遗漏
+memory_recall: "{设定关键词}"                    → 交叉验证设定冲突
+```
+
+### 架构设计时（novel-worldbuilding）
+
+```
+memory_recall: "已有的世界观规则"                 → 避免设定矛盾
+memory_recall: "现有角色的关系网络"               → 设计新角色时考虑已有关系
+```
+
+---
+
+## 与纯文件模式的区别
+
+| 操作 | 纯文件模式 | + OpenViking |
 |------|-----------|-------------|
-| 设定查询 | grep 关键词搜索 | 语义搜索，模糊匹配 |
-| 章节回顾 | 读 summary 文件 | L0/L1/L2 分层摘要，按需加载 |
-| 关系检查 | 读 relations.md | 知识图谱遍历，自动发现隐含关系 |
-| 跨章追踪 | 手动翻阅前文 | 语义检索，一步定位相关段落 |
+| 查设定 | grep 关键词 → 精确匹配 | memory_recall → 语义模糊匹配 |
+| 回顾前文 | 逐个读 summary 文件 | memory_recall → 一步定位相关章节 |
+| 查伏笔 | 读 foreshadowing.md | memory_recall "未回收伏笔" → 语义聚合 |
+| 存设定 | 写文件 | 写文件 + memory_store 同步 |
 
 ---
 
-## OpenViking 三维映射
+## 注意事项
 
-在文件系统记忆的基础上，同步数据到 OpenViking 三个模块：
-
-| OpenViking 模块 | 同步来源 | 增强能力 |
-|----------------|---------|---------|
-| **Memories** | `设定/` + `summary/` 全部文件 | 语义搜索 + 自动摘要分层 |
-| **Resources** | 外部参考素材 | 风格参考检索 |
-| **Skills** | `设定/relations.md` + `world.md` | 结构化知识图谱浏览 |
-
----
-
-## 使用方式
-
-### 索引设定文件（新书启动或设定大改后）
-
-```bash
-bash skills/openviking/scripts/viking.sh add-dir novel/{书名}/设定/
-```
-
-### 索引章节摘要（每章归档后）
-
-```bash
-bash skills/openviking/scripts/viking.sh add novel/{书名}/summary/chapter_XX.md
-```
-
-### 语义查询（替代 grep）
-
-```bash
-# 查询角色相关设定
-bash skills/openviking/scripts/viking.sh search "林晓的性格特征和成长经历"
-
-# 查询跨章伏笔
-bash skills/openviking/scripts/viking.sh search "青铜匕首的来历和出现场景"
-
-# 查询世界设定
-bash skills/openviking/scripts/viking.sh search "魔法体系的等级限制"
-```
-
-### 风格参考检索
-
-```bash
-# 先索引参考素材
-bash skills/openviking/scripts/viking.sh add-dir ./参考素材/
-
-# 检索特定风格
-bash skills/openviking/scripts/viking.sh search "悬疑氛围的开场描写手法"
-```
-
----
-
-## 工作流变化
-
-启用本扩展后，`novel-memory` 的操作流程变为：
-
-```
-原：写入设定文件 → 完成
-增强：写入设定文件 → 同步索引到 OpenViking → 完成
-
-原：grep 搜索设定 → 获取结果
-增强：OpenViking 语义搜索 → 获取结果（更准确，支持模糊匹配）
-```
-
-**原则：文件系统是 source of truth，OpenViking 是索引层。** 数据始终先写入文件，再同步到 OpenViking。丢失 OpenViking 数据时，可从文件重建索引。
-
----
-
-## 安装方式
-
-### 1. 先安装 OpenViking
-
-见 `skills/openviking/SKILL.md`。
-
-### 2. 安装本插件
-
-```bash
-# 从本地安装
-openclaw plugins install ./extensions/novel-openviking
-
-# 启用
-openclaw plugins enable novel-openviking
-```
-
-### 3. 管理
-
-```bash
-# 查看状态
-openclaw plugins list
-
-# 关闭（不删除，可随时重新启用）
-openclaw plugins disable novel-openviking
-```
-
-安装后插件会注册两个工具供翰林院 agent 调用：
-- `novel_viking_search` — 语义搜索设定和前文
-- `novel_viking_index` — 将文件索引到 OpenViking
+1. **不要跳过文件写入**：即使有 OpenViking，设定文件仍然是权威数据源
+2. **store 内容要精炼**：存入的是摘要级信息，不是全文
+3. **recall 结果要验证**：语义搜索可能返回不精确的结果，关键设定以文件为准
