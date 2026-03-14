@@ -170,12 +170,15 @@ if grep -q '"discord"' "$CONFIG_FILE" 2>/dev/null; then
         pass "Discord 已启用"
 
         # 检查 Bot Token 占位符
-        BOT_PLACEHOLDER=$(grep -c "YOUR_.*BOT_TOKEN\|YOUR_.*_TOKEN" "$CONFIG_FILE" 2>/dev/null)
+        BOT_PLACEHOLDER=$(grep -cE "YOUR_.*BOT_TOKEN|YOUR_.*_TOKEN" "$CONFIG_FILE" 2>/dev/null || true)
+        BOT_PLACEHOLDER=${BOT_PLACEHOLDER:-0}
+        [ "$BOT_PLACEHOLDER" -eq "$BOT_PLACEHOLDER" ] 2>/dev/null || BOT_PLACEHOLDER=0
         if [ "$BOT_PLACEHOLDER" -gt 0 ]; then
             fail "有 $BOT_PLACEHOLDER 个 Bot Token 未填写"
             info "去 https://discord.com/developers/applications 创建 Bot 并复制 Token"
         else
-            BOT_COUNT=$(grep -c '"token":' "$CONFIG_FILE" 2>/dev/null || echo 0)
+            BOT_COUNT=$(grep -c '"token":' "$CONFIG_FILE" 2>/dev/null || true)
+            BOT_COUNT=${BOT_COUNT:-0}
             pass "Bot Token 已填写（$BOT_COUNT 个 Bot）"
         fi
 
@@ -397,7 +400,9 @@ if grep -q '"feishu"' "$CONFIG_FILE" 2>/dev/null; then
 
     # 5c. 检查 accounts
     FEISHU_ACCOUNTS=$(json_keys "$CONFIG_FILE" "channels.feishu.accounts")
-    FEISHU_ACCOUNT_COUNT=$(echo "$FEISHU_ACCOUNTS" | grep -c . 2>/dev/null || echo 0)
+    FEISHU_ACCOUNT_COUNT=$(echo "$FEISHU_ACCOUNTS" | grep -c . 2>/dev/null || true)
+    FEISHU_ACCOUNT_COUNT=${FEISHU_ACCOUNT_COUNT:-0}
+    [ "$FEISHU_ACCOUNT_COUNT" -eq "$FEISHU_ACCOUNT_COUNT" ] 2>/dev/null || FEISHU_ACCOUNT_COUNT=0
 
     if [ "$FEISHU_ACCOUNT_COUNT" -gt 0 ]; then
         pass "飞书已配置 $FEISHU_ACCOUNT_COUNT 个 Bot 账户"
@@ -459,7 +464,9 @@ if grep -q '"feishu"' "$CONFIG_FILE" 2>/dev/null; then
         done <<< "$FEISHU_ACCOUNTS"
 
         # 5d. 检查 bindings 中飞书路由
-        FEISHU_BINDING_COUNT=$(grep -c '"channel": "feishu"\|"channel":"feishu"' "$CONFIG_FILE" 2>/dev/null || echo 0)
+        FEISHU_BINDING_COUNT=$(grep -cE '"channel":\s*"feishu"' "$CONFIG_FILE" 2>/dev/null || true)
+        FEISHU_BINDING_COUNT=${FEISHU_BINDING_COUNT:-0}
+        [ "$FEISHU_BINDING_COUNT" -eq "$FEISHU_BINDING_COUNT" ] 2>/dev/null || FEISHU_BINDING_COUNT=0
         if [ "$FEISHU_BINDING_COUNT" -gt 0 ]; then
             pass "Bindings 中有 $FEISHU_BINDING_COUNT 条飞书路由"
             if [ "$FEISHU_ACCOUNT_COUNT" -gt 1 ] && [ "$FEISHU_BINDING_COUNT" -lt "$FEISHU_ACCOUNT_COUNT" ]; then
@@ -552,7 +559,9 @@ fi
 echo ""
 echo -e "${YELLOW}[7/9] 检查 Agent 配置...${NC}"
 
-AGENT_COUNT=$(grep -c '"id":' "$CONFIG_FILE" 2>/dev/null || echo 0)
+AGENT_COUNT=$(grep -c '"id":' "$CONFIG_FILE" 2>/dev/null || true)
+AGENT_COUNT=${AGENT_COUNT:-0}
+[ "$AGENT_COUNT" -eq "$AGENT_COUNT" ] 2>/dev/null || AGENT_COUNT=0
 if [ "$AGENT_COUNT" -gt 0 ]; then
     pass "已配置 $AGENT_COUNT 个 Agent"
 else
@@ -560,7 +569,9 @@ else
 fi
 
 # 检查 bindings 总数
-BINDING_COUNT=$(grep -c '"agentId":' "$CONFIG_FILE" 2>/dev/null || echo 0)
+BINDING_COUNT=$(grep -c '"agentId":' "$CONFIG_FILE" 2>/dev/null || true)
+BINDING_COUNT=${BINDING_COUNT:-0}
+[ "$BINDING_COUNT" -eq "$BINDING_COUNT" ] 2>/dev/null || BINDING_COUNT=0
 if [ "$BINDING_COUNT" -gt 0 ]; then
     pass "已配置 $BINDING_COUNT 条 Binding 路由"
 else
