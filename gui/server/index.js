@@ -1618,7 +1618,7 @@ app.get('/api/channel-messages', authMiddleware, async (req, res) => {
   }
 });
 
-// 发送指令到Discord频道
+// 发送指令 — 支持 Discord 直连 + 通用 gateway wake 兜底
 // SEC-31: /api/command rate limiter — 每分钟最多 10 次
 const _cmdRateLimit = { count: 0, resetAt: 0 };
 
@@ -1635,72 +1635,80 @@ app.post('/api/command', authMiddleware, async (req, res) => {
   if (!message || typeof message !== 'string') {
     return res.status(400).json({ error: 'Message is required and must be a string' });
   }
-  // SEC-32: channel 必填，不使用硬编码默认值
-  if (!channel) {
-    return res.status(400).json({ error: 'Channel ID is required' });
-  }
-  const targetChannel = channel;
-  // Validate channel ID is numeric (Discord snowflake)
-  if (!/^\d{17,20}$/.test(targetChannel)) {
-    return res.status(400).json({ error: 'Invalid channel ID format' });
-  }
   
   // SEC-33: 验证 botId 防止原型链污染
   const safeBotId = botId ? sanitizeAgentId(botId) : null;
+  const usedBot = safeBotId || 'silijian';
   
-  // 读取bot token - 使用指定的botId发送
+  // SEC-34: 审计日志
+  console.log(`[AUDIT] /api/command botId=${usedBot} channel=${channel || 'none'} msgLen=${message.length}`);
+  
+  // 策略1: 如果提供了 Discord channel ID 且有 Discord token，走 Discord REST API（原有逻辑）
+  if (channel && /^\d{17,20}$/.test(channel)) {
+    try {
+      const config = getClawdbotConfig() || {};
+      const accounts = config.channels?.discord?.accounts || {};
+      let account = safeBotId ? accounts[safeBotId] : null;
+      if (!account?.token) {
+        const firstKey = Object.keys(accounts)[0];
+        account = firstKey ? accounts[firstKey] : null;
+      }
+      
+      if (account?.token) {
+        const r = await fetch(`https://discord.com/api/v10/channels/${channel}/messages`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bot ${account.token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: message })
+        });
+        if (r.ok) {
+          const data = await r.json();
+          return res.json({ success: true, messageId: data.id, sentAs: usedBot, method: 'discord' });
+        }
+        // Discord 失败则 fallthrough 到 gateway
+        console.warn(`[COMMAND] Discord API failed (${r.status}), falling back to gateway wake`);
+      }
+    } catch (e) {
+      console.warn(`[COMMAND] Discord path error: ${e.message}, falling back to gateway wake`);
+    }
+  }
+  
+  // 策略2: 通过 gateway wake 发送（通用方案，支持所有平台）
   try {
-    if (!existsSync(CONFIG_PATH)) {
-      return res.status(400).json({ error: 'Config not found' });
-    }
-    const config = JSON.parse(readFileSync(CONFIG_PATH, 'utf-8'));
-    const accounts = config.channels?.discord?.accounts || {};
-    // Try target bot first, fall back to first available account
-    let account = safeBotId ? accounts[safeBotId] : null;
-    let usedBot = safeBotId || 'unknown';
-    if (!account?.token) {
-      const firstKey = Object.keys(accounts)[0];
-      account = firstKey ? accounts[firstKey] : null;
-      usedBot = firstKey || 'none';
-    }
-    const token = account?.token;
-    
-    // SEC-34: 审计日志
-    console.log(`[AUDIT] /api/command botId=${usedBot} channel=${targetChannel} msgLen=${message.length}`);
-    
-    if (!token) {
-      return res.status(400).json({ error: `Bot ${botId} token not found` });
-    }
-
-    const r = await fetch(`https://discord.com/api/v10/channels/${targetChannel}/messages`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bot ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ content: message })
-    });
-    
-    if (r.ok) {
-      const data = await r.json();
-      res.json({ success: true, messageId: data.id, sentAs: usedBot });
-    } else {
-      const err = await r.text();
-      res.status(r.status).json({ error: err });
-    }
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const wakeText = safeBotId ? `[Court指令→${AGENT_DEPT_MAP[safeBotId] || safeBotId}] ${message}` : message;
+    // 转义引号防止命令注入
+    const safeText = wakeText.replace(/'/g, "'\\''");
+    const { stdout, stderr } = await execAsync(
+      `${CLI_CMD} gateway wake --text '${safeText}' --mode now 2>&1`,
+      { encoding: 'utf-8', timeout: 10000 }
+    );
+    console.log(`[COMMAND] Gateway wake result: ${stdout.trim()}`);
+    return res.json({ success: true, sentAs: usedBot, method: 'gateway', detail: stdout.trim() });
+  } catch (wakeErr) {
+    console.error(`[COMMAND] Gateway wake failed: ${wakeErr.message}`);
+  }
+  
+  // 策略3: 直接写入 agent session（最后兜底）
+  try {
+    const safeMsg = message.replace(/'/g, "'\\''");
+    const { stdout } = await execAsync(
+      `${CLI_CMD} session send --agent ${usedBot} --text '${safeMsg}' 2>&1`,
+      { encoding: 'utf-8', timeout: 10000 }
+    );
+    return res.json({ success: true, sentAs: usedBot, method: 'session', detail: stdout.trim() });
+  } catch (sessErr) {
+    return res.status(500).json({ error: `All delivery methods failed. Last: ${sessErr.message}`, sentAs: usedBot });
   }
 });
 
-// 获取bot列表（含状态）
+// 获取bot列表（含状态）— 合并三个数据源：channels.accounts + agents.list + 文件系统
 app.get('/api/bots', authMiddleware, (req, res) => {
   try {
-    const config = JSON.parse(readFileSync(CONFIG_PATH, 'utf-8'));
+    const config = getClawdbotConfig() || {};
     const channels = config.channels || {};
+    const defaultModel = config.agents?.defaults?.model?.primary || config.defaultModel || 'claude-opus-4-6';
     const botMap = {};
     
-    // Collect bots from all platform channels
+    // 数据源1: channels.*.accounts（Discord/飞书等平台账号）
     for (const [platform, chConf] of Object.entries(channels)) {
       const accounts = chConf?.accounts || {};
       for (const [id, acc] of Object.entries(accounts)) {
@@ -1709,7 +1717,7 @@ app.get('/api/bots', authMiddleware, (req, res) => {
             id,
             name: AGENT_DEPT_MAP[id] || id,
             displayName: acc.displayName || AGENT_DEPT_MAP[id] || id,
-            model: acc.model || config.defaultModel || 'claude-opus-4-6',
+            model: acc.model || defaultModel,
             hasToken: !!acc.token,
             platforms: [],
           };
@@ -1719,6 +1727,51 @@ app.get('/api/bots', authMiddleware, (req, res) => {
           botMap[id].platforms.push(platName);
         }
         if (acc.token) botMap[id].hasToken = true;
+      }
+    }
+    
+    // 数据源2: agents.list（网关配置里的 agent 列表，支持数组和对象两种格式）
+    const agentsList = config.agents?.list;
+    if (agentsList) {
+      const entries = Array.isArray(agentsList)
+        ? agentsList.map(a => [a.id, a])
+        : Object.entries(agentsList);
+      for (const [id, agentConf] of entries) {
+        if (!id) continue;
+        if (!botMap[id]) {
+          botMap[id] = {
+            id,
+            name: AGENT_DEPT_MAP[id] || id,
+            displayName: agentConf.displayName || AGENT_DEPT_MAP[id] || id,
+            model: agentConf.model?.primary || defaultModel,
+            hasToken: true,  // agent 在配置里就算有效
+            platforms: [],
+          };
+        }
+        // 补充 model 信息
+        if (agentConf.model?.primary && botMap[id].model === defaultModel) {
+          botMap[id].model = agentConf.model.primary;
+        }
+      }
+    }
+    
+    // 数据源3: 文件系统 ~/.clawdbot/agents/ 或 ~/.openclaw/agents/（已有会话的 agent）
+    if (existsSync(AGENTS_DIR)) {
+      const agentDirs = readdirSync(AGENTS_DIR, { withFileTypes: true })
+        .filter(d => d.isDirectory())
+        .map(d => d.name);
+      for (const id of agentDirs) {
+        if (!botMap[id]) {
+          const sessData = getAgentSessionData(id);
+          botMap[id] = {
+            id,
+            name: AGENT_DEPT_MAP[id] || id,
+            displayName: AGENT_DEPT_MAP[id] || id,
+            model: sessData.model || defaultModel,
+            hasToken: true,  // 有会话数据说明 agent 已运行过
+            platforms: detectAgentPlatforms(id),
+          };
+        }
       }
     }
     

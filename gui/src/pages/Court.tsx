@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from "react"
 import { useTheme } from "../theme"
 import { getAuthToken } from "../utils/auth"
 
-// 频道 ID 可通过环境变量配置，默认使用 API 获取
-const COURT_CHANNEL = import.meta.env.VITE_COURT_CHANNEL || ''
+// 频道 ID 可通过环境变量配置；为空时前端会跳过频道消息获取，下旨走 gateway 通道
+const CONFIGURED_COURT_CHANNEL = import.meta.env.VITE_COURT_CHANNEL || ''
 
 interface Bot {
   id: string; name: string; displayName: string; model: string; hasToken: boolean
@@ -107,9 +107,14 @@ export default function Court() {
   const sub = theme === 'light' ? 'text-gray-500' : 'text-[#a3a3a3]'
 
   const fetchChannelMessages = async () => {
+    // 没有配置频道 ID 时跳过（不报错，下旨仍可通过 gateway 通道工作）
+    if (!CONFIGURED_COURT_CHANNEL) {
+      setLoadingMessages(false)
+      return
+    }
     setLoadingMessages(true)
     try {
-      const r = await fetch(`/api/channel-messages?channel=${COURT_CHANNEL}&limit=15`, {
+      const r = await fetch(`/api/channel-messages?channel=${CONFIGURED_COURT_CHANNEL}&limit=15`, {
         headers: { Authorization: `Bearer ${getAuthToken()}` }
       })
       const d = await r.json()
@@ -140,7 +145,7 @@ export default function Court() {
       const r = await fetch('/api/command', {
         method: 'POST',
         headers: { Authorization: `Bearer ${getAuthToken()}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ channel: COURT_CHANNEL, message: finalMessage, botId: target })
+        body: JSON.stringify({ ...(CONFIGURED_COURT_CHANNEL ? { channel: CONFIGURED_COURT_CHANNEL } : {}), message: finalMessage, botId: target })
       })
       const d = await r.json()
       setMessages(prev => [...prev, {
@@ -310,7 +315,7 @@ export default function Court() {
         <div ref={msgRef} className="max-h-72 overflow-y-auto space-y-2">
           {channelMessages.length === 0 ? (
             <div className={`text-center text-xs py-4 ${sub}`}>
-              {loadingMessages ? '加载中...' : '暂无消息'}
+              {loadingMessages ? '加载中...' : !CONFIGURED_COURT_CHANNEL ? '未配置 VITE_COURT_CHANNEL，消息区不可用（下旨功能仍可通过 gateway 通道工作）' : '暂无消息'}
             </div>
           ) : (
             channelMessages.map((msg) => (
