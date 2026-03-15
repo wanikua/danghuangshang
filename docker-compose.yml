@@ -8,24 +8,20 @@ services:
       - "127.0.0.1:18789:18789"   # Gateway Dashboard
       - "127.0.0.1:18795:18795"   # 菠萝 GUI（可选）
     volumes:
-      # 配置文件（可选挂载）
-      # ⚠ 使用前必须先创建文件：cp openclaw.example.json openclaw.json
-      #   取消下行注释启用挂载（文件不存在会导致启动失败）
-      # - ./openclaw.json:/home/court/.openclaw/openclaw.json
+      # 配置持久化（init-court 生成的配置不会因容器重建丢失）
+      - court-config:/home/court/.openclaw
       # 工作区持久化（记忆、日志等）
       - court-workspace:/home/court/clawd
       # OpenViking 数据持久化（可选）
       - court-openviking:/home/court/.openviking
-    environment:
-      - LLM_API_KEY=${LLM_API_KEY}
-      - OPENVIKING_CONFIG_FILE=${OPENVIKING_CONFIG_FILE}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:18789/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 15s
+      start_period: 60s   # 等待配置初始化
 
 volumes:
+  court-config:
   court-workspace:
   court-openviking:

@@ -93,23 +93,6 @@ if [ -f "$HOME/.openviking/ov.conf" ] || [ -n "$OPENVIKING_CONFIG_FILE" ]; then
     mkdir -p "$HOME/.openviking/data"
 fi
 
-# ---- [M-03] GUI Dashboard 自动启动（带进程守护）----
-if [ -f "/opt/gui/server/index.js" ]; then
-    echo "✓ 朝堂 Dashboard 已检测到，启动中..."
-    export BOLUO_BIND_HOST="${BOLUO_BIND_HOST:-0.0.0.0}"
-    (
-        cd /opt/gui
-        while true; do
-            node server/index.js || true
-            echo "⚠ Dashboard 进程退出，2 秒后重启..."
-            sleep 2
-        done
-    ) &
-    GUI_PID=$!
-    cd "$WORKSPACE"
-    echo "✓ Dashboard 已启动 (PID: $GUI_PID, 端口: 18795, 自动重启: 已启用)"
-fi
-
 # ---- 提示信息 & 无配置等待模式 ----
 if [ ! -f "$CONFIG_DIR/openclaw.json" ]; then
     echo ""
@@ -141,6 +124,30 @@ if [ ! -f "$CONFIG_DIR/openclaw.json" ]; then
 
     echo "✓ 检测到配置文件，启动 Gateway..."
 fi
+
+# ---- [M-03] GUI Dashboard 自动启动（配置就绪后）----
+GUI_PID=""
+if [ -f "/opt/gui/server/index.js" ]; then
+    echo "✓ 朝堂 Dashboard 启动中..."
+    export BOLUO_BIND_HOST="${BOLUO_BIND_HOST:-0.0.0.0}"
+    (
+        cd /opt/gui
+        while true; do
+            node server/index.js || true
+            sleep 2
+        done
+    ) &
+    GUI_PID=$!
+    cd "$WORKSPACE"
+    echo "✓ Dashboard 已启动 (PID: $GUI_PID, 端口: 18795)"
+fi
+
+# ---- 信号处理：清理后台进程 ----
+cleanup() {
+    [ -n "$GUI_PID" ] && kill "$GUI_PID" 2>/dev/null
+    exit 0
+}
+trap cleanup SIGTERM SIGINT
 
 echo ""
 echo "🏛️ AI 朝廷 Docker 启动中..."

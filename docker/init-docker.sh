@@ -94,9 +94,6 @@ echo ""
 echo -e "${YELLOW}📋 步骤 4/4：配置平台凭证${NC}"
 echo ""
 
-CHANNEL_CONFIG=""
-BINDINGS=""
-
 if [ "$PLATFORM" = "1" ]; then
     echo "Discord Bot 配置："
     echo "  1. 去 https://discord.com/developers/applications 创建 Bot"
@@ -112,7 +109,15 @@ if [ "$PLATFORM" = "1" ]; then
         echo -e "${RED}✗ Bot Token 不能为空${NC}"
         exit 1
     fi
-    # Discord 凭证已保存在 $BOT_TOKEN
+    echo ""
+    echo "  Discord 服务器 ID（Guild ID）获取方式："
+    echo "  设置 → 高级 → 开启「开发者模式」→ 右键服务器名 → 复制服务器 ID"
+    echo ""
+    if [ -t 0 ]; then
+    read -p "Discord Guild ID（留空则所有服务器生效）: " GUILD_ID
+    else
+      GUILD_ID=""
+    fi
     APP_ID=""
     APP_SECRET=""
 
@@ -152,38 +157,18 @@ echo -e "${CYAN}⚙️ 生成配置文件...${NC}"
 
 mkdir -p "$CONFIG_DIR"
 
-# Agent 列表
-if [ "$MODE" = "2" ]; then
-    AGENTS_LIST=',
-      { "id": "neige", "name": "内阁", "identity": { "theme": "你是内阁首辅，专精战略决策、方案审议、全局规划。回答用中文。" }, "sandbox": { "mode": "off" } },
-      { "id": "duchayuan", "name": "都察院", "identity": { "theme": "你是都察院御史，专精监察审计、代码审查、质量把控。回答用中文。" }, "sandbox": { "mode": "all", "scope": "agent" } },
-      { "id": "bingbu", "name": "兵部", "identity": { "theme": "你是兵部尚书，专精软件工程、系统架构。回答用中文。" }, "sandbox": { "mode": "all", "scope": "agent" } },
-      { "id": "hubu", "name": "户部", "identity": { "theme": "你是户部尚书，专精财务分析、成本管控。回答用中文。" }, "sandbox": { "mode": "off" } },
-      { "id": "libu", "name": "礼部", "identity": { "theme": "你是礼部尚书，专精品牌营销、内容创作。回答用中文。" }, "sandbox": { "mode": "off" } },
-      { "id": "gongbu", "name": "工部", "identity": { "theme": "你是工部尚书，专精 DevOps、服务器运维。回答用中文。" }, "sandbox": { "mode": "off" } },
-      { "id": "libu2", "name": "吏部", "identity": { "theme": "你是吏部尚书，专精项目管理、团队协调。回答用中文。" }, "sandbox": { "mode": "off" } },
-      { "id": "xingbu", "name": "刑部", "identity": { "theme": "你是刑部尚书，专精法务合规、知识产权。回答用中文。" }, "sandbox": { "mode": "off" } },
-      { "id": "hanlinyuan", "name": "翰林院", "identity": { "theme": "你是翰林院学士，专精学术研究、知识整理、文档撰写。回答用中文。" }, "sandbox": { "mode": "off" } }'
-    SUBAGENTS='"subagents": { "allowAgents": ["neige","duchayuan","bingbu","hubu","libu","gongbu","libu2","xingbu","hanlinyuan"] },'
-    SILIJIAN_IDENTITY="你是AI朝廷的司礼监大内总管。你的职责是规划调度，不是亲自执行。使用 sessions_spawn 将任务派发给对应部门。"
-else
-    AGENTS_LIST=""
-    SUBAGENTS=""
-    SILIJIAN_IDENTITY="你是AI朝廷的司礼监，忠诚干练，说话简练干脆。用中文回答。"
-fi
-
 # [M-15] 用 Python 生成合法 JSON（通过环境变量传参，避免注入风险）
 CFG_API_URL="$API_URL" \
 CFG_API_KEY="$API_KEY" \
 CFG_API_FORMAT="$API_FORMAT" \
 CFG_MODEL_ID="$MODEL_ID" \
 CFG_WORKSPACE="$WORKSPACE" \
-CFG_SILIJIAN_IDENTITY="$SILIJIAN_IDENTITY" \
 CFG_MODE="$MODE" \
 CFG_PLATFORM="$PLATFORM" \
 CFG_BOT_TOKEN="$BOT_TOKEN" \
 CFG_APP_ID="$APP_ID" \
 CFG_APP_SECRET="$APP_SECRET" \
+CFG_GUILD_ID="${GUILD_ID:-}" \
 CFG_CONFIG_FILE="$CONFIG_FILE" \
 python3 << 'PYEOF'
 import json, os
@@ -193,14 +178,19 @@ api_key = os.environ['CFG_API_KEY']
 api_format = os.environ['CFG_API_FORMAT']
 model_id = os.environ['CFG_MODEL_ID']
 workspace = os.environ['CFG_WORKSPACE']
-silijian_identity = os.environ['CFG_SILIJIAN_IDENTITY']
 mode = os.environ['CFG_MODE']
 platform = os.environ['CFG_PLATFORM']
 bot_token = os.environ.get('CFG_BOT_TOKEN', '')
-# applicationId is auto-detected from token, no config key needed
 app_id = os.environ.get('CFG_APP_ID', '')
 app_secret = os.environ.get('CFG_APP_SECRET', '')
+guild_id = os.environ.get('CFG_GUILD_ID', '')
 config_file = os.environ['CFG_CONFIG_FILE']
+
+silijian_identity = (
+    "你是AI朝廷的司礼监大内总管。你的职责是规划调度，不是亲自执行。使用 sessions_spawn 将任务派发给对应部门。"
+    if mode == "2" else
+    "你是AI朝廷的司礼监，忠诚干练，说话简练干脆。用中文回答。"
+)
 
 config = {
     "models": {
@@ -257,11 +247,13 @@ if mode == "2":
 
 # 平台配置
 if platform == "1":
-    config["channels"] = {"discord": {
+    discord_config = {
         "enabled": True, "groupPolicy": "open", "allowBots": True,
         "accounts": {"silijian": {"name": "司礼监", "token": bot_token, "groupPolicy": "open"}},
-        "guilds": {"YOUR_GUILD_ID": {"requireMention": True}}
-    }}
+    }
+    if guild_id:
+        discord_config["guilds"] = {guild_id: {"requireMention": True}}
+    config["channels"] = {"discord": discord_config}
     config["bindings"] = [{"agentId": "silijian", "match": {"channel": "discord", "accountId": "silijian"}}]
 elif platform == "2":
     config["channels"] = {"feishu": {
@@ -324,6 +316,8 @@ echo ""
 echo "  配置文件: $CONFIG_FILE"
 echo "  工作区:   $WORKSPACE"
 echo ""
+echo "  Gateway 将在几秒内自动启动..."
+echo ""
 if [ "$PLATFORM" = "1" ]; then
     echo "  下一步：在 Discord 里 @你的 Bot 说句话"
 elif [ "$PLATFORM" = "2" ]; then
@@ -331,7 +325,4 @@ elif [ "$PLATFORM" = "2" ]; then
 else
     echo "  下一步：打开 http://localhost:18789"
 fi
-echo ""
-echo "  重启容器使配置生效："
-echo "    docker compose restart"
 echo ""
