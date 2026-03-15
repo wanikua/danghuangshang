@@ -23,7 +23,7 @@
 
 <div align="center">
 
-### 👑 一键当皇帝
+### 👑 一键登基
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
@@ -84,8 +84,9 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/
 <a id="朝廷架构"></a>
 
 ## 🏛️ 朝廷架构
-
-采用**明朝内阁制**——废丞相，司礼监 + 内阁二元治理，运行近 300 年。
+三省六部制是中国古代经典制度。
+**明朝初年** 废丞相，司礼监 + 内阁二元治理。
+本项目的Agent团队协作方式采用更贴近明朝六部的制度。
 
 ```
 皇帝（你）下旨
