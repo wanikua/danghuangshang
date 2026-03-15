@@ -26,12 +26,12 @@
 ### 👑 一键当皇帝
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
 ```
 
 **一行命令，5 分钟，你就是皇上。** [→ 快速开始](#快速开始三步登基)
 
-🏥 **安装遇到问题？** `bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/doctor.sh)` — [诊断工具文档](./docs/doctor.md)
+🏥 **安装遇到问题？** `bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/doctor.sh)` — [诊断工具文档](./docs/doctor.md)
 
 🤖 **不想看文档？** 把 [这段 Prompt](./docs/install-prompt.md) 丢给你的 AI 助手（Claude / ChatGPT / DeepSeek），让它一步步带你装。
 
@@ -124,7 +124,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-t
 
 > 已经在跑 OpenClaw 的老用户，不需要重新安装，用精简版脚本直接初始化朝廷工作区和配置模板：
 > ```bash
-> bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install-lite.sh)
+> bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install-lite.sh)
 > ```
 > 跑完后跳到第三步填 Key 即可。**新用户请忽略，从第一步开始。**
 
@@ -163,7 +163,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-t
 
 ```bash
 # 1️⃣ 一键安装（Linux 示例，其他路径见对应文档）
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
 
 # 2️⃣ 填入 API Key 和 Bot Token
 nano ~/.openclaw/openclaw.json
@@ -301,7 +301,7 @@ systemctl --user start openclaw-gateway
 
 ```bash
 # 重跑安装脚本（自动保留你的配置）
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
 
 # Docker 用户
 docker pull boluobobo/ai-court:latest && docker compose up -d
@@ -314,4 +314,4 @@ npm update -g openclaw && systemctl --user restart openclaw-gateway
 
 v3.5.1 | MIT License | [User Agreement](./docs/user-agreement.md) | [Privacy Policy](./docs/privacy-policy.md)
 
-> 📜 Licensed under MIT. Derivative works please credit: [boluobobo-ai-court-tutorial](https://github.com/wanikua/boluobobo-ai-court-tutorial) by [@wanikua](https://github.com/wanikua)
+> 📜 Licensed under MIT. Derivative works please credit: [danghuangshang](https://github.com/wanikua/danghuangshang) by [@wanikua](https://github.com/wanikua)

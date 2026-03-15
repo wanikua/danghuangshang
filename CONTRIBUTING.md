@@ -111,6 +111,6 @@ docs: 补充 GUI 使用说明
 
 ## 问题反馈
 
-- **Bug 报告**：[GitHub Issues](https://github.com/wanikua/boluobobo-ai-court-tutorial/issues)
-- **功能建议**：[GitHub Discussions](https://github.com/wanikua/boluobobo-ai-court-tutorial/discussions)
+- **Bug 报告**：[GitHub Issues](https://github.com/wanikua/danghuangshang/issues)
+- **功能建议**：[GitHub Discussions](https://github.com/wanikua/danghuangshang/discussions)
 - **社区交流**：微信群（关注公众号「菠言菠语」获取入群码）

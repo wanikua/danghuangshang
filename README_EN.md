@@ -26,12 +26,12 @@
 ### 👑 Become Emperor in One Click
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
 ```
 
 **One command. 5 minutes. You are the Emperor.** [→ Quick Start](#quick-start-three-steps-to-the-throne)
 
-🏥 **Having issues?** `bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/doctor.sh)` — [Doctor Tool Docs](./docs/doctor.md)
+🏥 **Having issues?** `bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/doctor.sh)` — [Doctor Tool Docs](./docs/doctor.md)
 
 🤖 **Don't want to read docs?** Give [this Prompt](./docs/install-prompt.md) to your AI assistant (Claude / ChatGPT / DeepSeek) and let it guide you step by step.
 
@@ -100,7 +100,7 @@ The Three Departments and Six Ministries system ran for over 1,300 years — one
 
 > Already running OpenClaw? No need to reinstall. Use the lite script to initialize the court workspace and config template:
 > ```bash
-> bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install-lite.sh)
+> bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install-lite.sh)
 > ```
 > Then skip to Step 3 to fill in your keys. **New users: ignore this, start from Step 1.**
 
@@ -129,7 +129,7 @@ The Three Departments and Six Ministries system ran for over 1,300 years — one
 
 ```bash
 # 1️⃣ One-line install (Linux example)
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
 
 # 2️⃣ Add API Key and Bot Token
 nano ~/.openclaw/openclaw.json
@@ -251,7 +251,7 @@ This project was first published on **February 22, 2026**. Full evidence: [GitHu
 
 ```bash
 # Re-run install script (auto-preserves your config)
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
 
 # Docker users
 docker pull boluobobo/ai-court:latest && docker compose up -d
@@ -270,4 +270,4 @@ This project is provided "as is" without any warranties. AI-generated content is
 
 v3.5.1 | MIT License
 
-> 📜 Licensed under MIT. Derivative works please credit: [boluobobo-ai-court-tutorial](https://github.com/wanikua/boluobobo-ai-court-tutorial) by [@wanikua](https://github.com/wanikua)
+> 📜 Licensed under MIT. Derivative works please credit: [danghuangshang](https://github.com/wanikua/danghuangshang) by [@wanikua](https://github.com/wanikua)

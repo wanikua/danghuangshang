@@ -9,7 +9,7 @@
 遇到问题？跑一行命令自动检查：
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/doctor.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/doctor.sh)
 ```
 
 ## 诊断内容

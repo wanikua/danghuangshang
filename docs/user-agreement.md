@@ -8,7 +8,7 @@
 
 ## 1. Acceptance of Terms
 
-By using, installing, or deploying the AI Court System ("boluobobo-ai-court-tutorial", hereinafter "the Project"), you agree to be bound by this User Agreement. If you do not agree, do not use the Project.
+By using, installing, or deploying the AI Court System ("danghuangshang", hereinafter "the Project"), you agree to be bound by this User Agreement. If you do not agree, do not use the Project.
 
 ## 2. Description of the Project
 
@@ -67,7 +67,7 @@ We reserve the right to modify this User Agreement at any time. Changes will be 
 
 ## 10. Contact
 
-For questions about this agreement, please open a [GitHub Issue](https://github.com/wanikua/boluobobo-ai-court-tutorial/issues).
+For questions about this agreement, please open a [GitHub Issue](https://github.com/wanikua/danghuangshang/issues).
 
 ---
 

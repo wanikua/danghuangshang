@@ -2,7 +2,7 @@ FROM node:22-slim
 
 LABEL maintainer="wanikua" \
       description="AI 朝廷一键部署 Docker 镜像" \
-      org.opencontainers.image.source="https://github.com/wanikua/boluobobo-ai-court-tutorial"
+      org.opencontainers.image.source="https://github.com/wanikua/danghuangshang"
 
 # 系统依赖
 RUN apt-get update -qq && \

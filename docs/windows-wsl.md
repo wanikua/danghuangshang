@@ -49,7 +49,7 @@ openclaw --version
 ### 6. 一键部署 AI 朝廷
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install-lite.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install-lite.sh)
 ```
 
 然后按提示填入 LLM API Key 和 Discord Bot Token 即可。

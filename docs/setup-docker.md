@@ -12,8 +12,8 @@
 
 ```bash
 # 1. 克隆项目
-git clone https://github.com/wanikua/boluobobo-ai-court-tutorial.git
-cd boluobobo-ai-court-tutorial
+git clone https://github.com/wanikua/danghuangshang.git
+cd danghuangshang
 
 # 2. 启动容器
 docker compose up -d
@@ -48,7 +48,7 @@ docker compose pull && docker compose up -d
 ## 镜像信息
 
 - Docker Hub：`boluobobo/ai-court:latest`（国内推荐，可配镜像加速）
-- GitHub：`ghcr.io/wanikua/boluobobo-ai-court-tutorial:latest`
+- GitHub：`ghcr.io/wanikua/danghuangshang:latest`
 - 架构：linux/amd64 + linux/arm64
 - 内含：Node.js 22 + OpenClaw + Chromium + GitHub CLI + Python + OpenViking
 - 工作区和配置通过 volume 持久化，升级不丢数据

@@ -342,8 +342,8 @@ BOLUO_AUTH_TOKEN=你的密码 node index.js
 ## 十、Docker 部署 — 容器化一键启动
 
 ```bash
-git clone https://github.com/wanikua/boluobobo-ai-court-tutorial.git
-cd boluobobo-ai-court-tutorial
+git clone https://github.com/wanikua/danghuangshang.git
+cd danghuangshang
 cp openclaw.example.json openclaw.json
 nano openclaw.json   # 填入 API Key 和 Bot Token
 docker compose up -d

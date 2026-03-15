@@ -199,7 +199,7 @@ ssh -i ~/Downloads/ssh-key-2025-xx-xx.key ubuntu@你的服务器IP
 SSH 连上服务器后，复制粘贴这一行：
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
 ```
 
 脚本自动完成：系统更新、防火墙配置、Swap、Node.js 22、GitHub CLI、OpenClaw 安装、工作区初始化。

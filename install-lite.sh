@@ -46,7 +46,7 @@ else
     echo "  npm install -g openclaw@latest"
     echo ""
     echo "或使用完整安装脚本："
-    echo "  bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)"
+    echo "  bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)"
     exit 1
 fi
 
@@ -524,7 +524,7 @@ fi
 # ---- 可选：安装 Dashboard Web UI ----
 echo -e "${YELLOW}[3/4] Dashboard Web UI...${NC}"
 if [ "$INSTALL_GUI" = "yes" ]; then
-    REPO_URL="https://github.com/wanikua/boluobobo-ai-court-tutorial"
+    REPO_URL="https://github.com/wanikua/danghuangshang"
     GUI_DIR="$WORKSPACE/gui"
     if [ -d "$GUI_DIR" ]; then
         echo -e "  ${GREEN}✓ gui/ 目录已存在，跳过克隆${NC}"
@@ -597,7 +597,7 @@ echo ""
 echo "  3. 启动 Gateway："
 echo "     $CLI_CMD gateway --verbose"
 echo ""
-echo -e "     📖 详细指南: ${CYAN}https://github.com/wanikua/boluobobo-ai-court-tutorial/blob/main/飞书配置指南.md${NC}"
+echo -e "     📖 详细指南: ${CYAN}https://github.com/wanikua/danghuangshang/blob/main/飞书配置指南.md${NC}"
 echo ""
 else
 echo -e "  ${YELLOW}接下来需要 3 步：${NC}"
@@ -621,5 +621,5 @@ fi
 echo -e "${CYAN}💡 Troubleshooting:${NC}"
 echo "  遇到 config invalid 错误？先跑: $CLI_CMD doctor --fix"
 echo ""
-echo -e "完整教程：${BLUE}https://github.com/wanikua/boluobobo-ai-court-tutorial${NC}"
+echo -e "完整教程：${BLUE}https://github.com/wanikua/danghuangshang${NC}"
 echo ""

@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-This Privacy Policy describes how the AI Court System ("boluobobo-ai-court-tutorial", hereinafter "the Project") handles data. The Project is a self-hosted, open-source system — **you control all your data**.
+This Privacy Policy describes how the AI Court System ("danghuangshang", hereinafter "the Project") handles data. The Project is a self-hosted, open-source system — **you control all your data**.
 
 ## 2. Data Collection
 
@@ -92,7 +92,7 @@ The Project is not intended for use by children under 13. We do not knowingly co
 
 The entire Project is open source. You can audit exactly what the code does:
 
-- **Repository**: https://github.com/wanikua/boluobobo-ai-court-tutorial
+- **Repository**: https://github.com/wanikua/danghuangshang
 - **Docker image contents**: See [Docker Security](./setup-docker.md#-镜像安全说明) for a full breakdown
 - **Installation scripts**: All `.sh` files are readable before execution
 
@@ -102,7 +102,7 @@ We may update this Privacy Policy from time to time. Changes will be reflected i
 
 ## 9. Contact
 
-For privacy-related questions, please open a [GitHub Issue](https://github.com/wanikua/boluobobo-ai-court-tutorial/issues).
+For privacy-related questions, please open a [GitHub Issue](https://github.com/wanikua/danghuangshang/issues).
 
 ---
 

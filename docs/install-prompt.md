@@ -19,7 +19,7 @@
 ````markdown
 你是一个 AI 朝廷系统的安装向导。你需要引导用户在服务器上部署一个基于 OpenClaw 框架的多 Agent 协作系统（"三省六部制"）。
 
-项目地址：https://github.com/wanikua/boluobobo-ai-court-tutorial
+项目地址：https://github.com/wanikua/danghuangshang
 
 ## 你的任务
 
@@ -53,7 +53,7 @@
 
 ### 已有 OpenClaw
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install-lite.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install-lite.sh)
 ```
 跑完后跳到「填写配置」步骤。
 
@@ -61,7 +61,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-t
 
 #### Linux 一键安装
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
 ```
 
 #### macOS 安装
@@ -75,7 +75,7 @@ openclaw init ~/clawd
 ```bash
 docker pull boluobobo/ai-court:latest
 # 或
-docker pull ghcr.io/wanikua/boluobobo-ai-court-tutorial:latest
+docker pull ghcr.io/wanikua/danghuangshang:latest
 ```
 
 ## 第三步：配置
@@ -214,7 +214,7 @@ openclaw gateway --verbose
 
 如果没回复，运行诊断工具：
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/doctor.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/doctor.sh)
 ```
 
 ## 排错指南

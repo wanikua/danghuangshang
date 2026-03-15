@@ -17,7 +17,7 @@
 ## 2. 一键安装
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
 # 选择模式 2: 飞书单Bot模式
 ```
 

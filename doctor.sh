@@ -519,7 +519,7 @@ if grep -q '"feishu"' "$CONFIG_FILE" 2>/dev/null; then
     echo ""
 else
     info "飞书未配置（如果不用飞书可忽略）"
-    info "飞书配置指南: https://github.com/wanikua/boluobobo-ai-court-tutorial/blob/main/飞书配置指南.md"
+    info "飞书配置指南: https://github.com/wanikua/danghuangshang/blob/main/飞书配置指南.md"
 fi
 
 # ---- [6/9] 检测 Docker / Sandbox 权限 ----
@@ -645,7 +645,7 @@ try {
         fail "有 $MISSING_COUNT 个 Agent 缺少 identity.theme（角色描述）"
         info "缺少 identity 的 Agent: $MISSING_IDENTITY"
         info "Agent 没有 identity.theme 会不知道自己的角色定位，影响回答质量"
-        info "参考模板补全: https://github.com/wanikua/boluobobo-ai-court-tutorial/blob/main/openclaw.example.json"
+        info "参考模板补全: https://github.com/wanikua/danghuangshang/blob/main/openclaw.example.json"
         echo ""
         echo -e "${CYAN}  📋 修复方法：${NC}"
         echo -e "     1. 编辑 ${YELLOW}$CONFIG_FILE${NC}"

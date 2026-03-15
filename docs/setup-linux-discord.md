@@ -17,7 +17,7 @@
 SSH 连上服务器，运行：
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
 # 选择模式 1: Discord 多Bot模式
 ```
 

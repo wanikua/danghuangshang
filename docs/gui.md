@@ -31,7 +31,7 @@ AI 朝廷提供三层 GUI：**Web Dashboard** 看系统状态 → **Discord** �
 
 ```bash
 # 1. 进入教程仓库
-cd boluobobo-ai-court-tutorial
+cd danghuangshang
 
 # 2. 构建前端
 cd gui && npm install && npm run build

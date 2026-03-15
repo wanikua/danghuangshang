@@ -995,7 +995,7 @@ echo "     e) 事件接收选择 WebSocket 长连接"
 echo "     f) 把 appId/appSecret 填到 openclaw.json 的 silijian 位置"
 echo "     g) 创建版本并发布应用，邀请 Bot 到飞书群"
 echo ""
-echo -e "     📖 详细指南: ${CYAN}https://github.com/wanikua/boluobobo-ai-court-tutorial/blob/main/飞书配置指南.md${NC}"
+echo -e "     📖 详细指南: ${CYAN}https://github.com/wanikua/danghuangshang/blob/main/飞书配置指南.md${NC}"
 elif [ "$DEPLOY_MODE" = "3" ]; then
 echo -e "  ${YELLOW}2. 无需配置 Bot${NC}"
 echo "     WebUI 模式直接通过浏览器访问即可"
@@ -1030,7 +1030,7 @@ echo "     添加 cron： openclaw cron add --name '每日简报' \\"
 echo "       --agent main --cron '0 22 * * *' --tz Asia/Shanghai \\"
 echo "       --message '生成今日简报' --session isolated --token <你的token>"
 echo ""
-echo -e "完整教程：${BLUE}https://github.com/wanikua/boluobobo-ai-court-tutorial${NC}"
+echo -e "完整教程：${BLUE}https://github.com/wanikua/danghuangshang${NC}"
 echo ""
 
 # ---- 自动运行 doctor.sh 健康检查 ----
@@ -1039,7 +1039,7 @@ echo -e "${YELLOW}[自检] 运行 doctor.sh 检查安装状态...${NC}"
 echo ""
 # [M-04] 优先下载最新 doctor.sh 到工作区，确保路径始终可用
 if command -v curl &>/dev/null; then
-    curl -fsSL https://raw.githubusercontent.com/wanikua/boluobobo-ai-court-tutorial/main/doctor.sh -o "$WORKSPACE/doctor.sh" 2>/dev/null || true
+    curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/doctor.sh -o "$WORKSPACE/doctor.sh" 2>/dev/null || true
 fi
 if [ -f "$WORKSPACE/doctor.sh" ]; then
     bash "$WORKSPACE/doctor.sh" 2>/dev/null || true
