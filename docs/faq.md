@@ -61,16 +61,36 @@ sandbox mode 设成了 `all` 导致 Agent 跑在 Docker 容器里，文件系统
 在 `openclaw.json` 的 `models.providers` 中添加 OpenAI API 格式的 provider，指定 `baseUrl` 到 Ollama 地址。零 API 费用。
 
 ### Q: 启动时报 "workspace does not exist"？
-手动创建缺失的目录，或者所有 Agent 共用一个工作区（推荐）：
+这通常是因为 `defaults.workspace` 配置了但目录未创建，或者个别 Agent 覆盖了自己的 workspace 路径。
+
+**推荐做法**：所有 Agent 共用一个工作区（在 `defaults` 里配，不要在每个 agent 里单独配）：
 ```json
 "agents": {
-  "defaults": { "workspace": "$HOME/clawd" },
+  "defaults": { "workspace": "/home/你的用户名/clawd" },
   "list": [
-    { "id": "silijian" },
-    { "id": "bingbu" }
+    { "id": "silijian", "name": "司礼监" },
+    { "id": "bingbu", "name": "兵部" }
   ]
 }
 ```
+
+然后确保目录存在：
+```bash
+mkdir -p ~/clawd
+```
+
+> ⚠️ **不要在每个 agent 里写不同的 workspace**（如 `workspace-silijian`、`workspace-bingbu`），这会导致 SOUL.md / IDENTITY.md 等文件需要在每个目录里单独维护。共享工作区 + `defaults.workspace` 是最佳实践。
+
+### Q: Agent 不知道自己是谁 / SOUL.md 和 IDENTITY.md 是空的？
+安装脚本会自动生成包含有意义内容的 SOUL.md 和 IDENTITY.md。如果你的文件是空的，说明可能是早期版本安装的，手动补充即可：
+
+- **SOUL.md** — 朝廷行为准则（铁律、沟通风格、部门架构等）
+- **IDENTITY.md** — 身份信息（名字、定位、Emoji 等）
+
+参考最新安装脚本生成的模板内容，或直接重新运行安装脚本。
+
+### Q: subagent 用的 workspace 不是自己的而是继承了父 agent 的？
+这是正常行为。OpenClaw 的 subagent 默认继承父 agent 的 workspace。如果你希望所有 agent 共享同一个工作区，在 `defaults.workspace` 配置统一路径即可。
 
 ### Q: Gateway 启动失败？
 ```bash
@@ -78,6 +98,20 @@ journalctl --user -u openclaw-gateway --since today --no-pager
 openclaw doctor
 ```
 常见原因：API Key 未填、JSON 格式错误、Bot Token 无效。
+
+### Q: 报 "Failed to resolve Discord application id"？
+每个 Discord Bot 需要在配置中添加 `applicationId` 字段。在 Discord Developer Portal → 你的 Application → General Information 页面复制 Application ID（一串数字），填入对应 account 配置中：
+```json
+"silijian": {
+  "name": "司礼监",
+  "token": "你的Bot Token",
+  "applicationId": "你的Application ID",
+  "groupPolicy": "open"
+}
+```
+
+### Q: 报 "Unrecognized key: botName"？
+新版 OpenClaw 已将 `botName` 字段改为 `name`。把配置中所有 `"botName"` 替换为 `"name"` 即可，或运行 `openclaw doctor --fix` 自动修复。
 
 ### Q: 报 config invalid 错误？
 新版 OpenClaw 移除了过期字段（如 `runTimeoutSeconds`），运行 `openclaw doctor --fix` 自动修复。

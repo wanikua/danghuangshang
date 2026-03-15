@@ -30,7 +30,7 @@
 
 ### 新功能
 - **预装 7 个 Skill** — weather / github / notion / hacker-news / browser-use / quadrants / openviking
-- **飞书配置全面优化** — 所有示例统一 dmPolicy/groupPolicy/botName，权限表补全到 8 项
+- **飞书配置全面优化** — 所有示例统一 dmPolicy/groupPolicy/name，权限表补全到 8 项
 - **GUI 品牌可配置** — 通过 `VITE_BRAND_NAME` 环境变量自定义品牌名
 - **install.sh 安装后自动运行 doctor.sh** 健康检查
 - **新增 CONTRIBUTING.md** 贡献指南和 skills/README.md 索引

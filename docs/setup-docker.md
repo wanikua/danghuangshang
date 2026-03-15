@@ -96,7 +96,7 @@ docker compose pull && docker compose up -d
       "enabled": true,
       "groupPolicy": "open",
       "accounts": {
-        "silijian": { "botName": "司礼监", "token": "你的Bot_Token", "groupPolicy": "open" }
+        "silijian": { "name": "司礼监", "token": "你的Bot_Token", "applicationId": "你的Application_ID", "groupPolicy": "open" }
       }
     }
   }

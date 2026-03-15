@@ -559,7 +559,25 @@ fi
 echo ""
 echo -e "${YELLOW}[7/9] 检查 Agent 配置...${NC}"
 
-AGENT_COUNT=$(grep -c '"id":' "$CONFIG_FILE" 2>/dev/null || true)
+# 使用 JSON 解析准确统计 agents.list 数组长度（避免 grep 误匹配 model id 等字段）
+if command -v python3 &>/dev/null; then
+    AGENT_COUNT=$(JSON_FILE="$CONFIG_FILE" python3 -c "
+import json, os
+try:
+    d = json.load(open(os.environ['JSON_FILE']))
+    print(len(d.get('agents', {}).get('list', [])))
+except: print(0)
+" 2>/dev/null)
+elif command -v node &>/dev/null; then
+    AGENT_COUNT=$(JSON_FILE="$CONFIG_FILE" node -e "
+try {
+    const d = require(process.env.JSON_FILE);
+    console.log(((d.agents || {}).list || []).length);
+} catch(e) { console.log(0); }
+" 2>/dev/null)
+else
+    AGENT_COUNT=$(grep -c '"id":' "$CONFIG_FILE" 2>/dev/null || true)
+fi
 AGENT_COUNT=${AGENT_COUNT:-0}
 [ "$AGENT_COUNT" -eq "$AGENT_COUNT" ] 2>/dev/null || AGENT_COUNT=0
 if [ "$AGENT_COUNT" -gt 0 ]; then

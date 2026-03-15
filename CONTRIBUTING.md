@@ -103,7 +103,7 @@ docs: 补充 GUI 使用说明
 ## PR 检查清单
 
 - [ ] README.md 和 README_EN.md 保持同步
-- [ ] 飞书配置示例包含 `dmPolicy` + `groupPolicy` + `botName`
+- [ ] 飞书配置示例包含 `dmPolicy` + `groupPolicy` + `name`
 - [ ] openclaw.example.json 的 agents/bindings/accounts 三者匹配
 - [ ] install.sh 的配置模板与 openclaw.example.json 一致
 - [ ] doctor.sh 能检测到新增的配置项

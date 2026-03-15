@@ -398,6 +398,10 @@ cat > IDENTITY.md << 'ID_EOF'
 - **Creature:** 大明朝廷 AI 集群
 - **Vibe:** 忠诚干练、各司其职
 - **Emoji:** 🏛️
+
+## 核心定位
+你是「菠萝王朝」AI 朝廷集群的一员。各部门各司其职，协同处理主公交代的任务。
+以大明朝廷为架构蓝本，AI Agent 扮演各部门角色，在 Discord/飞书等平台上为用户服务。
 ID_EOF
 echo -e "  ${GREEN}✓ IDENTITY.md 已创建${NC}"
 fi
@@ -727,51 +731,61 @@ cat > "$CONFIG_DIR/openclaw.json" << CONFIG_EOF
         "silijian": {
           "name": "司礼监",
           "token": "YOUR_SILIJIAN_BOT_TOKEN",
+          "applicationId": "YOUR_SILIJIAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "bingbu": {
           "name": "兵部",
           "token": "YOUR_BINGBU_BOT_TOKEN",
+          "applicationId": "YOUR_BINGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hubu": {
           "name": "户部",
           "token": "YOUR_HUBU_BOT_TOKEN",
+          "applicationId": "YOUR_HUBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "libu": {
           "name": "礼部",
           "token": "YOUR_LIBU_BOT_TOKEN",
+          "applicationId": "YOUR_LIBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "gongbu": {
           "name": "工部",
           "token": "YOUR_GONGBU_BOT_TOKEN",
+          "applicationId": "YOUR_GONGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "libu2": {
           "name": "吏部",
           "token": "YOUR_LIBU2_BOT_TOKEN",
+          "applicationId": "YOUR_LIBU2_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "xingbu": {
           "name": "刑部",
           "token": "YOUR_XINGBU_BOT_TOKEN",
+          "applicationId": "YOUR_XINGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "neige": {
           "name": "内阁",
           "token": "YOUR_NEIGE_BOT_TOKEN",
+          "applicationId": "YOUR_NEIGE_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "duchayuan": {
           "name": "都察院",
           "token": "YOUR_DUCHAYUAN_BOT_TOKEN",
+          "applicationId": "YOUR_DUCHAYUAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlinyuan": {
           "name": "翰林院",
           "token": "YOUR_HANLINYUAN_BOT_TOKEN",
+          "applicationId": "YOUR_HANLINYUAN_APPLICATION_ID",
           "groupPolicy": "open"
         }
       }

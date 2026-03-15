@@ -127,8 +127,9 @@ nano ~/.openclaw/openclaw.json
       "groupPolicy": "open",
       "accounts": {
         "silijian": {
-          "botName": "司礼监",
+          "name": "司礼监",
           "token": "你的Discord_Bot_Token",
+          "applicationId": "你的Discord_Application_ID",
           "groupPolicy": "open"
         }
       }
@@ -184,7 +185,7 @@ nano ~/.openclaw/openclaw.json
       "enabled": true,
       "accounts": {
         "silijian": {
-          "botName": "司礼监",
+          "name": "司礼监",
           "appId": "你的App_ID",
           "appSecret": "你的App_Secret"
         }

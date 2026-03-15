@@ -136,6 +136,13 @@ cat > "$WORKSPACE/SOUL.md" << 'SOUL_EOF'
 - 吏部：项目管理、创业孵化
 - 刑部：法务合规、知识产权
 - 翰林院：学术研究、知识整理、文档撰写
+
+## 模型分层
+| 层级 | 模型 | 说明 |
+|---|---|---|
+| 调度层 | 快速模型 | 日常对话，快速响应 |
+| 执行层（重） | 强力模型 | 编码、深度分析 |
+| 执行层（轻） | 经济模型（可选） | 轻量任务，省钱 |
 SOUL_EOF
 echo -e "  ${GREEN}✓ SOUL.md 已创建${NC}"
 fi
@@ -149,6 +156,10 @@ cat > "$WORKSPACE/IDENTITY.md" << 'ID_EOF'
 - **Creature:** 大明朝廷 AI 集群
 - **Vibe:** 忠诚干练、各司其职
 - **Emoji:** 🏛️
+
+## 核心定位
+你是「菠萝王朝」AI 朝廷集群的一员。各部门各司其职，协同处理主公交代的任务。
+以大明朝廷为架构蓝本，AI Agent 扮演各部门角色，在 Discord/飞书等平台上为用户服务。
 ID_EOF
 echo -e "  ${GREEN}✓ IDENTITY.md 已创建${NC}"
 fi
@@ -290,7 +301,7 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << FEISHU_EOF
         "silijian": {
           "appId": "YOUR_FEISHU_APP_ID",
           "appSecret": "YOUR_FEISHU_APP_SECRET",
-          "botName": "司礼监",
+          "name": "司礼监",
           "groupPolicy": "open"
         }
       }
@@ -421,53 +432,63 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << CONFIG_EOF
       "allowBots": true,
       "accounts": {
         "silijian": {
-          "botName": "司礼监",
+          "name": "司礼监",
           "token": "YOUR_SILIJIAN_BOT_TOKEN",
+          "applicationId": "YOUR_SILIJIAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "neige": {
-          "botName": "内阁",
+          "name": "内阁",
           "token": "YOUR_NEIGE_BOT_TOKEN",
+          "applicationId": "YOUR_NEIGE_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "duchayuan": {
-          "botName": "都察院",
+          "name": "都察院",
           "token": "YOUR_DUCHAYUAN_BOT_TOKEN",
+          "applicationId": "YOUR_DUCHAYUAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "bingbu": {
-          "botName": "兵部",
+          "name": "兵部",
           "token": "YOUR_BINGBU_BOT_TOKEN",
+          "applicationId": "YOUR_BINGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hubu": {
-          "botName": "户部",
+          "name": "户部",
           "token": "YOUR_HUBU_BOT_TOKEN",
+          "applicationId": "YOUR_HUBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "libu": {
-          "botName": "礼部",
+          "name": "礼部",
           "token": "YOUR_LIBU_BOT_TOKEN",
+          "applicationId": "YOUR_LIBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "gongbu": {
-          "botName": "工部",
+          "name": "工部",
           "token": "YOUR_GONGBU_BOT_TOKEN",
+          "applicationId": "YOUR_GONGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "libu2": {
-          "botName": "吏部",
+          "name": "吏部",
           "token": "YOUR_LIBU2_BOT_TOKEN",
+          "applicationId": "YOUR_LIBU2_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "xingbu": {
-          "botName": "刑部",
+          "name": "刑部",
           "token": "YOUR_XINGBU_BOT_TOKEN",
+          "applicationId": "YOUR_XINGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlinyuan": {
-          "botName": "翰林院",
+          "name": "翰林院",
           "token": "YOUR_HANLINYUAN_BOT_TOKEN",
+          "applicationId": "YOUR_HANLINYUAN_APPLICATION_ID",
           "groupPolicy": "open"
         }
       }

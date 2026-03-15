@@ -335,10 +335,10 @@ nano ~/.openclaw/openclaw.json
       "groupPolicy": "open",
       "allowBots": true,
       "accounts": {
-        "silijian": { "botName": "司礼监", "token": "司礼监的Bot Token", "groupPolicy": "open" },
-        "bingbu": { "botName": "兵部", "token": "兵部的Bot Token", "groupPolicy": "open" },
-        "hubu": { "botName": "户部", "token": "户部的Bot Token", "groupPolicy": "open" },
-        "libu": { "botName": "礼部", "token": "礼部的Bot Token", "groupPolicy": "open" }
+        "silijian": { "name": "司礼监", "token": "司礼监的Bot Token", "applicationId": "司礼监的Application ID", "groupPolicy": "open" },
+        "bingbu": { "name": "兵部", "token": "兵部的Bot Token", "applicationId": "兵部的Application ID", "groupPolicy": "open" },
+        "hubu": { "name": "户部", "token": "户部的Bot Token", "applicationId": "户部的Application ID", "groupPolicy": "open" },
+        "libu": { "name": "礼部", "token": "礼部的Bot Token", "applicationId": "礼部的Application ID", "groupPolicy": "open" }
       }
     }
   },
