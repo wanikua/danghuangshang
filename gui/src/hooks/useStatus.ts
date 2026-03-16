@@ -1,11 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react"
 import type { SystemStatus } from "../types"
+import { getAuthToken } from "../utils/auth"
 
 const DEFAULT_REFRESH_INTERVAL = 30000
-
-function getAuthToken(): string {
-  return localStorage.getItem('boluo_auth_token') || ''
-}
 
 function getRefreshInterval(): number {
   try {
@@ -68,9 +65,17 @@ export function useStatus() {
 
   useEffect(() => {
     fetchStatus()
-    const interval = setInterval(fetchStatus, getRefreshInterval())
+    // Re-read interval from settings on each cycle so changes take effect without reload
+    let timerId: ReturnType<typeof setTimeout>
+    const scheduleNext = () => {
+      timerId = setTimeout(() => {
+        fetchStatus()
+        scheduleNext()
+      }, getRefreshInterval())
+    }
+    scheduleNext()
     return () => {
-      clearInterval(interval)
+      clearTimeout(timerId)
       abortRef.current?.abort()
     }
   }, [fetchStatus])

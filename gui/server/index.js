@@ -1143,7 +1143,7 @@ app.get('/api/notion', authMiddleware, (req, res) => {
 });
 
 app.post('/api/notion/sync', authMiddleware, (req, res) => {
-  res.status(501).json({ success: false, message: 'Notion 同步功能尚未实现（placeholder）' });
+  res.json({ success: false, message: 'Notion 同步功能尚未对接，数据展示基于本地 Agent 会话统计' });
 });
 
 app.get('/api/notion/data', authMiddleware, (req, res) => {
@@ -1173,28 +1173,40 @@ app.get('/api/notion/data', authMiddleware, (req, res) => {
     const tokenStats = getTokenStats();
     const tokenPrice = tokenStats.tokenPrice || 0.3;
     const data = tokenStats.byDepartment.slice(0, 6).map((d, i) => {
-      const expense = Math.floor(d.tokens * 0.001);
+      const cost = parseFloat((d.tokens / 1000000 * tokenPrice).toFixed(3));
       return {
         id: String(i + 1),
         category: d.department,
         income: 0,
-        expense: expense,
+        expense: cost,
         period: new Date().toISOString().substring(0, 7),
-        balance: -expense,
-        tokenCost: (d.tokens / 1000000 * tokenPrice).toFixed(3),
+        balance: -cost,
+        tokenCost: cost.toFixed(3),
       };
     });
     res.json({ type: 'finance', data, lastSync: new Date().toISOString() });
   } else if (type === 'personnel') {
-    const depts = ['工部', '户部', '吏部', '刑部', '兵部', '礼部'];
-    const data = depts.map((name, i) => ({
-      id: String(i + 1),
-      name: `${name}尚书`,
-      title: name,
-      department: name,
-      status: 'active',
-      tenure: `${new Date().getFullYear() - (depts.length - i - 1)}年任职`
-    }));
+    const data = [];
+    const agentConfig = config?.agents?.list;
+    const entries = agentConfig
+      ? (Array.isArray(agentConfig) ? agentConfig.map(a => [a.id, a]) : Object.entries(agentConfig))
+      : [];
+    let agentIds = entries.map(([id]) => id);
+    if (agentIds.length === 0 && existsSync(AGENTS_DIR)) {
+      agentIds = readdirSync(AGENTS_DIR, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name);
+    }
+    agentIds.forEach((id, i) => {
+      const sessData = getAgentSessionData(id);
+      data.push({
+        id: String(i + 1),
+        name: AGENT_DEPT_MAP[id] || id,
+        title: AGENT_DEPT_MAP[id] || id,
+        department: AGENT_DEPT_MAP[id] || id,
+        status: sessData.sessions > 0 ? 'active' : 'idle',
+        sessions: sessData.sessions,
+        totalTokens: sessData.totalTokens,
+      });
+    });
     res.json({ type: 'personnel', data, lastSync: new Date().toISOString() });
   } else {
     res.json({ type, data: [], lastSync: new Date().toISOString() });
@@ -1439,7 +1451,7 @@ app.get('/api/cron/jobs', authMiddleware, async (req, res) => {
     const data = JSON.parse(stdout);
     res.json({ jobs: parseCronJobs(data), source: 'gateway' });
   } catch (e) {
-    res.json({ jobs: [], source: 'error', error: e.message });
+    res.json({ jobs: [], source: 'unavailable', error: e.message });
   }
 });
 
