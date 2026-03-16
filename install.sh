@@ -954,6 +954,43 @@ echo -e "  ${GREEN}✓ Discord 多Bot模式配置已生成${NC}"
 fi # end DEPLOY_MODE
 fi # end config file exists check
 
+# ============================================
+# 从 clawdbot 升级时迁移 agent 数据
+# ============================================
+OLD_STATE_DIR="$HOME/.clawdbot"
+NEW_STATE_DIR="$CONFIG_DIR"  # ~/.openclaw
+
+if [ -d "$OLD_STATE_DIR/agents" ] && [ -d "$NEW_STATE_DIR/agents" ]; then
+  echo -e "${YELLOW}[迁移] 检测到旧版 clawdbot 数据，开始迁移...${NC}"
+
+  # 1. main -> silijian 迁移（agent ID 改名）
+  if [ -d "$OLD_STATE_DIR/agents/main/sessions" ] && [ ! -d "$NEW_STATE_DIR/agents/silijian/sessions" ] || \
+     [ -d "$NEW_STATE_DIR/agents/silijian/sessions" ] && [ -z "$(ls -A "$NEW_STATE_DIR/agents/silijian/sessions" 2>/dev/null)" ]; then
+    mkdir -p "$NEW_STATE_DIR/agents/silijian/sessions"
+    if [ -n "$(ls -A "$OLD_STATE_DIR/agents/main/sessions" 2>/dev/null)" ]; then
+      cp -a "$OLD_STATE_DIR/agents/main/sessions/"* "$NEW_STATE_DIR/agents/silijian/sessions/" 2>/dev/null
+      echo -e "  ${GREEN}✓ 迁移司礼监 sessions (main → silijian): $(ls "$NEW_STATE_DIR/agents/silijian/sessions" | wc -l) 个${NC}"
+    fi
+  fi
+
+  # 2. 迁移其他 agent 的 sessions（ID 未变的）
+  for agent_dir in "$OLD_STATE_DIR/agents"/*/; do
+    agent_id=$(basename "$agent_dir")
+    [ "$agent_id" = "main" ] && continue  # 已处理
+    if [ -d "$agent_dir/sessions" ] && [ -n "$(ls -A "$agent_dir/sessions" 2>/dev/null)" ]; then
+      target="$NEW_STATE_DIR/agents/$agent_id/sessions"
+      if [ ! -d "$target" ] || [ -z "$(ls -A "$target" 2>/dev/null)" ]; then
+        mkdir -p "$target"
+        cp -a "$agent_dir/sessions/"* "$target/" 2>/dev/null
+        echo -e "  ${GREEN}✓ 迁移 $agent_id sessions: $(ls "$target" | wc -l) 个${NC}"
+      fi
+    fi
+  done
+
+  echo -e "  ${GREEN}✓ 数据迁移完成${NC}"
+fi
+
+
 # 安装 jq（用于 JSON 验证，轻量级）
 if ! command -v jq &>/dev/null; then
   pkg_install jq 2>/dev/null || true
