@@ -213,6 +213,10 @@ config = {
             }
         }
     },
+    "gateway": {
+        "mode": "local",
+        "port": 18789
+    },
     "agents": {
         "defaults": {
             "workspace": workspace,

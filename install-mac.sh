@@ -208,6 +208,10 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << CONFIG_EOF
       }
     }
   },
+  "gateway": {
+    "mode": "local",
+    "port": 18789
+  },
   "agents": {
     "defaults": {
       "workspace": "$HOME/clawd",
@@ -254,6 +258,10 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << FEISHU_EOF
         ]
       }
     }
+  },
+  "gateway": {
+    "mode": "local",
+    "port": 18789
   },
   "agents": {
     "defaults": {
@@ -404,6 +412,10 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << CONFIG_EOF
         ]
       }
     }
+  },
+  "gateway": {
+    "mode": "local",
+    "port": 18789
   },
   "agents": {
     "defaults": {

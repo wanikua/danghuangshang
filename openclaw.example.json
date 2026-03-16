@@ -30,6 +30,10 @@
       }
     }
   },
+  "gateway": {
+    "mode": "local",
+    "port": 18789
+  },
   "agents": {
     "defaults": {
       "workspace": "/home/YOUR_USERNAME/clawd",
