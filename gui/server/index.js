@@ -280,12 +280,27 @@ app.get('/api/status', authMiddleware, async (req, res) => {
 
   const logs = getRecentLogs(100);
 
-  // Measure real gateway ping
+  // Measure real gateway ping — resolve bind address from config
   let gatewayPing = -1;
   let gatewayStatus = 'unknown';
   try {
     const pingStart = Date.now();
-    const pingRes = await fetch(`${process.env.GATEWAY_URL || 'http://127.0.0.1:18789'}/health`, { signal: AbortSignal.timeout(3000) });
+    let gwUrl = process.env.GATEWAY_URL;
+    if (!gwUrl) {
+      const gwConfig = getOpenclawConfig();
+      const gwPort = gwConfig?.gateway?.port || 18789;
+      const gwBind = gwConfig?.gateway?.bind;
+      // Resolve bind mode to actual address
+      let gwHost = gwBind || '127.0.0.1';
+      if (gwBind === 'tailnet') {
+        // Resolve Tailscale IP from network interfaces
+        const tsIface = os.networkInterfaces()['tailscale0'];
+        const tsAddr = tsIface?.find(a => a.family === 'IPv4');
+        gwHost = tsAddr?.address || '127.0.0.1';
+      }
+      gwUrl = `http://${gwHost}:${gwPort}`;
+    }
+    const pingRes = await fetch(`${gwUrl}/health`, { signal: AbortSignal.timeout(3000) });
     if (pingRes.ok) {
       gatewayPing = Date.now() - pingStart;
       gatewayStatus = 'ready';
