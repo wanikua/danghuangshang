@@ -20,11 +20,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // CLI 命令
-let CLI_CMD = 'openclaw';
+let CLI_CMD = 'clawdbot';
 try {
-  await execAsync('which openclaw', { encoding: 'utf-8', timeout: 3000 });
-  CLI_CMD = 'openclaw';
-} catch { CLI_CMD = 'openclaw'; }
+  await execAsync('which clawdbot', { encoding: 'utf-8', timeout: 3000 });
+  CLI_CMD = 'clawdbot';
+} catch {
+  try {
+    await execAsync('which openclaw', { encoding: 'utf-8', timeout: 3000 });
+    CLI_CMD = 'openclaw';
+  } catch { CLI_CMD = 'clawdbot'; }
+}
 
 const app = express();
 const PORT = process.env.BOLUO_GUI_PORT || 18795;
@@ -58,6 +63,12 @@ const AGENT_DEPT_MAP = {
   'taiyiyuan': '太医院', 'guozijian': '国子监',
   'yushanfang': '御膳房'
 };
+
+// GUI botId → clawdbot agent id 映射（silijian 在 GUI 里是司礼监，但实际 agent id 是 main）
+const BOT_TO_AGENT = { 'silijian': 'main' };
+function resolveAgentId(botId) {
+  return BOT_TO_AGENT[botId] || botId;
+}
 
 const HOME = process.env.HOME || '/home/ubuntu';
 // 兼容 OpenClaw (.openclaw) 和 Clawdbot (.clawdbot) 两种目录结构
@@ -1750,66 +1761,85 @@ app.post('/api/command', authMiddleware, async (req, res) => {
   // SEC-33: 验证 botId 防止原型链污染
   const safeBotId = botId ? sanitizeAgentId(botId) : null;
   const usedBot = safeBotId || 'silijian';
+  const agentId = resolveAgentId(usedBot); // 转换为实际 clawdbot agent id
   
   // SEC-34: 审计日志
-  console.log(`[AUDIT] /api/command botId=${usedBot} channel=${channel || 'none'} msgLen=${message.length}`);
+  console.log(`[AUDIT] /api/command botId=${usedBot} agentId=${agentId} channel=${channel || 'none'} msgLen=${message.length}`);
   
-  // 策略1: 如果提供了 Discord channel ID 且有 Discord token，走 Discord REST API
-  // 始终用司礼监的 token 发送（代发），消息中已包含 @部门名 前缀
-  if (channel && /^\d{17,20}$/.test(channel)) {
-    try {
-      const config = getOpenclawConfig() || {};
-      const accounts = config.channels?.discord?.accounts || {};
-      // 优先用司礼监 token（代发旨意），而非目标部门自己发
-      let senderAccount = accounts['silijian'] || accounts['main'];
-      if (!senderAccount?.token) {
-        const firstKey = Object.keys(accounts)[0];
-        senderAccount = firstKey ? accounts[firstKey] : null;
-      }
+  // 确定回复目标频道
+  const targetChannel = channel && /^\d{17,20}$/.test(channel) ? channel : null;
 
-      if (senderAccount?.token) {
-        const r = await fetch(`https://discord.com/api/v10/channels/${channel}/messages`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bot ${senderAccount.token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content: message })
-        });
-        if (r.ok) {
-          const data = await r.json();
-          return res.json({ success: true, messageId: data.id, sentAs: 'silijian', method: 'discord' });
-        }
-        // Discord 失败则 fallthrough 到 gateway
-        console.warn(`[COMMAND] Discord API failed (${r.status}), falling back to agent call`);
-      }
-    } catch (e) {
-      console.warn(`[COMMAND] Discord path error: ${e.message}, falling back to agent call`);
+  // 策略1（推荐）: 通过 clawdbot agent 发送指令给目标 agent
+  // agent 会处理消息并通过 --deliver 把结果发到 Discord 频道
+  try {
+    const args = [
+      'agent',
+      '--agent', agentId,
+      '--message', message,
+      '--deliver',
+      '--reply-channel', 'discord',
+      '--json',
+      '--timeout', '120'
+    ];
+    if (targetChannel) {
+      args.push('--reply-to', `channel:${targetChannel}`);
+      args.push('--reply-account', agentId);
     }
-  }
-  
-  // 策略2: 通过 clawdbot agent 发送（通用方案，支持所有平台）
-  // 使用 execFileAsync 避免 shell 注入，参数直接传递不经过 shell 解释
-  try {
-    const agentMsg = safeBotId ? `[Court指令→${AGENT_DEPT_MAP[safeBotId] || safeBotId}] ${message}` : message;
-    const { stdout } = await execFileAsync(
-      CLI_CMD,
-      ['agent', '--agent', usedBot, '--message', agentMsg, '--json'],
-      { encoding: 'utf-8', timeout: 30000 }
-    );
-    console.log(`[COMMAND] Agent call result: ${stdout.substring(0, 200)}`);
-    return res.json({ success: true, sentAs: usedBot, method: 'agent', detail: stdout.trim().substring(0, 500) });
+    
+    console.log(`[COMMAND] Executing: ${CLI_CMD} ${args.join(' ')}`);
+    const { stdout } = await execFileAsync(CLI_CMD, args, { encoding: 'utf-8', timeout: 130000 });
+    console.log(`[COMMAND] Agent call result: ${stdout.substring(0, 300)}`);
+    
+    let result = {};
+    try { result = JSON.parse(stdout); } catch {}
+    return res.json({ 
+      success: true, 
+      sentAs: usedBot, 
+      method: 'agent-deliver',
+      reply: result.reply?.substring?.(0, 500) || stdout.trim().substring(0, 500)
+    });
   } catch (agentErr) {
-    console.error(`[COMMAND] Agent call failed: ${agentErr.message}`);
-  }
-
-  // 策略3: 通过 message send 直接发送到 Discord 频道（兜底）
-  try {
-    const { stdout } = await execFileAsync(
-      CLI_CMD,
-      ['message', 'send', '--channel', 'discord', '--account', usedBot, '--message', message, '--json'],
-      { encoding: 'utf-8', timeout: 10000 }
-    );
-    return res.json({ success: true, sentAs: usedBot, method: 'message', detail: stdout.trim().substring(0, 500) });
-  } catch (msgErr) {
-    return res.status(500).json({ error: `All delivery methods failed. Last: ${msgErr.message}`, sentAs: usedBot });
+    console.error(`[COMMAND] Agent deliver failed: ${agentErr.message}`);
+    
+    // 策略2（兜底）: 通过 clawdbot message send 直接发消息到 Discord 频道
+    if (targetChannel) {
+      try {
+        const { stdout } = await execFileAsync(
+          CLI_CMD,
+          ['message', 'send', '--channel', 'discord', '--account', agentId, 
+           '--target', targetChannel, '--message', `📜 圣旨: ${message}`],
+          { encoding: 'utf-8', timeout: 15000 }
+        );
+        console.log(`[COMMAND] Message send result: ${stdout.substring(0, 200)}`);
+        return res.json({ success: true, sentAs: usedBot, method: 'message-send', detail: stdout.trim().substring(0, 500) });
+      } catch (msgErr) {
+        console.error(`[COMMAND] Message send failed: ${msgErr.message}`);
+      }
+    }
+    
+    // 策略3（最后兜底）: 用 Discord REST API 直接发
+    if (targetChannel) {
+      try {
+        const config = getOpenclawConfig() || {};
+        const accounts = config.channels?.discord?.accounts || {};
+        const senderAccount = accounts[agentId] || accounts[usedBot] || accounts['main'] || accounts[Object.keys(accounts)[0]];
+        if (senderAccount?.token) {
+          const r = await fetch(`https://discord.com/api/v10/channels/${targetChannel}/messages`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bot ${senderAccount.token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: `📜 **圣旨** → ${AGENT_DEPT_MAP[usedBot] || usedBot}\n${message}` })
+          });
+          if (r.ok) {
+            const data = await r.json();
+            return res.json({ success: true, messageId: data.id, sentAs: usedBot, method: 'discord-rest' });
+          }
+        }
+      } catch (e) {
+        console.error(`[COMMAND] Discord REST failed: ${e.message}`);
+      }
+    }
+    
+    return res.status(500).json({ error: `All delivery methods failed`, sentAs: usedBot });
   }
 });
 
