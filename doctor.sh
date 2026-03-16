@@ -98,7 +98,8 @@ else
 fi
 
 NODE_VER=$(node -v 2>/dev/null || echo "none")
-if [[ "$NODE_VER" == v22* ]] || [[ "$NODE_VER" == v23* ]] || [[ "$NODE_VER" == v24* ]] || [[ "$NODE_VER" == v25* ]]; then
+NODE_MAJOR=$(echo "$NODE_VER" | sed "s/v\([0-9]*\).*/\1/")
+if [ "${NODE_MAJOR:-0}" -ge 22 ] 2>/dev/null; then
     pass "Node.js $NODE_VER"
 elif [[ "$NODE_VER" == "none" ]]; then
     fail "Node.js 未安装"

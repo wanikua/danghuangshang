@@ -226,7 +226,7 @@ config = {
 # 全六部模式：添加 subagents 和其他部门
 if mode == "2":
     config["agents"]["list"][0]["subagents"] = {
-        "allowAgents": ["neige","duchayuan","bingbu","hubu","libu","gongbu","libu2","xingbu","hanlinyuan"]
+        "allowAgents": ["neige","duchayuan","bingbu","hubu","libu","gongbu","libu2","xingbu","hanlin_zhang"]
     }
     departments = [
         ("neige", "内阁", "你是内阁首辅，专精战略决策、方案审议、全局规划。回答用中文。", "off"),
@@ -237,7 +237,7 @@ if mode == "2":
         ("gongbu", "工部", "你是工部尚书，专精 DevOps、服务器运维。回答用中文。", "off"),
         ("libu2", "吏部", "你是吏部尚书，专精项目管理、团队协调。回答用中文。", "off"),
         ("xingbu", "刑部", "你是刑部尚书，专精法务合规、知识产权。回答用中文。", "off"),
-        ("hanlinyuan", "翰林院", "你是翰林院学士，专精学术研究、知识整理、文档撰写。回答用中文。", "off"),
+        ("hanlin_zhang", "翰林院", "你是翰林院学士，专精学术研究、知识整理、文档撰写。回答用中文。", "off"),
     ]
     for did, dname, dtheme, smode in departments:
         agent = {"id": did, "name": dname, "identity": {"theme": dtheme}, "sandbox": {"mode": smode}}

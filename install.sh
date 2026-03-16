@@ -847,31 +847,26 @@ cat > "$CONFIG_DIR/$CONFIG_FILE_NAME" << CONFIG_EOF
         "silijian": {
           "name": "司礼监",
           "token": "YOUR_SILIJIAN_BOT_TOKEN",
-          "applicationId": "YOUR_SILIJIAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "bingbu": {
           "name": "兵部",
           "token": "YOUR_BINGBU_BOT_TOKEN",
-          "applicationId": "YOUR_BINGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hubu": {
           "name": "户部",
           "token": "YOUR_HUBU_BOT_TOKEN",
-          "applicationId": "YOUR_HUBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "libu": {
           "name": "礼部",
           "token": "YOUR_LIBU_BOT_TOKEN",
-          "applicationId": "YOUR_LIBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "gongbu": {
           "name": "工部",
           "token": "YOUR_GONGBU_BOT_TOKEN",
-          "applicationId": "YOUR_GONGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "libu2": {
@@ -883,49 +878,41 @@ cat > "$CONFIG_DIR/$CONFIG_FILE_NAME" << CONFIG_EOF
         "xingbu": {
           "name": "刑部",
           "token": "YOUR_XINGBU_BOT_TOKEN",
-          "applicationId": "YOUR_XINGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "neige": {
           "name": "内阁",
           "token": "YOUR_NEIGE_BOT_TOKEN",
-          "applicationId": "YOUR_NEIGE_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "duchayuan": {
           "name": "都察院",
           "token": "YOUR_DUCHAYUAN_BOT_TOKEN",
-          "applicationId": "YOUR_DUCHAYUAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_zhang": {
           "name": "翰林院·掌院学士",
           "token": "YOUR_HANLIN_ZHANG_BOT_TOKEN",
-          "applicationId": "YOUR_HANLIN_ZHANG_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_xiuzhuan": {
           "name": "翰林院·修撰",
           "token": "YOUR_HANLIN_XIUZHUAN_BOT_TOKEN",
-          "applicationId": "YOUR_HANLIN_XIUZHUAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_bianxiu": {
           "name": "翰林院·编修",
           "token": "YOUR_HANLIN_BIANXIU_BOT_TOKEN",
-          "applicationId": "YOUR_HANLIN_BIANXIU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_jiantao": {
           "name": "翰林院·检讨",
           "token": "YOUR_HANLIN_JIANTAO_BOT_TOKEN",
-          "applicationId": "YOUR_HANLIN_JIANTAO_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_shujishi": {
           "name": "翰林院·庶吉士",
           "token": "YOUR_HANLIN_SHUJISHI_BOT_TOKEN",
-          "applicationId": "YOUR_HANLIN_SHUJISHI_APPLICATION_ID",
           "groupPolicy": "open"
         }
       }
@@ -964,8 +951,8 @@ if [ -d "$OLD_STATE_DIR/agents" ] && [ -d "$NEW_STATE_DIR/agents" ]; then
   echo -e "${YELLOW}[迁移] 检测到旧版 clawdbot 数据，开始迁移...${NC}"
 
   # 1. main -> silijian 迁移（agent ID 改名）
-  if [ -d "$OLD_STATE_DIR/agents/main/sessions" ] && [ ! -d "$NEW_STATE_DIR/agents/silijian/sessions" ] || \
-     [ -d "$NEW_STATE_DIR/agents/silijian/sessions" ] && [ -z "$(ls -A "$NEW_STATE_DIR/agents/silijian/sessions" 2>/dev/null)" ]; then
+  if { [ -d "$OLD_STATE_DIR/agents/main/sessions" ] && [ ! -d "$NEW_STATE_DIR/agents/silijian/sessions" ]; } || \
+     { [ -d "$NEW_STATE_DIR/agents/silijian/sessions" ] && [ -z "$(ls -A "$NEW_STATE_DIR/agents/silijian/sessions" 2>/dev/null)" ]; }; then
     mkdir -p "$NEW_STATE_DIR/agents/silijian/sessions"
     if [ -n "$(ls -A "$OLD_STATE_DIR/agents/main/sessions" 2>/dev/null)" ]; then
       cp -a "$OLD_STATE_DIR/agents/main/sessions/"* "$NEW_STATE_DIR/agents/silijian/sessions/" 2>/dev/null
@@ -1147,6 +1134,8 @@ if [ -f "$CONFIG_FILE" ] && grep -q "YOUR_LLM_API_KEY" "$CONFIG_FILE"; then
   echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 fi
 
+fi  # end config wizard (YOUR_LLM_API_KEY check)
+
 # 创建工作区和 memory 目录（OpenClaw 不会自动创建，缺少会导致 agent 被跳过）
 mkdir -p "$WORKSPACE"
 mkdir -p "$WORKSPACE/memory"
@@ -1164,7 +1153,6 @@ else
 fi
 
 echo ""
-fi  # end non-interactive check
 
 echo "================================"
 echo -e "${GREEN}部署完成！${NC}"

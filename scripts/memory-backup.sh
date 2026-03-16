@@ -207,7 +207,7 @@ fi
 # 3) 备份配置
 qlog "备份配置文件..."
 mkdir -p "$STAGING/config"
-for cfg in "$OPENCLAW_HOME/$CLI_CONFIG_NAME" "$OPENCLAW_HOME/agents/main/agent/auth-profiles.json"; do
+for cfg in "$OPENCLAW_HOME/$CLI_CONFIG_NAME" "$OPENCLAW_HOME/agents/silijian/agent/auth-profiles.json"; do
     if [[ -f "$cfg" ]]; then
         if [[ "$DRY_RUN" == "true" ]]; then
             qlog "  [dry-run] 会备份 $(basename "$cfg")"
