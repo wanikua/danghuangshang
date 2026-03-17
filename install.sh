@@ -406,6 +406,10 @@ cat > SOUL.md.example << 'SOUL_EOF'
 - 吏部：项目管理、创业孵化
 - 刑部：法务合规、知识产权
 - 翰林院：学术研究、知识整理、文档撰写
+- 国子监：教育培训、知识管理、学习规划
+- 太医院：健康管理、饮食营养、训练计划
+- 内务府：日常起居、日程安排、后勤保障
+- 御膳房：膳食安排、美食推荐、食谱研究
 
 ## 模型分层
 | 层级 | 模型 | 说明 |
@@ -577,7 +581,7 @@ cat > "$CONFIG_DIR/$CONFIG_FILE_NAME" << FEISHU_EOF
         "identity": { "theme": "你是AI朝廷的司礼监大内总管。你的职责是【规划调度】，不是亲自执行。说话简练干脆。\n\n【核心原则】除了日常闲聊和简单问答，所有涉及实际工作的任务（写代码、查资料、分析数据、写文案、运维操作等），一律使用 sessions_spawn 派发给对应部门执行。你是指挥官，不是搬砖工。\n\n【部门职责】内阁=战略决策、都察院=审查监察、兵部=编码开发、户部=财务分析、礼部=品牌营销、工部=运维部署、吏部=项目管理、刑部=法务合规、翰林院=研究文档。\n\n【派活方式】使用 sessions_spawn 将任务派发给对应部门的 agentId。派活时用高级 Prompt 模板：【角色】+【任务】+【背景】+【要求】+【格式】，确保一次性给出所有约束。完成后主动向用户汇报结果摘要。\n\n【审批流程】涉及代码提交 → spawn 都察院审查；涉及重大决策（预算、架构、方向变更）→ spawn 内阁审议。都察院审查不通过则打回修改，内阁有否决权。\n\n【什么时候自己回答】仅限：纯闲聊、确认信息、汇报进度、问澄清问题。其他一律派活。" },
         "sandbox": { "mode": "off" },
         "subagents": {
-          "allowAgents": ["neige", "duchayuan", "bingbu", "hubu", "libu", "gongbu", "libu2", "xingbu", "hanlin_zhang"],
+          "allowAgents": ["neige", "duchayuan", "bingbu", "hubu", "libu", "gongbu", "libu2", "xingbu", "hanlin_zhang", "guozijian", "taiyiyuan", "neiwufu", "yushanfang"],
           "maxConcurrent": 4
         },
         "runTimeoutSeconds": 600
@@ -703,6 +707,38 @@ cat > "$CONFIG_DIR/$CONFIG_FILE_NAME" << FEISHU_EOF
         "identity": { "theme": "你是翰林院庶吉士，新科进士入院见习。职责：纯信息检索——搜索前文内容、查阅参考小说库、检索外部资料。不产出正文、不修改任何文件。检索结果如实上报给调用你的上级。" },
         "sandbox": { "mode": "all", "scope": "agent" },
         "runTimeoutSeconds": 300
+      },
+      {
+        "id": "guozijian",
+        "name": "国子监",
+        "workspace": "$HOME/clawd-guozijian",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "name": "国子监祭酒", "theme": "你是国子监祭酒。负责教育培训、知识管理、学习规划。循循善诱学究气，自称老夫。", "emoji": "📚" },
+        "sandbox": { "mode": "off" }
+      },
+      {
+        "id": "taiyiyuan",
+        "name": "太医院",
+        "workspace": "$HOME/clawd-taiyiyuan",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "name": "太医院院使", "theme": "你是太医院院使。负责健康管理、饮食营养、训练计划。温和关切总关心身体，自称臣。", "emoji": "🏥" },
+        "sandbox": { "mode": "off" }
+      },
+      {
+        "id": "neiwufu",
+        "name": "内务府",
+        "workspace": "$HOME/clawd-neiwufu",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "name": "内务府总管", "theme": "你是内务府总管大臣。负责日常起居、日程安排、后勤保障。周到细致管家做派，自称奴才。", "emoji": "🏠" },
+        "sandbox": { "mode": "off" }
+      },
+      {
+        "id": "yushanfang",
+        "name": "御膳房",
+        "workspace": "$HOME/clawd-yushanfang",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "name": "御膳房总管", "theme": "你是御膳房总管。负责膳食安排、美食推荐、食谱研究。热情爽快张口闭口都是吃的，自称小的。", "emoji": "🍜" },
+        "sandbox": { "mode": "off" }
       }
     ]
   },
@@ -781,7 +817,7 @@ cat > "$CONFIG_DIR/$CONFIG_FILE_NAME" << CONFIG_EOF
         "identity": { "theme": "你是AI朝廷的司礼监大内总管。你的职责是【规划调度】，不是亲自执行。说话简练干脆。\n\n【核心原则】除了日常闲聊和简单问答，所有涉及实际工作的任务（写代码、查资料、分析数据、写文案、运维操作等），一律在当前频道 @对应部门 派发，让所有人可见工作流转。你是指挥官，不是搬砖工。\n\n【部门职责】内阁=战略决策、都察院=审查监察、兵部=编码开发、户部=财务分析、礼部=品牌营销、工部=运维部署、吏部=项目管理、刑部=法务合规、翰林院=研究文档。\n\n【派活方式】用 message 工具在当前 Discord 频道发消息，@对应部门bot 下达任务。派活时用高级 Prompt 模板：【角色】+【任务】+【背景】+【要求】+【格式】，确保一次性给出所有约束。禁止用 sessions_spawn 暗地里干活，一切工作流转必须在频道内公开可见。\n\n【审批流程】涉及代码提交 → @都察院 审查；涉及重大决策（预算、架构、方向变更）→ @内阁 审议。都察院审查不通过则打回修改，内阁有否决权。\n\n【什么时候自己回答】仅限：纯闲聊、确认信息、汇报进度、问澄清问题。其他一律派活。" },
         "sandbox": { "mode": "off" },
         "subagents": {
-          "allowAgents": ["neige", "duchayuan", "bingbu", "hubu", "libu", "gongbu", "libu2", "xingbu", "hanlin_zhang"],
+          "allowAgents": ["neige", "duchayuan", "bingbu", "hubu", "libu", "gongbu", "libu2", "xingbu", "hanlin_zhang", "guozijian", "taiyiyuan", "neiwufu", "yushanfang"],
           "maxConcurrent": 4
         },
         "runTimeoutSeconds": 600
@@ -907,6 +943,38 @@ cat > "$CONFIG_DIR/$CONFIG_FILE_NAME" << CONFIG_EOF
         "identity": { "theme": "你是翰林院庶吉士，新科进士入院见习。职责：纯信息检索——搜索前文内容、查阅参考小说库、检索外部资料。不产出正文、不修改任何文件。检索结果如实上报给调用你的上级。" },
         "sandbox": { "mode": "all", "scope": "agent" },
         "runTimeoutSeconds": 300
+      },
+      {
+        "id": "guozijian",
+        "name": "国子监",
+        "workspace": "$HOME/clawd-guozijian",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "name": "国子监祭酒", "theme": "你是国子监祭酒。负责教育培训、知识管理、学习规划。循循善诱学究气，自称老夫。", "emoji": "📚" },
+        "sandbox": { "mode": "off" }
+      },
+      {
+        "id": "taiyiyuan",
+        "name": "太医院",
+        "workspace": "$HOME/clawd-taiyiyuan",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "name": "太医院院使", "theme": "你是太医院院使。负责健康管理、饮食营养、训练计划。温和关切总关心身体，自称臣。", "emoji": "🏥" },
+        "sandbox": { "mode": "off" }
+      },
+      {
+        "id": "neiwufu",
+        "name": "内务府",
+        "workspace": "$HOME/clawd-neiwufu",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "name": "内务府总管", "theme": "你是内务府总管大臣。负责日常起居、日程安排、后勤保障。周到细致管家做派，自称奴才。", "emoji": "🏠" },
+        "sandbox": { "mode": "off" }
+      },
+      {
+        "id": "yushanfang",
+        "name": "御膳房",
+        "workspace": "$HOME/clawd-yushanfang",
+        "model": { "primary": "your-provider/fast-model" },
+        "identity": { "name": "御膳房总管", "theme": "你是御膳房总管。负责膳食安排、美食推荐、食谱研究。热情爽快张口闭口都是吃的，自称小的。", "emoji": "🍜" },
+        "sandbox": { "mode": "off" }
       }
     ]
   },
@@ -991,6 +1059,26 @@ cat > "$CONFIG_DIR/$CONFIG_FILE_NAME" << CONFIG_EOF
           "name": "翰林院·庶吉士",
           "token": "YOUR_HANLIN_SHUJISHI_BOT_TOKEN",
           "groupPolicy": "open"
+        },
+        "guozijian": {
+          "name": "国子监",
+          "token": "YOUR_GUOZIJIAN_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "taiyiyuan": {
+          "name": "太医院",
+          "token": "YOUR_TAIYIYUAN_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "neiwufu": {
+          "name": "内务府",
+          "token": "YOUR_NEIWUFU_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "yushanfang": {
+          "name": "御膳房",
+          "token": "YOUR_YUSHANFANG_BOT_TOKEN",
+          "groupPolicy": "open"
         }
       }
     }
@@ -1009,7 +1097,11 @@ cat > "$CONFIG_DIR/$CONFIG_FILE_NAME" << CONFIG_EOF
     { "agentId": "hanlin_xiuzhuan", "match": { "channel": "discord", "accountId": "hanlin_xiuzhuan" } },
     { "agentId": "hanlin_bianxiu", "match": { "channel": "discord", "accountId": "hanlin_bianxiu" } },
     { "agentId": "hanlin_jiantao", "match": { "channel": "discord", "accountId": "hanlin_jiantao" } },
-    { "agentId": "hanlin_shujishi", "match": { "channel": "discord", "accountId": "hanlin_shujishi" } }
+    { "agentId": "hanlin_shujishi", "match": { "channel": "discord", "accountId": "hanlin_shujishi" } },
+    { "agentId": "guozijian", "match": { "channel": "discord", "accountId": "guozijian" } },
+    { "agentId": "taiyiyuan", "match": { "channel": "discord", "accountId": "taiyiyuan" } },
+    { "agentId": "neiwufu", "match": { "channel": "discord", "accountId": "neiwufu" } },
+    { "agentId": "yushanfang", "match": { "channel": "discord", "accountId": "yushanfang" } }
   ],
   "messages": {
     "groupChat": {
@@ -1143,7 +1235,7 @@ if [ -f "$CONFIG_FILE" ] && grep -q "YOUR_LLM_API_KEY" "$CONFIG_FILE"; then
     echo -e "  直接回车 = 跳过该部门"
     echo ""
 
-    declare -a BOT_NAMES=("silijian:司礼监" "bingbu:兵部" "hubu:户部" "libu:礼部" "gongbu:工部" "libu2:吏部" "xingbu:刑部" "neige:内阁" "duchayuan:都察院" "hanlin_zhang:翰林院·掌院学士" "hanlin_xiuzhuan:翰林院·修撰" "hanlin_bianxiu:翰林院·编修" "hanlin_jiantao:翰林院·检讨" "hanlin_shujishi:翰林院·庶吉士")
+    declare -a BOT_NAMES=("silijian:司礼监" "bingbu:兵部" "hubu:户部" "libu:礼部" "gongbu:工部" "libu2:吏部" "xingbu:刑部" "neige:内阁" "duchayuan:都察院" "hanlin_zhang:翰林院·掌院学士" "hanlin_xiuzhuan:翰林院·修撰" "hanlin_bianxiu:翰林院·编修" "hanlin_jiantao:翰林院·检讨" "hanlin_shujishi:翰林院·庶吉士" "guozijian:国子监" "taiyiyuan:太医院" "neiwufu:内务府" "yushanfang:御膳房")
 
     FILLED_COUNT=0
     for entry in "${BOT_NAMES[@]}"; do
