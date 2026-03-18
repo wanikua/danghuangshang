@@ -245,12 +245,20 @@ Get-Content $env:APPDATA\..\Local\openclaw\logs\gateway.log -Tail 50
 
 ## 可选：安装完整 AI 朝廷配置
 
-如果想安装完整的朝廷配置（司礼监 + 内阁 + 六部），运行：
+如果想安装完整的朝廷配置（司礼监 + 内阁 + 六部），有两种方式：
+
+**方式 A：使用 WSL2（推荐）**
 \`\`\`powershell
+wsl bash -c "$(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install-lite.sh)"
+\`\`\`
+
+**方式 B：使用 Git Bash**
+安装 Git for Windows 后，在 Git Bash 中运行：
+\`\`\`bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install-lite.sh)"
 \`\`\`
 
-这需要安装 Git Bash 或 WSL2。
+> 详细说明见 [docs/windows-wsl.md](https://github.com/wanikua/danghuangshang/blob/main/docs/windows-wsl.md)
 
 ---
 

@@ -8,13 +8,22 @@
   - 自动安装 OpenClaw CLI
   - 生成配置文件和快速开始指南
 
+### 配置修复
+- **openclaw.example.json** — 所有 18 个 Discord accounts 补充 `applicationId` 字段
+- **install.sh** — Discord 配置模板同步补充 `applicationId`
+- **install-lite.sh** — Discord 配置模板同步补充 `applicationId`
+- **install-mac.sh** — Discord 配置模板同步补充 `applicationId`
+
 ### 文档更新
-- **README.md** — 新增 Windows PowerShell 安装命令
-- **docs/faq.md** — Windows 支持说明更新（原生 vs WSL2 对比）
+- **README.md** — 新增 Windows PowerShell 安装命令，版本号更新为 v3.5.3
+- **README_EN.md** — 版本号更新为 v3.5.3
+- **docs/faq.md** — Windows 支持说明更新（原生 vs WSL2 对比表）
 - **docs/windows-wsl.md** — 重构为两种安装方式指南
+- **install.ps1** — 修复 WSL2 安装命令说明（`wsl bash -c` 替代直接运行）
 
 ### Bug 修复
 - 修复 Windows 用户找不到安装指南的问题 (closes #99)
+- 修复 Discord 配置缺少 `applicationId` 导致新手配置失败的问题
 
 ---
 

@@ -677,91 +677,109 @@ cat > "$CONFIG_DIR/$CONFIG_FILE" << CONFIG_EOF
         "silijian": {
           "name": "司礼监",
           "token": "YOUR_SILIJIAN_BOT_TOKEN",
+          "applicationId": "YOUR_SILIJIAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "neige": {
           "name": "内阁",
           "token": "YOUR_NEIGE_BOT_TOKEN",
+          "applicationId": "YOUR_NEIGE_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "duchayuan": {
           "name": "都察院",
           "token": "YOUR_DUCHAYUAN_BOT_TOKEN",
+          "applicationId": "YOUR_DUCHAYUAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "bingbu": {
           "name": "兵部",
           "token": "YOUR_BINGBU_BOT_TOKEN",
+          "applicationId": "YOUR_BINGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hubu": {
           "name": "户部",
           "token": "YOUR_HUBU_BOT_TOKEN",
+          "applicationId": "YOUR_HUBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "libu": {
           "name": "礼部",
           "token": "YOUR_LIBU_BOT_TOKEN",
+          "applicationId": "YOUR_LIBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "gongbu": {
           "name": "工部",
           "token": "YOUR_GONGBU_BOT_TOKEN",
+          "applicationId": "YOUR_GONGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "libu2": {
           "name": "吏部",
           "token": "YOUR_LIBU2_BOT_TOKEN",
+          "applicationId": "YOUR_LIBU2_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "xingbu": {
           "name": "刑部",
           "token": "YOUR_XINGBU_BOT_TOKEN",
+          "applicationId": "YOUR_XINGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_zhang": {
           "name": "翰林院·掌院学士",
           "token": "YOUR_HANLIN_ZHANG_BOT_TOKEN",
+          "applicationId": "YOUR_HANLIN_ZHANG_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_xiuzhuan": {
           "name": "翰林院·修撰",
           "token": "YOUR_HANLIN_XIUZHUAN_BOT_TOKEN",
+          "applicationId": "YOUR_HANLIN_XIUZHUAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_bianxiu": {
           "name": "翰林院·编修",
           "token": "YOUR_HANLIN_BIANXIU_BOT_TOKEN",
+          "applicationId": "YOUR_HANLIN_BIANXIU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_jiantao": {
           "name": "翰林院·检讨",
           "token": "YOUR_HANLIN_JIANTAO_BOT_TOKEN",
+          "applicationId": "YOUR_HANLIN_JIANTAO_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_shujishi": {
           "name": "翰林院·庶吉士",
           "token": "YOUR_HANLIN_SHUJISHI_BOT_TOKEN",
+          "applicationId": "YOUR_HANLIN_SHUJISHI_APPLICATION_ID",
           "groupPolicy": "open"
-        }        ,
+        },
         "guozijian": {
           "name": "国子监",
           "token": "YOUR_GUOZIJIAN_BOT_TOKEN",
+          "applicationId": "YOUR_GUOZIJIAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "taiyiyuan": {
           "name": "太医院",
           "token": "YOUR_TAIYIYUAN_BOT_TOKEN",
+          "applicationId": "YOUR_TAIYIYUAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "neiwufu": {
           "name": "内务府",
           "token": "YOUR_NEIWUFU_BOT_TOKEN",
+          "applicationId": "YOUR_NEIWUFU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "yushanfang": {
           "name": "御膳房",
           "token": "YOUR_YUSHANFANG_BOT_TOKEN",
+          "applicationId": "YOUR_YUSHANFANG_APPLICATION_ID",
           "groupPolicy": "open"
         }
       }

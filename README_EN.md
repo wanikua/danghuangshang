@@ -505,6 +505,6 @@ This project is provided "as is" without any warranties. AI-generated content is
 
 ---
 
-v3.5.2 | MIT License
+v3.5.3 | MIT License
 
 > 📜 Licensed under MIT. Derivative works please credit: [danghuangshang](https://github.com/wanikua/danghuangshang) by [@wanikua](https://github.com/wanikua)
