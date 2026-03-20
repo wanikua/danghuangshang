@@ -634,7 +634,7 @@ describe('ResponseRuleEngine', () => {
 
 - [Issue #107](https://github.com/wanikua/danghuangshang/issues/107)
 - [Discord.js Message API](https://discord.js.org/#/docs/discord.js/main/class/Message)
-- [OpenClaw Provider Architecture](./docs/architecture.md)
+- [OpenClaw Provider Architecture](./architecture.md)
 
 ---
 

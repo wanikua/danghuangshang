@@ -16,17 +16,25 @@ jobs:
       - name: Validate JSON files
         run: |
           echo "=== Validating JSON files ==="
-          for f in openclaw.example.json; do
+          ERRORS=0
+          for f in openclaw.example.json configs/*/openclaw.json; do
             echo "  Checking $f..."
-            python3 -m json.tool "$f" > /dev/null
+            if ! python3 -m json.tool "$f" > /dev/null 2>&1; then
+              echo "  ❌ INVALID: $f"
+              ERRORS=$((ERRORS + 1))
+            fi
           done
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "❌ $ERRORS JSON files invalid"
+            exit 1
+          fi
           echo "✅ All JSON files valid"
 
       - name: ShellCheck install scripts
         uses: ludeeus/action-shellcheck@2.0.0
         with:
           scandir: '.'
-          additional_files: 'install.sh install-lite.sh install-mac.sh doctor.sh'
+          additional_files: 'install.sh install-lite.sh install-mac.sh doctor.sh keepalive.sh scripts/safe-update.sh scripts/switch-regime.sh scripts/init-personas.sh scripts/extract-personas.sh scripts/backup-all.sh scripts/memory-backup.sh'
           severity: warning
 
       - name: Check Dockerfile builds

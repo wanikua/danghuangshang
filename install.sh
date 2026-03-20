@@ -180,6 +180,14 @@ if [ -d "$AGENTS_DIR" ]; then
     if [ -f "$persona_file" ]; then
       # 读取人设内容（跳过第一行标题）
       persona=$(tail -n +3 "$persona_file")
+      
+      # 跳过骨架文件（<200字符 = 只有 Agent ID/定位等元信息，无实质人设）
+      persona_len=${#persona}
+      if [ "$persona_len" -lt 200 ]; then
+        echo -e "    ${YELLOW}⚠${NC} $agent_id (人设文件太短，保留模板内置人设)"
+        continue
+      fi
+      
       persona_escaped=$(echo "$persona" | jq -Rs '.')
       
       # 注入到配置
@@ -234,6 +242,9 @@ fi
 # 标记制度
 jq --arg regime "$TARGET_REGIME" '._regime = $regime' \
   "$CONFIG_FILE" > "${CONFIG_FILE}.tmp" && mv "${CONFIG_FILE}.tmp" "$CONFIG_FILE"
+
+# 保护配置文件权限（含 Token 等敏感信息）
+chmod 600 "$CONFIG_FILE"
 
 echo ""
 

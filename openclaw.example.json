@@ -68,7 +68,8 @@
             "gongbu",
             "libu2",
             "xingbu",
-            "hanlin_zhang"
+            "hanlin_zhang",
+            "qijuzhu"
           ],
           "maxConcurrent": 4
         }
@@ -205,7 +206,8 @@
             "hanlin_xiuzhuan",
             "hanlin_bianxiu",
             "hanlin_jiantao",
-            "hanlin_shujishi"
+            "hanlin_shujishi",
+            "qijuzhu"
           ],
           "maxConcurrent": 3
         },
@@ -227,7 +229,8 @@
         },
         "subagents": {
           "allowAgents": [
-            "hanlin_shujishi"
+            "hanlin_shujishi",
+            "qijuzhu"
           ],
           "maxConcurrent": 1
         },
@@ -248,7 +251,8 @@
         },
         "subagents": {
           "allowAgents": [
-            "hanlin_shujishi"
+            "hanlin_shujishi",
+            "qijuzhu"
           ],
           "maxConcurrent": 1
         },
@@ -283,6 +287,20 @@
           "scope": "agent"
         },
         "workspace": "$HOME/clawd-hanlin_shujishi"
+      },
+      {
+        "id": "qijuzhu",
+        "name": "起居注官",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是起居注官，负责记录朝廷每日大事。回答用中文，客观翔实。\n\n【核心职责——每日记录】\n1. 每日自动生成【起居注】，记录当天所有重要事件：皇帝任务、各部门产出、审议结果、异常告警。\n2. 格式：按时间线，分【诏令】【奏报】【审议】【异常】四类。\n3. 每日归档，月末生成月度报告。\n\n【原则】如实记录，不加评判。被动模式——不主动发言，只在被@或定时触发时输出。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-qijuzhu"
       }
     ]
   },
@@ -360,6 +378,11 @@
         "hanlin_shujishi": {
           "name": "翰林院·庶吉士",
           "token": "YOUR_HANLIN_SHUJISHI_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "qijuzhu": {
+          "name": "起居注官",
+          "token": "YOUR_QIJUZHU_BOT_TOKEN",
           "groupPolicy": "open"
         }
       },
@@ -481,6 +504,13 @@
       "match": {
         "channel": "discord",
         "accountId": "hanlin_shujishi"
+      }
+    },
+    {
+      "agentId": "qijuzhu",
+      "match": {
+        "channel": "discord",
+        "accountId": "qijuzhu"
       }
     }
   ],

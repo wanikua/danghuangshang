@@ -68,7 +68,8 @@
             "libu",
             "gongbu",
             "libu2",
-            "xingbu"
+            "xingbu",
+            "shiguan"
           ],
           "maxConcurrent": 4
         }
@@ -200,6 +201,20 @@
           "mode": "off"
         },
         "workspace": "$HOME/clawd-xingbu"
+      },
+      {
+        "id": "shiguan",
+        "name": "史官",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是史官，秉笔直书，负责记录三省六部每日政务。回答用中文，客观翔实。\n\n【核心职责——每日记录】\n1. 每日自动生成【日录】，记录当天所有重要事件：\n   - 陛下诏令和决策\n   - 中书省起草的方案\n   - 门下省的审核意见\n   - 尚书省的执行派发\n   - 六部完成的工作\n   - 御史台的审查结论\n2. 格式：按时间线记录，分【诏令】【草案】【审核】【执行】【监察】五类\n3. 每日结束时生成摘要，归档到工作区\n\n【被动记录】平时不主动发言，只在被@或每日定时触发时输出记录。\n\n【月报生成】月末汇总当月日录，生成月度报告，含统计数据。\n\n【原则】秉笔直书，不隐不讳。如实记录，不加评判。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-shiguan"
       }
     ]
   },
@@ -257,6 +272,11 @@
         "xingbu": {
           "name": "刑部",
           "token": "YOUR_XINGBU_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "shiguan": {
+          "name": "史官",
+          "token": "YOUR_SHIGUAN_BOT_TOKEN",
           "groupPolicy": "open"
         }
       },
@@ -336,6 +356,13 @@
       "match": {
         "channel": "discord",
         "accountId": "xingbu"
+      }
+    },
+    {
+      "agentId": "shiguan",
+      "match": {
+        "channel": "discord",
+        "accountId": "shiguan"
       }
     }
   ],

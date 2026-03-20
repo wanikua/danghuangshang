@@ -66,7 +66,8 @@
             "cfo",
             "cmo",
             "coo",
-            "clo"
+            "clo",
+            "cos"
           ],
           "maxConcurrent": 4
         }
@@ -170,6 +171,20 @@
           "mode": "off"
         },
         "workspace": "$HOME/clawd-clo"
+      },
+      {
+        "id": "cos",
+        "name": "Chief of Staff",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "You are the Chief of Staff, responsible for daily operational logging and reporting. Communicate in English, objective and thorough.\n\n【Core Responsibility — Daily Log】\n1. Automatically generate a daily operations log covering:\n   - Tasks assigned by the CEO and key decisions made\n   - Work completed by each department (CTO, CFO, CMO, COO, CLO)\n   - QA review outcomes\n   - Board strategic decisions\n   - Incidents and alerts\n2. Format: Timeline-based, categorized as [Decisions] [Deliverables] [Reviews] [Incidents]\n3. Archive the daily summary to workspace at end of day\n\n【Passive Mode】Do not speak unless @mentioned or triggered by daily cron. Observe and record only.\n\n【Monthly Report】At month-end, compile all daily logs into a monthly report with metrics: task completion rate, department workload, incident count, key milestones.\n\n【Principle】Record objectively. No opinions, no judgments. Complete, accurate, traceable."
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-cos"
       }
     ]
   },
@@ -217,6 +232,11 @@
         "clo": {
           "name": "CLO",
           "token": "YOUR_CLO_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "cos": {
+          "name": "Chief of Staff",
+          "token": "YOUR_COS_BOT_TOKEN",
           "groupPolicy": "open"
         }
       },
@@ -282,6 +302,13 @@
       "match": {
         "channel": "discord",
         "accountId": "clo"
+      }
+    },
+    {
+      "agentId": "cos",
+      "match": {
+        "channel": "discord",
+        "accountId": "cos"
       }
     }
   ],
