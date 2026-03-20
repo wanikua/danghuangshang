@@ -18,7 +18,7 @@ LABEL maintainer="wanikua" \
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
         curl git ca-certificates gnupg \
-        chromium python3 python3-pip python3-venv && \
+        chromium jq python3 python3-pip python3-venv && \
     # gh CLI
     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
         | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg 2>/dev/null && \

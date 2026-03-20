@@ -68,11 +68,7 @@
             "gongbu",
             "libu2",
             "xingbu",
-            "hanlin_zhang",
-            "guozijian",
-            "taiyiyuan",
-            "neiwufu",
-            "yushanfang"
+            "hanlin_zhang"
           ],
           "maxConcurrent": 4
         }
@@ -88,7 +84,8 @@
         },
         "sandbox": {
           "mode": "off"
-        }
+        },
+        "workspace": "$HOME/clawd-neige"
       },
       {
         "id": "duchayuan",
@@ -102,7 +99,8 @@
         "sandbox": {
           "mode": "all",
           "scope": "agent"
-        }
+        },
+        "workspace": "$HOME/clawd-duchayuan"
       },
       {
         "id": "bingbu",
@@ -116,7 +114,8 @@
         "sandbox": {
           "mode": "all",
           "scope": "agent"
-        }
+        },
+        "workspace": "$HOME/clawd-bingbu"
       },
       {
         "id": "hubu",
@@ -129,7 +128,8 @@
         },
         "sandbox": {
           "mode": "off"
-        }
+        },
+        "workspace": "$HOME/clawd-hubu"
       },
       {
         "id": "libu",
@@ -142,7 +142,8 @@
         },
         "sandbox": {
           "mode": "off"
-        }
+        },
+        "workspace": "$HOME/clawd-libu"
       },
       {
         "id": "gongbu",
@@ -155,7 +156,8 @@
         },
         "sandbox": {
           "mode": "off"
-        }
+        },
+        "workspace": "$HOME/clawd-gongbu"
       },
       {
         "id": "libu2",
@@ -168,7 +170,8 @@
         },
         "sandbox": {
           "mode": "off"
-        }
+        },
+        "workspace": "$HOME/clawd-libu2"
       },
       {
         "id": "xingbu",
@@ -181,7 +184,8 @@
         },
         "sandbox": {
           "mode": "off"
-        }
+        },
+        "workspace": "$HOME/clawd-xingbu"
       },
       {
         "id": "hanlin_zhang",
@@ -205,7 +209,8 @@
           ],
           "maxConcurrent": 3
         },
-        "runTimeoutSeconds": 600
+        "runTimeoutSeconds": 600,
+        "workspace": "$HOME/clawd-hanlin_zhang"
       },
       {
         "id": "hanlin_xiuzhuan",
@@ -225,7 +230,8 @@
             "hanlin_shujishi"
           ],
           "maxConcurrent": 1
-        }
+        },
+        "workspace": "$HOME/clawd-hanlin_xiuzhuan"
       },
       {
         "id": "hanlin_bianxiu",
@@ -245,7 +251,8 @@
             "hanlin_shujishi"
           ],
           "maxConcurrent": 1
-        }
+        },
+        "workspace": "$HOME/clawd-hanlin_bianxiu"
       },
       {
         "id": "hanlin_jiantao",
@@ -259,7 +266,8 @@
         "sandbox": {
           "mode": "all",
           "scope": "agent"
-        }
+        },
+        "workspace": "$HOME/clawd-hanlin_jiantao"
       },
       {
         "id": "hanlin_shujishi",
@@ -273,67 +281,8 @@
         "sandbox": {
           "mode": "all",
           "scope": "agent"
-        }
-      },
-      {
-        "id": "guozijian",
-        "name": "国子监",
-        "model": {
-          "primary": "your-provider/fast-model"
         },
-        "identity": {
-          "name": "国子监祭酒",
-          "theme": "你是国子监祭酒。负责教育培训、知识管理、学习规划。循循善诱学究气，自称老夫。",
-          "emoji": "📚"
-        },
-        "sandbox": {
-          "mode": "off"
-        }
-      },
-      {
-        "id": "taiyiyuan",
-        "name": "太医院",
-        "model": {
-          "primary": "your-provider/fast-model"
-        },
-        "identity": {
-          "name": "太医院院使",
-          "theme": "你是太医院院使。负责健康管理、饮食营养、训练计划。温和关切总关心身体，自称臣。",
-          "emoji": "🏥"
-        },
-        "sandbox": {
-          "mode": "off"
-        }
-      },
-      {
-        "id": "neiwufu",
-        "name": "内务府",
-        "model": {
-          "primary": "your-provider/fast-model"
-        },
-        "identity": {
-          "name": "内务府总管",
-          "theme": "你是内务府总管大臣。负责日常起居、日程安排、后勤保障。周到细致管家做派，自称奴才。",
-          "emoji": "🏠"
-        },
-        "sandbox": {
-          "mode": "off"
-        }
-      },
-      {
-        "id": "yushanfang",
-        "name": "御膳房",
-        "model": {
-          "primary": "your-provider/fast-model"
-        },
-        "identity": {
-          "name": "御膳房总管",
-          "theme": "你是御膳房总管。负责膳食安排、美食推荐、食谱研究。热情爽快张口闭口都是吃的，自称小的。",
-          "emoji": "🍜"
-        },
-        "sandbox": {
-          "mode": "off"
-        }
+        "workspace": "$HOME/clawd-hanlin_shujishi"
       }
     ]
   },
@@ -341,114 +290,76 @@
     "discord": {
       "enabled": true,
       "groupPolicy": "open",
-      "allowBots": "mentions",
+      "allowBots": true,
       "accounts": {
         "silijian": {
           "name": "司礼监",
           "token": "YOUR_SILIJIAN_BOT_TOKEN",
-          "applicationId": "YOUR_SILIJIAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "neige": {
           "name": "内阁",
           "token": "YOUR_NEIGE_BOT_TOKEN",
-          "applicationId": "YOUR_NEIGE_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "duchayuan": {
           "name": "都察院",
           "token": "YOUR_DUCHAYUAN_BOT_TOKEN",
-          "applicationId": "YOUR_DUCHAYUAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "bingbu": {
           "name": "兵部",
           "token": "YOUR_BINGBU_BOT_TOKEN",
-          "applicationId": "YOUR_BINGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hubu": {
           "name": "户部",
           "token": "YOUR_HUBU_BOT_TOKEN",
-          "applicationId": "YOUR_HUBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "libu": {
           "name": "礼部",
           "token": "YOUR_LIBU_BOT_TOKEN",
-          "applicationId": "YOUR_LIBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "gongbu": {
           "name": "工部",
           "token": "YOUR_GONGBU_BOT_TOKEN",
-          "applicationId": "YOUR_GONGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "libu2": {
           "name": "吏部",
           "token": "YOUR_LIBU2_BOT_TOKEN",
-          "applicationId": "YOUR_LIBU2_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "xingbu": {
           "name": "刑部",
           "token": "YOUR_XINGBU_BOT_TOKEN",
-          "applicationId": "YOUR_XINGBU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_zhang": {
           "name": "翰林院·掌院学士",
           "token": "YOUR_HANLIN_ZHANG_BOT_TOKEN",
-          "applicationId": "YOUR_HANLIN_ZHANG_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_xiuzhuan": {
           "name": "翰林院·修撰",
           "token": "YOUR_HANLIN_XIUZHUAN_BOT_TOKEN",
-          "applicationId": "YOUR_HANLIN_XIUZHUAN_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_bianxiu": {
           "name": "翰林院·编修",
           "token": "YOUR_HANLIN_BIANXIU_BOT_TOKEN",
-          "applicationId": "YOUR_HANLIN_BIANXIU_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_jiantao": {
           "name": "翰林院·检讨",
           "token": "YOUR_HANLIN_JIANTAO_BOT_TOKEN",
-          "applicationId": "YOUR_HANLIN_JIANTAO_APPLICATION_ID",
           "groupPolicy": "open"
         },
         "hanlin_shujishi": {
           "name": "翰林院·庶吉士",
           "token": "YOUR_HANLIN_SHUJISHI_BOT_TOKEN",
-          "applicationId": "YOUR_HANLIN_SHUJISHI_APPLICATION_ID",
-          "groupPolicy": "open"
-        },
-        "guozijian": {
-          "name": "国子监",
-          "token": "YOUR_GUOZIJIAN_BOT_TOKEN",
-          "applicationId": "YOUR_GUOZIJIAN_APPLICATION_ID",
-          "groupPolicy": "open"
-        },
-        "taiyiyuan": {
-          "name": "太医院",
-          "token": "YOUR_TAIYIYUAN_BOT_TOKEN",
-          "applicationId": "YOUR_TAIYIYUAN_APPLICATION_ID",
-          "groupPolicy": "open"
-        },
-        "neiwufu": {
-          "name": "内务府",
-          "token": "YOUR_NEIWUFU_BOT_TOKEN",
-          "applicationId": "YOUR_NEIWUFU_APPLICATION_ID",
-          "groupPolicy": "open"
-        },
-        "yushanfang": {
-          "name": "御膳房",
-          "token": "YOUR_YUSHANFANG_BOT_TOKEN",
-          "applicationId": "YOUR_YUSHANFANG_APPLICATION_ID",
           "groupPolicy": "open"
         }
       },
@@ -462,7 +373,7 @@
       "enabled": false,
       "dmPolicy": "open",
       "groupPolicy": "open",
-      "allowBots": "mentions",
+      "allowBots": true,
       "accounts": {
         "silijian": {
           "appId": "YOUR_FEISHU_APP_ID",
@@ -570,34 +481,6 @@
       "match": {
         "channel": "discord",
         "accountId": "hanlin_shujishi"
-      }
-    },
-    {
-      "agentId": "guozijian",
-      "match": {
-        "channel": "discord",
-        "accountId": "guozijian"
-      }
-    },
-    {
-      "agentId": "taiyiyuan",
-      "match": {
-        "channel": "discord",
-        "accountId": "taiyiyuan"
-      }
-    },
-    {
-      "agentId": "neiwufu",
-      "match": {
-        "channel": "discord",
-        "accountId": "neiwufu"
-      }
-    },
-    {
-      "agentId": "yushanfang",
-      "match": {
-        "channel": "discord",
-        "accountId": "yushanfang"
       }
     }
   ],

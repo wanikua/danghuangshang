@@ -260,10 +260,19 @@ if mode == "2":
             agent["sandbox"]["scope"] = "agent"
         config["agents"]["list"].append(agent)
 
+# 消息配置（@everyone/@here 触发 + 反应范围）
+config["messages"] = {
+    "groupChat": {
+        "mentionPatterns": ["@everyone", "@here"]
+    },
+    "ackReactionScope": "group-mentions"
+}
+
 # 平台配置
 if platform == "1":
     discord_config = {
-        "enabled": True, "groupPolicy": "open", "allowBots": True,
+        "enabled": True, "groupPolicy": "open", "allowBots": "mentions",
+        "historyLimit": 20,
         "accounts": {"silijian": {"name": "司礼监", "token": bot_token, "groupPolicy": "open"}},
     }
     if guild_id:
