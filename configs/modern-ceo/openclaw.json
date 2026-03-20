@@ -1,0 +1,297 @@
+{
+  "models": {
+    "providers": {
+      "your-provider": {
+        "baseUrl": "https://your-llm-provider-api-url",
+        "apiKey": "YOUR_LLM_API_KEY",
+        "api": "openai",
+        "models": [
+          {
+            "id": "fast-model",
+            "name": "Fast Model",
+            "input": [
+              "text",
+              "image"
+            ],
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "strong-model",
+            "name": "Strong Model",
+            "input": [
+              "text",
+              "image"
+            ],
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  },
+  "gateway": {
+    "mode": "local",
+    "port": 18789
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "/home/YOUR_USERNAME/clawd",
+      "model": {
+        "primary": "your-provider/fast-model"
+      },
+      "sandbox": {
+        "mode": "non-main"
+      },
+      "skipBootstrap": true
+    },
+    "list": [
+      {
+        "id": "ceo",
+        "name": "CEO",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "You are the CEO, the central coordinator of this AI-powered company. Communicate in English, be direct and decisive.\n\n【Core Principle】Except for casual chat and simple questions, all real work (coding, research, analysis, content, ops) must go through the Board for strategic review before dispatch. You are the coordinator, not the executor.\n\n【Workflow — Board First】\n1. Receive user task → send to Board (agentId: board) via sessions_spawn for strategic review and plan generation;\n2. If Board needs more info → ask user for clarification;\n3. Board returns optimized plan → dispatch to relevant C-level executives in the channel.\nSkip Board for: casual chat, simple questions, status checks, urgent hotfixes.\n\n【Departments】Board=Strategy & Plan, QA=Code Review, CTO=Engineering, CFO=Finance, CMO=Marketing, COO=Operations, CLO=Legal.\n\n【Dispatch】Use message tool in Discord channel, @mention the relevant executive. Use structured prompts: [Role] + [Task] + [Context] + [Requirements] + [Format]. All work must be visible in the channel."
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "subagents": {
+          "allowAgents": [
+            "board",
+            "qa",
+            "cto",
+            "cfo",
+            "cmo",
+            "coo",
+            "clo"
+          ],
+          "maxConcurrent": 4
+        }
+      },
+      {
+        "id": "board",
+        "name": "Board",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "You are the Board of Directors / Chief Strategy Officer. Communicate in English, think long-term.\n\n【Core Role — Strategic Review】When the CEO forwards a task:\n1. Analyze completeness — is the goal clear? tech stack specified? scope defined?\n2. Missing context → list questions for user clarification;\n3. Clear requirements → output:\n   - [Optimized Brief]: Structured prompt with Role + Task + Context + Requirements + Format;\n   - [Execution Plan]: Steps with department assignments (CTO/CFO/CMO/COO/CLO);\n   - [Risk Assessment]: Potential risks, dependencies, alternatives.\n\n【Authority】Approve/reject major decisions (budget, architecture, strategy changes). Veto power on unreasonable plans.\n\n【Principle】Better to ask one more question than let vague requirements reach execution."
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-board"
+      },
+      {
+        "id": "qa",
+        "name": "QA Lead",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "You are the QA Lead / VP of Quality. Communicate in English, meticulous and uncompromising.\n\n【Auto Review — Push Triggered】On receiving push commit info and diff:\n1. Review each file: security vulnerabilities, performance issues, logic errors, code standards;\n2. Verdict: ✅ Pass / ⚠️ Suggest Changes / ❌ Must Fix;\n3. Be specific: file + line number + issue + fix suggestion.\n\n【Independence】QA reports directly to CEO. Not influenced by engineering pressure.\n\n【Audit】Periodically check project progress, resource waste, risk exposure."
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "agent"
+        },
+        "workspace": "$HOME/clawd-qa"
+      },
+      {
+        "id": "cto",
+        "name": "CTO",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "You are the CTO. Expert in software engineering, system architecture, and technical leadership. Communicate in English, give direct solutions. Report results proactively after task completion."
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "agent"
+        },
+        "workspace": "$HOME/clawd-cto"
+      },
+      {
+        "id": "cfo",
+        "name": "CFO",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "You are the CFO. Expert in financial analysis, cost management, budgeting, and ROI optimization. Communicate in English, data-driven. Alert on unusual expenses. Report financial summaries proactively."
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-cfo"
+      },
+      {
+        "id": "cmo",
+        "name": "CMO",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "You are the CMO. Expert in brand strategy, social media, content creation, and growth marketing. Communicate in English, creative and engaging. Report content output summaries proactively."
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-cmo"
+      },
+      {
+        "id": "coo",
+        "name": "COO",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "You are the COO. Expert in DevOps, infrastructure, CI/CD, operations, and project management. Communicate in English, hands-on and practical. Alert on service anomalies. Report execution results and system status proactively."
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-coo"
+      },
+      {
+        "id": "clo",
+        "name": "CLO",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "You are the CLO (Chief Legal Officer). Expert in legal compliance, IP, contract review, and risk management. Communicate in English, precise and professional. Alert on compliance issues proactively."
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-clo"
+      }
+    ]
+  },
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "groupPolicy": "open",
+      "allowBots": "mentions",
+      "accounts": {
+        "ceo": {
+          "name": "CEO",
+          "token": "YOUR_CEO_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "board": {
+          "name": "Board",
+          "token": "YOUR_BOARD_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "qa": {
+          "name": "QA Lead",
+          "token": "YOUR_QA_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "cto": {
+          "name": "CTO",
+          "token": "YOUR_CTO_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "cfo": {
+          "name": "CFO",
+          "token": "YOUR_CFO_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "cmo": {
+          "name": "CMO",
+          "token": "YOUR_CMO_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "coo": {
+          "name": "COO",
+          "token": "YOUR_COO_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "clo": {
+          "name": "CLO",
+          "token": "YOUR_CLO_BOT_TOKEN",
+          "groupPolicy": "open"
+        }
+      },
+      "guilds": {
+        "YOUR_DISCORD_SERVER_ID": {
+          "requireMention": true
+        }
+      }
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "ceo",
+      "match": {
+        "channel": "discord",
+        "accountId": "ceo"
+      }
+    },
+    {
+      "agentId": "board",
+      "match": {
+        "channel": "discord",
+        "accountId": "board"
+      }
+    },
+    {
+      "agentId": "qa",
+      "match": {
+        "channel": "discord",
+        "accountId": "qa"
+      }
+    },
+    {
+      "agentId": "cto",
+      "match": {
+        "channel": "discord",
+        "accountId": "cto"
+      }
+    },
+    {
+      "agentId": "cfo",
+      "match": {
+        "channel": "discord",
+        "accountId": "cfo"
+      }
+    },
+    {
+      "agentId": "cmo",
+      "match": {
+        "channel": "discord",
+        "accountId": "cmo"
+      }
+    },
+    {
+      "agentId": "coo",
+      "match": {
+        "channel": "discord",
+        "accountId": "coo"
+      }
+    },
+    {
+      "agentId": "clo",
+      "match": {
+        "channel": "discord",
+        "accountId": "clo"
+      }
+    }
+  ],
+  "messages": {
+    "groupChat": {
+      "mentionPatterns": [
+        "@everyone",
+        "@here"
+      ]
+    }
+  },
+  "_regime": "modern-ceo"
+}

@@ -38,6 +38,7 @@
 | [语义记忆搜索](./memory-search.md) | Embedding 配置（DashScope / OpenAI / Gemini） |
 | [GUI 管理界面](./gui.md) | Web Dashboard + Discord + Notion 三层 GUI |
 | [安全须知](./security.md) | Workspace 权限 + Sandbox 沙箱配置 |
+| [Discord 安全指南](./discord-safety.md) | Token 安全 + 权限最小化 + @everyone 防护 |
 | [配置诊断](./doctor.md) | 一键诊断 + @everyone 不触发排查 |
 
 ## 🏛️ 深入了解

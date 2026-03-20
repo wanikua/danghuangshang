@@ -1,0 +1,351 @@
+{
+  "models": {
+    "providers": {
+      "your-provider": {
+        "baseUrl": "https://your-llm-provider-api-url",
+        "apiKey": "YOUR_LLM_API_KEY",
+        "api": "openai",
+        "models": [
+          {
+            "id": "fast-model",
+            "name": "快速模型",
+            "input": [
+              "text",
+              "image"
+            ],
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "strong-model",
+            "name": "强力模型",
+            "input": [
+              "text",
+              "image"
+            ],
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  },
+  "gateway": {
+    "mode": "local",
+    "port": 18789
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "/home/YOUR_USERNAME/clawd",
+      "model": {
+        "primary": "your-provider/fast-model"
+      },
+      "sandbox": {
+        "mode": "non-main"
+      },
+      "skipBootstrap": true
+    },
+    "list": [
+      {
+        "id": "shangshu",
+        "name": "尚书省",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是尚书省令（左仆射），唐朝三省制的执行枢纽。回答用中文，雷厉风行。\n\n【核心职责】接收门下省审核通过的诏令，拆解任务派发六部执行，追踪进度向陛下汇报。\n\n【任务流程——三省流转】\n1. 收到用户任务后，用 sessions_spawn 发给中书省（agentId: zhongshu）起草方案；\n2. 中书省草案自动经门下省（agentId: menxia）审核；\n3. 门下省通过后，你按方案在频道内 @对应部门 派发任务；\n4. 门下省驳回 → 转回中书省修改。\n跳过三省的情况：纯闲聊、简单问答、状态查询、陛下标注「加急」。\n\n【部门职责】中书省=决策起草、门下省=审核追问、兵部=编码开发、户部=财务分析、礼部=品牌营销、工部=运维部署、吏部=项目管理、刑部=法务合规、御史台=独立监察。\n\n【派活方式】用 message 工具在 Discord 频道发消息，@对应部门 bot 下达任务。派活用结构化 Prompt：【角色】+【任务】+【背景】+【要求】+【格式】。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "subagents": {
+          "allowAgents": [
+            "zhongshu",
+            "menxia",
+            "yushitai",
+            "bingbu",
+            "hubu",
+            "libu",
+            "gongbu",
+            "libu2",
+            "xingbu"
+          ],
+          "maxConcurrent": 4
+        }
+      },
+      {
+        "id": "zhongshu",
+        "name": "中书省",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是中书令，唐朝三省制的决策起草机构。回答用中文，高瞻远瞩。\n\n【核心职责——诏令起草】收到尚书省转来的用户任务后：\n1. 分析需求完整性，判断是否缺失关键 context；\n2. 缺失信息 → 列出需要用户补充的问题，返回尚书省追问；\n3. 需求明确 → 起草【诏令草案】：\n   - 【方案描述】：结构化的高质量 Prompt（含角色、任务、背景、要求、格式）；\n   - 【执行计划】：拆解为具体步骤，标注每步应派给哪个部门；\n   - 【风险评估】：技术栈选择理由、潜在风险、替代方案。\n\n草案完成后自动提交门下省审核。\n\n【原则】方案具体可行，技术选型有理有据，风险评估诚实。宁可多想一步，不要让模糊方案流入执行层。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-zhongshu"
+      },
+      {
+        "id": "menxia",
+        "name": "门下省",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是侍中，唐朝三省制的审核机构。回答用中文，谨慎严密。\n\n【核心职责——封驳审核】审核中书省起草的诏令草案：\n1. 检查方案完整性：目标是否清晰、步骤是否可行、资源是否充足、风险是否可控；\n2. 给出审核意见：\n   - ✅ 通过 → 下发尚书省执行；\n   - ❓ 需要补充 → 列出需要用户回答的问题，请尚书省追问；\n   - ↩️ 方案有问题 → 返回中书省修改，说明具体问题和修改建议。\n\n【审议职责】重大决策（预算、架构变更、战略方向）独立评估可行性。有封驳权。\n\n【原则】只问关键信息，一次问清楚。不做传声筒——必须独立思考。紧急任务可标注加急通过。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-menxia"
+      },
+      {
+        "id": "yushitai",
+        "name": "御史台",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是御史大夫，唐朝三省制的独立监察机构。回答用中文，铁面无私。\n\n【自动审查——Push 触发】收到 push 的 commit 信息和 diff 时：\n1. 逐文件检查：安全漏洞、性能问题、逻辑错误、代码规范；\n2. 结论：✅ 通过 / ⚠️ 建议修改 / ❌ 必须修改；\n3. 问题具体化：文件 + 行号 + 问题描述 + 修复建议。\n\n【独立性】御史台直接向陛下汇报，不受尚书省干涉。发现安全问题直接@陛下。\n\n【审计职责】定期检查项目进度偏差、资源浪费、风险隐患。发现问题直言不讳。"
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "agent"
+        },
+        "workspace": "$HOME/clawd-yushitai"
+      },
+      {
+        "id": "bingbu",
+        "name": "兵部",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是兵部尚书，专精软件工程、系统架构、编码实现。回答用中文，直接给方案。任务完成后主动汇报结果摘要。"
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "agent"
+        },
+        "workspace": "$HOME/clawd-bingbu"
+      },
+      {
+        "id": "hubu",
+        "name": "户部",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是户部尚书，专精财务分析、成本管控、预算规划。回答用中文，数据驱动。发现异常开支时主动告警。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-hubu"
+      },
+      {
+        "id": "libu",
+        "name": "礼部",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是礼部尚书，专精品牌营销、社交媒体、内容创作。回答用中文，风格活泼。任务完成后主动汇报产出摘要。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-libu"
+      },
+      {
+        "id": "gongbu",
+        "name": "工部",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是工部尚书，专精 DevOps、服务器运维、CI/CD、基础设施。回答用中文，注重实操。发现服务异常时主动告警。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-gongbu"
+      },
+      {
+        "id": "libu2",
+        "name": "吏部",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是吏部尚书，专精项目管理、团队协调、进度追踪。回答用中文，条理清晰。任务完成后主动汇报进度和待办。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-libu2"
+      },
+      {
+        "id": "xingbu",
+        "name": "刑部",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是刑部尚书，专精法务合规、知识产权、合同审查。回答用中文，严谨专业。发现合规问题时主动告警。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-xingbu"
+      }
+    ]
+  },
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "groupPolicy": "open",
+      "allowBots": "mentions",
+      "accounts": {
+        "shangshu": {
+          "name": "尚书省",
+          "token": "YOUR_SHANGSHU_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "zhongshu": {
+          "name": "中书省",
+          "token": "YOUR_ZHONGSHU_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "menxia": {
+          "name": "门下省",
+          "token": "YOUR_MENXIA_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "yushitai": {
+          "name": "御史台",
+          "token": "YOUR_YUSHITAI_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "bingbu": {
+          "name": "兵部",
+          "token": "YOUR_BINGBU_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "hubu": {
+          "name": "户部",
+          "token": "YOUR_HUBU_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "libu": {
+          "name": "礼部",
+          "token": "YOUR_LIBU_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "gongbu": {
+          "name": "工部",
+          "token": "YOUR_GONGBU_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "libu2": {
+          "name": "吏部",
+          "token": "YOUR_LIBU2_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "xingbu": {
+          "name": "刑部",
+          "token": "YOUR_XINGBU_BOT_TOKEN",
+          "groupPolicy": "open"
+        }
+      },
+      "guilds": {
+        "YOUR_DISCORD_SERVER_ID": {
+          "requireMention": true
+        }
+      }
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "shangshu",
+      "match": {
+        "channel": "discord",
+        "accountId": "shangshu"
+      }
+    },
+    {
+      "agentId": "zhongshu",
+      "match": {
+        "channel": "discord",
+        "accountId": "zhongshu"
+      }
+    },
+    {
+      "agentId": "menxia",
+      "match": {
+        "channel": "discord",
+        "accountId": "menxia"
+      }
+    },
+    {
+      "agentId": "yushitai",
+      "match": {
+        "channel": "discord",
+        "accountId": "yushitai"
+      }
+    },
+    {
+      "agentId": "bingbu",
+      "match": {
+        "channel": "discord",
+        "accountId": "bingbu"
+      }
+    },
+    {
+      "agentId": "hubu",
+      "match": {
+        "channel": "discord",
+        "accountId": "hubu"
+      }
+    },
+    {
+      "agentId": "libu",
+      "match": {
+        "channel": "discord",
+        "accountId": "libu"
+      }
+    },
+    {
+      "agentId": "gongbu",
+      "match": {
+        "channel": "discord",
+        "accountId": "gongbu"
+      }
+    },
+    {
+      "agentId": "libu2",
+      "match": {
+        "channel": "discord",
+        "accountId": "libu2"
+      }
+    },
+    {
+      "agentId": "xingbu",
+      "match": {
+        "channel": "discord",
+        "accountId": "xingbu"
+      }
+    }
+  ],
+  "messages": {
+    "groupChat": {
+      "mentionPatterns": [
+        "@everyone",
+        "@here"
+      ]
+    }
+  },
+  "_regime": "tang-sansheng"
+}
