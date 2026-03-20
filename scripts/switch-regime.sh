@@ -68,7 +68,7 @@ else
 fi
 
 # 检查配置模板是否存在
-TEMPLATE="$SCRIPT_DIR/configs/$TARGET_REGIME/openclaw.json"
+TEMPLATE="$(dirname "$SCRIPT_DIR")/configs/$TARGET_REGIME/openclaw.json"
 if [ ! -f "$TEMPLATE" ]; then
     echo -e "${RED}✗ 未找到配置模板：$TEMPLATE${NC}"
     echo "请确保已克隆完整的 danghuangshang 仓库"

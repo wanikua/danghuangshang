@@ -126,6 +126,25 @@ bash scripts/switch-regime.sh modern-ceo     # 现代企业制
 bash scripts/switch-regime.sh ming-neige     # 明朝内阁制
 ```
 
+> **⚠️ 更新安全提示**
+> 
+> 更新代码前，请先备份重要文件：
+> ```bash
+> cd ~/clawd
+> tar -czf ../clawd_backup_$(date +%Y%m%d).tar.gz \
+>   SOUL.md IDENTITY.md USER.md MEMORY.md memory/
+> ```
+> 
+> 更新命令：
+> ```bash
+> cd ~/clawd
+> git stash          # 暂存本地修改
+> git pull           # 拉取最新代码
+> git stash pop      # 恢复本地修改（可能有冲突需手动解决）
+> ```
+> 
+> **系统会自动备份配置文件（`~/.openclaw/openclaw.json`），但工作区文件（如 MEMORY.md）需手动备份。**
+
 > 🏥 遇到问题？
 > - Linux/macOS: `bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/doctor.sh)`
 > - Windows: `openclaw doctor`
