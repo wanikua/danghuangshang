@@ -13,6 +13,7 @@
 | [browser-use](./browser-use/) | 浏览器自动化、社媒管理 | ❌ | [SKILL.md](./browser-use/SKILL.md) |
 | [quadrants](./quadrants/) | 四象限任务管理（quadrants.ch） | ✅ | [SKILL.md](./quadrants/SKILL.md) |
 | [openviking](./openviking/) | 向量知识库（火山引擎开源） | ✅ | [SKILL.md](./openviking/SKILL.md) |
+| [self-improving-agent](./self-improving-agent/) | 自我改进：记录错误、学习和纠正 | ❌ | [SKILL.md](./self-improving-agent/SKILL.md) |
 
 > \* GitHub Skill 需要先运行 `gh auth login` 登录 GitHub 账号。
 
