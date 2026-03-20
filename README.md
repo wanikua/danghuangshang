@@ -171,9 +171,16 @@ bash scripts/switch-regime.sh ming-neige     # 明朝内阁制
 <a id="朝廷架构"></a>
 
 ## 🏛️ 朝廷架构
-三省六部制是中国古代经典制度。
-**明朝初年** 废丞相，司礼监 + 内阁二元治理。
-本项目的Agent团队协作方式采用更贴近明朝六部的制度。
+
+本项目提供 **三种制度** 供选择，各有侧重：
+
+| 制度 | 特点 | 流程 |
+|------|------|------|
+| **明朝内阁制**（默认） | 司礼监 + 内阁二元调度 | 司礼监接旨 → 内阁优化 → 六部执行 |
+| **唐朝三省制** | 三权分立、互相制衡 | 中书起草 → 门下审核 → 尚书执行 |
+| **现代企业制** | 扁平管理、英文沟通 | CEO 决策 → Board 审议 → CxO 执行 |
+
+> 💡 下方先展示明朝内阁制（默认），唐朝三省制和现代企业制请展开下方折叠查看。
 
 **方式一：经司礼监调度（默认）**
 
@@ -201,6 +208,112 @@ bash scripts/switch-regime.sh ming-neige     # 明朝内阁制
 ```
 
 > 💡 Discord 多 Bot 模式下，每个部门都是独立 Bot，你可以直接 @任意部门下达指令，无需经过司礼监。复杂任务推荐走司礼监（自动内阁优化），简单任务直接 @对应部门更快。
+
+---
+
+<details>
+<summary><b>唐朝三省制（tang-sansheng）</b></summary>
+
+**中书起草 → 门下审核 → 尚书执行**，三权分立、互相制衡。适合需要严谨审批流程的企业级场景。
+
+**方式一：三省流转（默认）**
+
+```
+皇帝（你）下旨
+  ▼
+中书省 ── 起草诏令（理解意图、生成执行方案）
+  ▼
+门下省 ── 审核驳回（审查方案可行性、合规性）
+  │
+  ├─ ❌ 封驳 → 退回中书省修改
+  └─ ✅ 通过 ▼
+         尚书省 ── 执行派发
+           ├─→ @兵部 编码开发
+           ├─→ @户部 财务分析
+           ├─→ @工部 运维部署
+           ├─→ @礼部 品牌营销
+           ├─→ @吏部 项目管理
+           └─→ @刑部 法务合规
+                  ▼
+               御史台 ── 监察审计（全程监督、代码审查）
+```
+
+**方式二：皇帝直接下旨给任意部门**
+
+```
+皇帝（你）
+  ├─→ @中书省 拟一份新产品方案
+  ├─→ @兵部 修复这个 Bug
+  └─→ @御史台 审查这个 PR
+```
+
+> 💡 三省制的核心是制衡：中书省负责"想"，门下省负责"审"，尚书省负责"做"。任何重大决策都要经过三省流转，避免一家独大。
+
+| 唐朝三省 | Agent ID | 职责 |
+|----------|----------|------|
+| **中书省** | `zhongshu` | 起草方案、Prompt 增强、生成执行计划 |
+| **门下省** | `menxia` | 审核方案、封驳不合理决策 |
+| **尚书省** | `shangshu` | 接收通过的方案、派发六部执行 |
+| **御史台** | `yushitai` | 全程监察、代码审查、质量把控 |
+| **兵部** | `bingbu` | 软件工程、系统架构 |
+| **户部** | `hubu` | 财务分析、成本管控 |
+| **工部** | `gongbu` | DevOps、服务器运维 |
+| **礼部** | `libu` | 品牌营销、内容创作 |
+| **吏部** | `libu2` | 项目管理、团队协调 |
+| **刑部** | `xingbu` | 法务合规、知识产权 |
+| **史官** | `shiguan` | 自动记录每日朝政摘要 |
+
+</details>
+
+<details>
+<summary><b>现代企业制（modern-ceo）</b></summary>
+
+**CEO 决策 → Board 审议 → CxO 执行**，扁平化管理、英文沟通。适合国际化团队或偏好现代企业架构的用户。
+
+**方式一：经 CEO 调度（默认）**
+
+```
+Owner (You)
+  ▼
+CEO ── Receive task, delegate to C-suite
+  │
+  ├─→ Board of Directors ── Strategic review & approval
+  │ ←─┘ Approve / Reject / Request changes
+  │
+  ├─→ @CTO  Technical execution (code, architecture)
+  ├─→ @CFO  Financial analysis (budget, cost)
+  ├─→ @CMO  Marketing (brand, content, social)
+  ├─→ @COO  Operations (DevOps, infrastructure)
+  ├─→ @CLO  Legal & compliance
+  └─→ @CoS  Project coordination
+         ▼
+      QA Director ── Quality assurance & code review
+```
+
+**方式二：直接指挥（Direct command）**
+
+```
+Owner (You)
+  ├─→ @CTO Build a login API
+  ├─→ @CFO Review this month's spending
+  └─→ @QA  Review this PR
+```
+
+> 💡 Modern CEO mode uses English for all communication. The CEO acts as dispatcher (like 司礼监), the Board provides strategic oversight (like 内阁), and QA handles quality control (like 都察院).
+
+| Role | Agent ID | Responsibility |
+|------|----------|---------------|
+| **CEO** | `ceo` | Task intake, delegation, progress tracking |
+| **Board** | `board` | Strategic review, budget approval, veto power |
+| **QA Director** | `qa` | Code review, quality assurance |
+| **CTO** | `cto` | Engineering, architecture, technical decisions |
+| **CFO** | `cfo` | Financial analysis, cost optimization |
+| **CMO** | `cmo` | Marketing, brand, content creation |
+| **COO** | `coo` | Operations, DevOps, infrastructure |
+| **CLO** | `clo` | Legal compliance, IP protection |
+| **Chief of Staff** | `cos` | Project management, team coordination |
+
+</details>
 
 <details>
 <summary><b>查看完整机构表</b></summary>

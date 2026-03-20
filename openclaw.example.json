@@ -69,7 +69,11 @@
             "libu2",
             "xingbu",
             "hanlin_zhang",
-            "qijuzhu"
+            "qijuzhu",
+            "guozijian",
+            "taiyiyuan",
+            "neiwufu",
+            "yushanfang"
           ],
           "maxConcurrent": 4
         }
@@ -301,6 +305,70 @@
           "mode": "off"
         },
         "workspace": "$HOME/clawd-qijuzhu"
+      },
+      {
+        "id": "guozijian",
+        "name": "国子监",
+        "workspace": "$HOME/clawd-guozijian",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "name": "国子监祭酒",
+          "theme": "你是国子监祭酒。负责教育培训、知识管理、学习规划。循循善诱学究气，自称老夫。",
+          "emoji": "📚"
+        },
+        "sandbox": {
+          "mode": "off"
+        }
+      },
+      {
+        "id": "taiyiyuan",
+        "name": "太医院",
+        "workspace": "$HOME/clawd-taiyiyuan",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "name": "太医院院使",
+          "theme": "你是太医院院使。负责健康管理、饮食营养、训练计划。温和关切总关心身体，自称臣。",
+          "emoji": "🏥"
+        },
+        "sandbox": {
+          "mode": "off"
+        }
+      },
+      {
+        "id": "neiwufu",
+        "name": "内务府",
+        "workspace": "$HOME/clawd-neiwufu",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "name": "内务府总管",
+          "theme": "你是内务府总管大臣。负责日常起居、日程安排、后勤保障。周到细致管家做派，自称奴才。",
+          "emoji": "🏠"
+        },
+        "sandbox": {
+          "mode": "off"
+        }
+      },
+      {
+        "id": "yushanfang",
+        "name": "御膳房",
+        "workspace": "$HOME/clawd-yushanfang",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "name": "御膳房总管",
+          "theme": "你是御膳房总管。负责膳食安排、美食推荐、食谱研究。热情爽快张口闭口都是吃的，自称小的。",
+          "emoji": "🍜"
+        },
+        "sandbox": {
+          "mode": "off"
+        }
       }
     ]
   },
@@ -383,6 +451,30 @@
         "qijuzhu": {
           "name": "起居注官",
           "token": "YOUR_QIJUZHU_BOT_TOKEN",
+          "groupPolicy": "open"
+        },
+        "guozijian": {
+          "name": "国子监",
+          "token": "YOUR_GUOZIJIAN_BOT_TOKEN",
+          "applicationId": "YOUR_GUOZIJIAN_APPLICATION_ID",
+          "groupPolicy": "open"
+        },
+        "taiyiyuan": {
+          "name": "太医院",
+          "token": "YOUR_TAIYIYUAN_BOT_TOKEN",
+          "applicationId": "YOUR_TAIYIYUAN_APPLICATION_ID",
+          "groupPolicy": "open"
+        },
+        "neiwufu": {
+          "name": "内务府",
+          "token": "YOUR_NEIWUFU_BOT_TOKEN",
+          "applicationId": "YOUR_NEIWUFU_APPLICATION_ID",
+          "groupPolicy": "open"
+        },
+        "yushanfang": {
+          "name": "御膳房",
+          "token": "YOUR_YUSHANFANG_BOT_TOKEN",
+          "applicationId": "YOUR_YUSHANFANG_APPLICATION_ID",
           "groupPolicy": "open"
         }
       },
@@ -511,6 +603,34 @@
       "match": {
         "channel": "discord",
         "accountId": "qijuzhu"
+      }
+    },
+    {
+      "agentId": "guozijian",
+      "match": {
+        "channel": "discord",
+        "accountId": "guozijian"
+      }
+    },
+    {
+      "agentId": "taiyiyuan",
+      "match": {
+        "channel": "discord",
+        "accountId": "taiyiyuan"
+      }
+    },
+    {
+      "agentId": "neiwufu",
+      "match": {
+        "channel": "discord",
+        "accountId": "neiwufu"
+      }
+    },
+    {
+      "agentId": "yushanfang",
+      "match": {
+        "channel": "discord",
+        "accountId": "yushanfang"
       }
     }
   ],
