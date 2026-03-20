@@ -427,7 +427,9 @@ bash scripts/memory-backup.sh --dry-run
 bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/doctor.sh)
 ```
 
-**⚠️ 安全配置（必读）** → 多 Bot 模式下，必须在每个 Agent 的 `openclaw.json` 中设置 `allowBots: "mentions"`，否则会导致机器人互@无限循环！
+**⚠️ 安全配置（必读）— 防止 Bot 消息循环！**
+
+多 Bot 模式下，**必须**在每个 Agent 的 `openclaw.json` 中设置 `allowBots: "mentions"`：
 
 ```json
 {
@@ -443,34 +445,13 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/
 ```
 
 **配置说明：**
-- `allowBots: false` ❌ — 完全忽略 Bot 消息，多 Bot 协作失效
-- `allowBots: true` ❌ — 响应所有 Bot 消息，导致消息循环
-- `allowBots: "mentions"` ✅ — 只响应明确@的 Bot 消息，推荐！
-
-**@everyone 不触发？** → 每个 Bot 都要开 Message Content Intent + Server Members Intent（[Discord Developer Portal](https://discord.com/developers/applications) → Bot 页面 → Privileged Gateway Intents）
+- `allowBots: false` ❌ — 完全忽略 Bot 消息，多 Bot 协作失效（司礼监无法@六部）
+- `allowBots: true` ❌ — 响应所有 Bot 消息，导致无限循环
+- `allowBots: "mentions"` ✅ — 只响应明确@的 Bot 消息，完美平衡
 
 > 📌 **严禁使用 @everyone**：会触发所有 Bot 同时响应，导致频道瘫痪。
 
-**⚠️ 重要：防止 Bot 消息循环！**
-
-在 `openclaw.json` 的 Discord channel 配置中，**必须**设置 `allowBots: "mentions"`：
-
-```json
-{
-  "channels": {
-    "discord": {
-      "allowBots": "mentions",  // ← 必须是 "mentions"！
-      "groupPolicy": "open"
-    }
-  }
-}
-```
-
-- `allowBots: true` ❌ 会导致 Bot 互相响应，无限循环
-- `allowBots: false` ❌ 会导致多 Bot 协作失效（司礼监无法@其他部门）
-- `allowBots: "mentions"` ✅ 只响应明确 @ 的消息，完美平衡
-
-同时**严禁使用 `@everyone`** —— 会触发所有 Bot 同时响应，导致频道崩溃。
+**@everyone 不触发？** → 每个 Bot 都要开 Message Content Intent + Server Members Intent（[Discord Developer Portal](https://discord.com/developers/applications) → Bot 页面 → Privileged Gateway Intents）
 
 </details>
 
