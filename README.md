@@ -652,7 +652,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/
 
 ---
 
-**🔄 已安装？一键更新：** `bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)` · Docker：`docker pull boluobobo/ai-court:latest && docker compose up -d`
+**🔄 已安装？一键更新：** `bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/scripts/full-install.sh)` · Docker：`docker pull boluobobo/ai-court:latest && docker compose up -d`
 
 v3.5.3 | MIT License | [User Agreement](./docs/user-agreement.md) | [Privacy Policy](./docs/privacy-policy.md)
 
