@@ -21,3 +21,15 @@ Thumbs.db
 frontend/
 gui/dist/
 SECURITY-AUDIT.md
+
+# 临时文件和备份
+*.tar.gz
+*.tmp
+*.swp
+*~
+
+# 教程和示例（独立仓库）
+boluobobo-ai-court-tutorial/
+thinking-skills/
+meow/
+guangqi-sentinel/

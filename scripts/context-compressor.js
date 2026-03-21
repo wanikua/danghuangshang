@@ -2,6 +2,11 @@
 /**
  * Context Compressor - 智能上下文压缩
  * 
+ * @fileoverview 解决长任务链 context 爆炸问题
+ * @version 1.0.0
+ * @author 工部
+ */
+ * 
  * 解决长任务链 context 爆炸问题
  * - 保留关键决策、交付物、错误信息
  * - 压缩中间讨论、尝试过程
