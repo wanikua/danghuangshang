@@ -41,7 +41,7 @@
 ### 👑 一键登基
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/scripts/full-install.sh)
 ```
 
 **一行命令，5 分钟，你就是皇上。** [→ 快速开始](#快速开始)
