@@ -1,4 +1,4 @@
-[English Version](./README_EN.md) | [🏢 企业版 Become CEO (English)](https://github.com/wanikua/become-ceo) | [📚 完整文档](./docs/README.md)
+[English Version](./README_EN.md) | [日本語版](./README_JA.md) | [🏢 企业版 Become CEO (English)](https://github.com/wanikua/become-ceo) | [📚 完整文档](./docs/README.md)
 
 > **⚠️ 维权声明 / Originality Notice**
 >

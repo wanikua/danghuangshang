@@ -1,4 +1,4 @@
-[中文版](./README.md) | [🏢 Corporate Edition: Become CEO](https://github.com/wanikua/become-ceo) | [📚 Full Docs](./docs/README.md)
+[中文版](./README.md) | [日本語版](./README_JA.md) | [🏢 Corporate Edition: Become CEO](https://github.com/wanikua/become-ceo) | [📚 Full Docs](./docs/README.md)
 
 <!-- SEO Keywords: Three Departments and Six Ministries, Ming Dynasty, Six Ministries System, Zhongshu Province, Menxia Province, Shangshu Province, AI Court, AI Agent, Multi-Agent Collaboration, AI Management, Ancient China Governance, Modern Management, Organization Architecture, OpenClaw, multi-agent, ancient-china -->
 
