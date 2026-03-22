@@ -3,14 +3,12 @@
  * Task Store - 任务状态共享存储
  * 
  * @fileoverview 解决多 Agent 协作中的信息孤岛问题
- * @version 1.0.0
- * @author 工部
- */
- * 
- * 解决多 Agent 协作中的信息孤岛问题
  * - 任务创建、状态更新、输出收集
  * - 依赖管理、自动注入上游输出
  * - 支持 SQLite 持久化
+ * 
+ * @version 1.0.0
+ * @author 工部
  * 
  * 用法：
  *   node task-store.js create --id task_123 --plan plan.json
