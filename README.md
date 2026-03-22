@@ -54,6 +54,8 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/
 
 **一行命令，5 分钟，你就是皇上。** [→ 快速开始](#快速开始)
 
+> 🔒 **安全更新（2026-03-22）**：新增 Webhook 签名验证，防止伪造请求。[查看配置指南](./docs/webhook-security.md)
+
 </div>
 
 > ### ⚠️ **Discord 多 Bot 安全配置**（必读）
