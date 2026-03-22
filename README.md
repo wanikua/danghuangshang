@@ -42,16 +42,13 @@
 
 **方式一：本地安装（推荐）**
 ```bash
-<<<<<<< HEAD
 git clone https://github.com/wanikua/danghuangshang.git
 cd danghuangshang
-bash install.sh
+bash scripts/full-install.sh
 ```
 
 **方式二：远程一键安装**
 ```bash
-=======
->>>>>>> origin/main
 bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/scripts/full-install.sh)
 ```
 
