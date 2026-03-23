@@ -661,8 +661,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/
 
 | 小红书「菠萝菠菠🍍」 | 公众号「菠言菠语」 | 微信群 |
 |:---:|:---:|:---:|
-| <a href="https://www.xiaohongshu.com/user/profile/5a169df34eacab2bc9a7a22d"><img src="./images/avatar-xiaohongshu.png" width="150" style="border-radius:50%"/></a> | <img src="./images/qr-wechat-official.jpg" width="150"/> | ![8e02d54f8ec2145c9592ffd1fadb2068](https://github.com/user-attachments/assets/eb4daaba-d531-46cd-a3f4-789223752a34)
- |
+| <a href="https://www.xiaohongshu.com/user/profile/5a169df34eacab2bc9a7a22d"><img src="./images/avatar-xiaohongshu.png" width="150" style="border-radius:50%"/></a> | <img src="./images/qr-wechat-official.jpg" width="150"/> | <img src="./images/qr-wechat-group.png" width="150"/> |
 
 <details>
 <summary>相关链接 · 安全须知 · 免责声明</summary>
