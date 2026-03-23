@@ -1,0 +1,33 @@
+{
+  "name": "self-improving-agent",
+  "version": "3.0.5",
+  "description": "Self-improving Agent with reflection and learning capabilities",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "echo \"No tests specified\"",
+    "postinstall": "node -e \"console.log('✅ self-improving-agent installed')\""
+  },
+  "dependencies": {
+    "undici": "^5.28.0"
+  },
+  "peerDependencies": {
+    "@openclaw/core": ">=1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "openclaw",
+    "skill",
+    "self-improving",
+    "agent",
+    "reflection"
+  ],
+  "author": "wanikua",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wanikua/danghuangshang.git"
+  }
+}
