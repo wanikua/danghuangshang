@@ -82,7 +82,7 @@ fi
 echo ""
 
 # ---- 初始化工作区 ----
-echo -e "${YELLOW}[1/4] 初始化朝廷工作区...${NC}"
+echo -e "${YELLOW}[1/5] 初始化朝廷工作区...${NC}"
 WORKSPACE="$HOME/clawd"
 CONFIG_DIR="$HOME/.openclaw"
 CONFIG_FILE="openclaw.json"
@@ -190,7 +190,7 @@ create_agent_workspaces() {
 
 
 # ---- 生成配置文件 ----
-echo -e "${YELLOW}[2/4] 生成配置文件...${NC}"
+echo -e "${YELLOW}[3/5] 生成配置文件...${NC}"
 
 # 注意：配置从 GitHub 模板下载并自动适配部署模式。
 # 模板来源: configs/ming-neige/openclaw.json
@@ -291,7 +291,7 @@ fi
 
 # ---- 安装项目依赖 ----
 echo ""
-echo -e "${YELLOW}[2/4] 安装项目依赖...${NC}"
+echo -e "${YELLOW}[2/5] 安装项目依赖...${NC}"
 echo -e "  ${CYAN}正在安装主项目依赖...${NC}"
 cd "$WORKSPACE"
 npm install --loglevel=error
@@ -327,7 +327,7 @@ fi
 
 
 # ---- 可选：安装 Dashboard Web UI ----
-echo -e "${YELLOW}[3/4] Dashboard Web UI...${NC}"
+echo -e "${YELLOW}[4/5] Dashboard Web UI...${NC}"
 if [ "$INSTALL_GUI" = "yes" ]; then
     REPO_URL="https://github.com/wanikua/danghuangshang"
     GUI_DIR="$WORKSPACE/gui"
@@ -362,7 +362,7 @@ else
 fi
 
 # ---- 完成提示 ----
-echo -e "${YELLOW}[4/4] 配置完成！${NC}"
+echo -e "${YELLOW}[5/5] 配置完成！${NC}"
 echo ""
 echo "================================"
 echo -e "${GREEN}🎉 工作区初始化完成！${NC}"
