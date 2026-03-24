@@ -75,7 +75,7 @@
             "taiyiyuan",
             "neiwufu",
             "yushanfang"
-          ],
+          ]
         }
       },
       {
@@ -212,7 +212,7 @@
             "hanlin_jiantao",
             "hanlin_shujishi",
             "qijuzhu"
-          ],
+          ]
         },
         "runTimeoutSeconds": 600,
         "workspace": "$HOME/clawd-hanlin_zhang"
@@ -234,7 +234,7 @@
           "allowAgents": [
             "hanlin_shujishi",
             "qijuzhu"
-          ],
+          ]
         },
         "workspace": "$HOME/clawd-hanlin_xiuzhuan"
       },
@@ -255,7 +255,7 @@
           "allowAgents": [
             "hanlin_shujishi",
             "qijuzhu"
-          ],
+          ]
         },
         "workspace": "$HOME/clawd-hanlin_bianxiu"
       },
@@ -634,5 +634,5 @@
         "@here"
       ]
     }
-  },
+  }
 }
