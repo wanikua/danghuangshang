@@ -117,12 +117,19 @@ CONFIG_FILE="openclaw.json"
 mkdir -p "$WORKSPACE/memory"
 cd "$WORKSPACE"
 
-# ---- 安装项目依赖 ----
+# ---- 安装项目依赖（可选）----
 echo ""
-echo -e "${YELLOW}[5/6] 安装项目依赖...${NC}"
-echo -e "  ${CYAN}正在安装主项目依赖...${NC}"
-npm install --loglevel=error
-echo -e "  ${GREEN}✓${NC} 项目依赖已安装"
+echo -e "${YELLOW}[5/6] 检查项目依赖...${NC}"
+if [ -f "$WORKSPACE/package.json" ]; then
+  echo -e "  ${CYAN}正在安装主项目依赖...${NC}"
+  cd "$WORKSPACE"
+  npm install --loglevel=error
+  echo -e "  ${GREEN}✓${NC} 项目依赖已安装"
+else
+  echo -e "  ${GREEN}✓${NC} 跳过项目依赖安装（无 package.json）"
+  echo -e "  ${CYAN}提示：如需安装项目依赖，请先克隆仓库:${NC}"
+  echo -e "    git clone https://github.com/wanikua/danghuangshang.git $WORKSPACE"
+fi
 
 # ---- 安装默认 Skill: self-improving ----
 echo ""
