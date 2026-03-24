@@ -251,8 +251,13 @@ echo -e "${BLUE}[5/7] 安装依赖...${NC}"
 
 echo -e "  ${CYAN}正在安装项目依赖...${NC}"
 cd "$INSTALL_DIR"
-npm install --loglevel=error
-echo -e "  ${GREEN}✓${NC} 项目依赖已安装"
+if [ -f "package.json" ]; then
+  npm install --loglevel=error
+  echo -e "  ${GREEN}✓${NC} 项目依赖已安装"
+else
+  echo -e "  ${YELLOW}⚠${NC} package.json 不存在，跳过项目依赖安装"
+  echo -e "  ${CYAN}提示：请检查仓库是否完整克隆${NC}"
+fi
 
 echo ""
 
