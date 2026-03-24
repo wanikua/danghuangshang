@@ -125,6 +125,8 @@ bash scripts/full-install.sh
 
 **优点**：可离线使用，可修改安装脚本，可查看所有文件，**包含完整人设注入**。
 
+> ⚠️ **安装遇到问题？** → [查看故障排除指南](docs/install-troubleshooting.md)
+
 #### 方式二：远程一键安装
 
 **Linux / macOS**:
