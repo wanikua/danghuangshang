@@ -1,38 +1,77 @@
 services:
   court:
     image: boluobobo/ai-court:latest
-    # platform: linux/amd64  # ⚠️ 仅在需要强制 amd64 时取消注释（不推荐）
-    build: .   # 本地构建备选（无预构建镜像时自动 build）
+    # platform: linux/amd64  # ⚠️ 仅在需要强制 amd64 时取消注释
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILDKIT_INLINE_CACHE=1
     container_name: ai-court
     restart: unless-stopped
-    logging:
-      driver: json-file
-      options:
-        max-size: "50m"
-        max-file: "3"
+    
+    # 资源限制
     deploy:
       resources:
         limits:
           memory: 4G
           cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+    
+    # 日志配置
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
+    
+    # 端口映射（默认绑定 localhost，生产环境请修改）
     ports:
       - "127.0.0.1:18789:18789"   # Gateway Dashboard
-      - "127.0.0.1:18795:18795"   # 菠萝 GUI（可选）
+      - "127.0.0.1:18795:18795"   # 菠萝 GUI
+    
+    # 数据持久化
     volumes:
-      # 配置持久化（init-court 生成的配置不会因容器重建丢失）
       - court-config:/home/court/.openclaw
-      # 工作区持久化（记忆、日志等）
       - court-workspace:/home/court/clawd
-      # OpenViking 数据持久化（可选）
       - court-openviking:/home/court/.openviking
+      # 可选：挂载自定义配置
+      # - ./openclaw.json:/home/court/.openclaw/openclaw.json:ro
+      # 可选：挂载自定义 skills
+      # - ./skills:/home/court/clawd/skills:ro
+    
+    # 环境变量
+    environment:
+      - TZ=Asia/Shanghai
+      - NODE_ENV=production
+      - OPENCLAW_WORKSPACE=/home/court/clawd
+      - OPENCLAW_CONFIG_DIR=/home/court/.openclaw
+    
+    # 健康检查
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:18789/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 60s   # 等待配置初始化
+      start_period: 60s
+    
+    # 安全选项
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    tmpfs:
+      - /tmp:size=100M
 
 volumes:
   court-config:
+    driver: local
   court-workspace:
+    driver: local
   court-openviking:
+    driver: local
+
+networks:
+  default:
+    driver: bridge

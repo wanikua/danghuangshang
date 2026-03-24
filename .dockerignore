@@ -1,9 +1,70 @@
-node_modules
+# Git
 .git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# 文档
+*.md
+!README.md
+docs/
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
+
+# 测试
+tests/
+*.test.js
+*.spec.js
+__tests__/
+coverage/
+.nyc_output/
+
+# 开发工具
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# 依赖（Docker 内重新安装）
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# 构建产物（Docker 内重新构建）
+dist/
+build/
 *.log
-gui/node_modules
-gui/dist
-evidence/
-images/
-skills/*/node_modules
-gui/server/node_modules
+
+# 环境配置（敏感）
+.env
+.env.*
+openclaw.json
+*.bak
+
+# 运行时数据
+.openclaw/
+memory/
+logs/
+*.pid
+*.lock
+
+# 嵌套仓库（可选，减小镜像体积）
+meow/
+guangqi-sentinel/
+thinking-skills/
+boluobobo-site/
+art-of-war-skill/
+melonclaw/
+likuanwang.com/
+wanikua/
+boluobobo-ai-court-tutorial/
+projects/boluo-gui/
+projects/boluo-gui-frontend/
