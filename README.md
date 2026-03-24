@@ -120,10 +120,10 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/
 ```bash
 git clone https://github.com/wanikua/danghuangshang.git
 cd danghuangshang
-bash install.sh
+bash scripts/full-install.sh
 ```
 
-**优点**：可离线使用，可修改安装脚本，可查看所有文件。
+**优点**：可离线使用，可修改安装脚本，可查看所有文件，**包含完整人设注入**。
 
 #### 方式二：远程一键安装
 
@@ -137,7 +137,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/
 powershell -ExecutionPolicy Bypass -File (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/wanikua/danghuangshang/main/install.ps1')
 ```
 
-**优点**：无需 git，复制粘贴一行命令。
+**优点**：无需 git，复制粘贴一行命令，**包含完整人设注入**。
 
 #### 方式三：已有 OpenClaw？精简版
 
@@ -145,7 +145,7 @@ powershell -ExecutionPolicy Bypass -File (New-Object Net.WebClient).DownloadStri
 bash <(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install-lite.sh)
 ```
 
-**适用**：已安装 OpenClaw，只需配置模板。
+**适用**：已安装 OpenClaw，只需配置模板。**包含人设注入**。
 
 > ⚠️ **注意**：旧版 `install.sh` 不支持远程执行（会报 `/dev/fd` 路径错误）。请使用 `scripts/full-install.sh` 或先 `git clone`。
 
