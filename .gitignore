@@ -33,3 +33,40 @@ boluobobo-ai-court-tutorial/
 thinking-skills/
 meow/
 guangqi-sentinel/
+
+# 本地工作区文件
+AGENTS.md
+SOUL.md
+USER.md
+TOOLS.md
+MEMORY.md
+HEARTBEAT.md
+IDENTITY.md
+
+# 中文临时文件
+*.md.backup
+*.txt.backup
+*.txt.gz
+*\346\264\273*
+*\345\260\217*
+
+# 本地目录
+memory/
+avatars/
+promo/
+minimax-pr/
+projects/edict-case/
+projects/first-commit/
+projects/become-ceo-iterations/
+projects/become-ceo-promo/
+
+# skills 中的临时文件
+skills/*/.clawdhub/
+skills/*/_meta.json
+
+# 脚本
+scripts/melonclaw-check.sh
+
+# 缓存
+__pycache__/
+.clawdhub/
