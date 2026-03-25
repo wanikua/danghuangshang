@@ -1,0 +1,9 @@
+{
+  "name": "twclaw",
+  "version": "1.0.0",
+  "description": "Twitter/X CLI for OpenClaw — mock implementation",
+  "bin": {
+    "twclaw": "./bin/twclaw.js"
+  },
+  "license": "MIT"
+}

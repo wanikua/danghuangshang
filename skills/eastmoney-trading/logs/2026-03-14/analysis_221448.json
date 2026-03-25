@@ -1,0 +1,122 @@
+{
+  "analysis": {
+    "total_market_value": 0,
+    "total_cost": 13962.5,
+    "total_profit": -13962.5,
+    "total_profit_percent": -100.0,
+    "stock_count": 8,
+    "top3_weight": 0,
+    "stock_details": [
+      {
+        "code": "159688",
+        "name": "恒生互联",
+        "volume": 2500,
+        "cost_price": 1.032,
+        "current_price": 0,
+        "change_percent": 0,
+        "market_value": 0,
+        "profit": -2580.0,
+        "profit_percent": -100.0,
+        "weight": 0
+      },
+      {
+        "code": "159770",
+        "name": "机器人AI",
+        "volume": 1000,
+        "cost_price": 1.12,
+        "current_price": 0,
+        "change_percent": 0,
+        "market_value": 0,
+        "profit": -1120.0,
+        "profit_percent": -100.0,
+        "weight": 0
+      },
+      {
+        "code": "159842",
+        "name": "券商ETF",
+        "volume": 1000,
+        "cost_price": 1.096,
+        "current_price": 0,
+        "change_percent": 0,
+        "market_value": 0,
+        "profit": -1096.0,
+        "profit_percent": -100.0,
+        "weight": 0
+      },
+      {
+        "code": "512010",
+        "name": "医药ETF",
+        "volume": 7000,
+        "cost_price": 0.407,
+        "current_price": 0,
+        "change_percent": 0,
+        "market_value": 0,
+        "profit": -2849.0,
+        "profit_percent": -100.0,
+        "weight": 0
+      },
+      {
+        "code": "512710",
+        "name": "军工龙头",
+        "volume": 1500,
+        "cost_price": 0.865,
+        "current_price": 0,
+        "change_percent": 0,
+        "market_value": 0,
+        "profit": -1297.5,
+        "profit_percent": -100.0,
+        "weight": 0
+      },
+      {
+        "code": "513770",
+        "name": "港股互联",
+        "volume": 5000,
+        "cost_price": 0.519,
+        "current_price": 0,
+        "change_percent": 0,
+        "market_value": 0,
+        "profit": -2595.0,
+        "profit_percent": -100.0,
+        "weight": 0
+      },
+      {
+        "code": "520560",
+        "name": "香港30",
+        "volume": 1000,
+        "cost_price": 0.87,
+        "current_price": 0,
+        "change_percent": 0,
+        "market_value": 0,
+        "profit": -870.0,
+        "profit_percent": -100.0,
+        "weight": 0
+      },
+      {
+        "code": "588000",
+        "name": "科创50",
+        "volume": 1000,
+        "cost_price": 1.555,
+        "current_price": 0,
+        "change_percent": 0,
+        "market_value": 0,
+        "profit": -1555.0,
+        "profit_percent": -100.0,
+        "weight": 0
+      }
+    ],
+    "update_time": "2026-03-14 22:14:48"
+  },
+  "suggestions": [
+    "✅ 持仓分散度良好",
+    "⚠️ 亏损超过 10%，建议复盘买入逻辑，考虑止损或补仓",
+    "🛑 恒生互联(159688) 亏损超 20%，建议检查基本面是否恶化",
+    "🛑 机器人AI(159770) 亏损超 20%，建议检查基本面是否恶化",
+    "🛑 券商ETF(159842) 亏损超 20%，建议检查基本面是否恶化",
+    "🛑 医药ETF(512010) 亏损超 20%，建议检查基本面是否恶化",
+    "🛑 军工龙头(512710) 亏损超 20%，建议检查基本面是否恶化",
+    "🛑 港股互联(513770) 亏损超 20%，建议检查基本面是否恶化",
+    "🛑 香港30(520560) 亏损超 20%，建议检查基本面是否恶化",
+    "🛑 科创50(588000) 亏损超 20%，建议检查基本面是否恶化"
+  ],
+  "market_data": {}
+}

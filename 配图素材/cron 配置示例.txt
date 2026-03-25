@@ -1,0 +1,28 @@
+# 小红书教程 - cron 配置示例
+# 截图时可用此内容作为参考
+
+# ========== 朝廷自动化任务配置 ==========
+
+# 每天下午 6 点生成日报
+0 18 * * * cd ~/clawd && ./daily-report.sh >> ~/clawd/reports/daily.log 2>&1
+
+# 每周五下午 5 点备份代码到 GitHub
+0 17 * * 5 cd ~/clawd && git add . && git commit -m "周备份 $(date +'%Y-%m-%d')" && git push origin main >> ~/clawd/git-backup.log 2>&1
+
+# 每周日凌晨 2 点备份数据库
+0 2 * * 0 mysqldump -u root -p'database' database > ~/backups/db-$(date +'%Y%m%d').sql
+
+# 每小时健康检查
+0 * * * * cd ~/clawd && ./health-check.sh >> ~/clawd/health.log 2>&1
+
+# 每月 1 号上午 10 点生成财务报告
+0 10 1 * * cd ~/clawd && ./monthly-finance.sh >> ~/clawd/reports/finance.log 2>&1
+
+# 每天早上 9 点在 Discord 发送今日计划
+0 9 * * * cd ~/clawd && clawdbot chat "在 Discord 日报频道发送今日工作计划提醒"
+
+# ========== 环境变量配置 ==========
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+LANG=zh_CN.UTF-8
+MAILTO=your-email@example.com

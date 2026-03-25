@@ -244,6 +244,83 @@ jq --arg regime "$TARGET_REGIME" '._regime = $regime' \
 echo ""
 
 # ============================================
+# 步骤 4.5: 初始化工作区（创建 SOUL.md 等）
+# ============================================
+
+echo -e "${BLUE}[4.5/7] 初始化工作区...${NC}"
+
+# 确保 HOME 变量有效
+if [ -z "$HOME" ]; then
+  HOME=$(getent passwd "$(id -un)" | cut -d: -f6)
+  [ -z "$HOME" ] && HOME="/root"
+  export HOME
+fi
+
+WORKSPACE="${WORKSPACE:-$HOME/clawd}"
+
+# 检查工作区
+if [ -d "$WORKSPACE" ]; then
+  echo -e "  ${YELLOW}⚠ 工作区已存在：$WORKSPACE${NC}"
+else
+  mkdir -p "$WORKSPACE" || {
+    echo -e "  ${RED}❌ 无法创建工作区：$WORKSPACE${NC}"
+    exit 1
+  }
+  echo -e "  ${GREEN}✓ 工作区已创建：$WORKSPACE${NC}"
+fi
+
+cd "$WORKSPACE"
+
+# 创建 SOUL.md
+if [ ! -f "$WORKSPACE/SOUL.md" ]; then
+  cat > "$WORKSPACE/SOUL.md" << 'SOUL_EOF'
+# SOUL.md - 朝廷行为准则
+
+## 铁律
+1. 废话不要多 — 说重点
+2. 汇报要及时 — 做完就说
+3. 做事要靠谱 — 先想后做
+
+## 沟通风格
+- 中文为主
+- 直接说结论，需要细节再展开
+SOUL_EOF
+  cp "$WORKSPACE/SOUL.md" "$WORKSPACE/SOUL.md.example"
+  echo -e "  ${GREEN}✓ SOUL.md 已创建${NC}"
+else
+  echo -e "  ${GREEN}✓ SOUL.md 已存在${NC}"
+fi
+
+# 创建 IDENTITY.md
+if [ ! -f "$WORKSPACE/IDENTITY.md" ]; then
+  cat > "$WORKSPACE/IDENTITY.md" << 'ID_EOF'
+# IDENTITY.md - 身份信息
+
+- **Name:** AI 朝廷
+- **Creature:** 大明朝廷 AI 集群
+- **Vibe:** 忠诚干练、各司其职
+- **Emoji:** 🏛️
+ID_EOF
+  echo -e "  ${GREEN}✓ IDENTITY.md 已创建${NC}"
+fi
+
+# 创建 USER.md
+if [ ! -f "$WORKSPACE/USER.md" ]; then
+  cat > "$WORKSPACE/USER.md" << 'USER_EOF'
+# USER.md - 关于你
+
+- **称呼:** （填你的称呼）
+- **语言:** 中文
+- **风格:** 简洁高效
+USER_EOF
+  echo -e "  ${GREEN}✓ USER.md 已创建${NC}"
+fi
+
+mkdir -p "$WORKSPACE/memory"
+
+echo ""
+
+# ============================================
 # 步骤 5: 安装项目依赖
 # ============================================
 

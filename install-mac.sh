@@ -111,11 +111,39 @@ fi
 
 # ---- 4. 初始化工作区 ----
 echo -e "${YELLOW}[4/6] 初始化工作区...${NC}"
-WORKSPACE="$HOME/clawd"
-CONFIG_DIR="$HOME/.openclaw"
+
+# 确保 HOME 变量有效（修复非交互式 shell 环境）
+if [ -z "$HOME" ]; then
+  HOME=$(getent passwd "$(id -un)" | cut -d: -f6)
+  [ -z "$HOME" ] && HOME="$HOME"
+  export HOME
+fi
+
+WORKSPACE="${WORKSPACE:-$HOME/clawd}"
+CONFIG_DIR="${CONFIG_DIR:-$HOME/.openclaw}"
 CONFIG_FILE="openclaw.json"
-mkdir -p "$WORKSPACE/memory"
-cd "$WORKSPACE"
+
+# 检查工作区是否存在
+if [ -d "$WORKSPACE" ]; then
+  echo -e "  ${YELLOW}⚠ 工作区已存在：$WORKSPACE${NC}"
+else
+  mkdir -p "$WORKSPACE" || {
+    echo -e "  ${RED}❌ 无法创建工作区：$WORKSPACE${NC}"
+    echo "     请检查权限或手动创建：mkdir -p $WORKSPACE"
+    exit 1
+  }
+  echo -e "  ${GREEN}✓ 工作区已创建：$WORKSPACE${NC}"
+fi
+
+mkdir -p "$WORKSPACE/memory" || {
+  echo -e "  ${RED}❌ 无法创建 memory 目录${NC}"
+  exit 1
+}
+
+cd "$WORKSPACE" || {
+  echo -e "  ${RED}❌ 无法进入工作区${NC}"
+  exit 1
+}
 
 # ---- 安装项目依赖（可选）----
 echo ""

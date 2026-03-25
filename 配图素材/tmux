@@ -1,0 +1,25 @@
+===== tmux 三面板演示 =====
+echo '🌐 网络状态' && echo '───────────
+──────────────' && echo '公网 IP:' && c
+url -s ifconfig.me 2>/dev/null || echo
+'144.24.xx.xx' && echo '' && echo '连接
+状态:' && netstat -tuln 2>/dev/null | h
+ead -5 || ss -tuln | head -5
+ubuntu@vibe-server:~/clawd$ echo '🌐 网
+络状态' && echo '──────────────────────
+───' && echo '公网 IP:' && curl -s ifco
+nfig.me 2>/dev/null || echo '144.24.xx.
+xx' && echo '' && echo '连接状态:' && n
+etstat -tuln 2>/dev/null | head -5 || s
+s -tuln | head -5
+🌐 网络状态
+─────────────────────────
+公网 IP:
+144.24.247.79
+连接状态:
+ubuntu@vibe-server:~/clawd$
+
+===== 面板列表 =====
+0: [40x24] [history 10/2000, 37031 bytes] %0
+1: [39x12] [history 20/2000, 31592 bytes] %1
+2: [39x11] [history 8/2000, 16929 bytes] %2 (active)
