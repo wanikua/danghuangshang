@@ -31,6 +31,7 @@ LABEL maintainer="wanikua" \
 
 # 安装系统依赖（合并为单层减小体积）
 RUN apk add --no-cache \
+        bash \
         curl \
         git \
         ca-certificates \
@@ -79,12 +80,11 @@ RUN chmod +x /entrypoint.sh /init-docker.sh
 
 # 复制 GUI 构建产物
 COPY --from=gui-builder /build/dist/ /opt/gui/dist/
-COPY --from=gui-builder /build/node_modules/ /opt/gui/server/node_modules/
 COPY gui/server/ /opt/gui/server/
 COPY gui/package.json /opt/gui/package.json
 
 # 安装 GUI 后端依赖
-RUN cd /opt/gui/server && npm ci --only=production --loglevel=error && \
+RUN cd /opt/gui/server && npm ci --omit=dev --loglevel=error && \
     chown -R court:court /opt/gui
 
 # 复制 Skills（只读模板）

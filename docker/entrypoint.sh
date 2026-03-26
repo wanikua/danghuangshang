@@ -189,6 +189,8 @@ if command -v openclaw &>/dev/null && [ -f "$CONFIG_DIR/openclaw.json" ]; then
     fi
 fi
 
-"$@" &
-GATEWAY_PID=$!
-wait $GATEWAY_PID
+if [ $# -gt 0 ]; then
+    "$@" &
+    GATEWAY_PID=$!
+    wait $GATEWAY_PID || true
+fi

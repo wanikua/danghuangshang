@@ -237,7 +237,7 @@
       "enabled": true,
       "dmPolicy": "open",
       "groupPolicy": "open",
-      "allowBots": true,
+      "allowBots": "mentions",
       "accounts": {
         "board": {
           "name": "Board",
@@ -334,7 +334,7 @@
       "enabled": false,
       "dmPolicy": "open",
       "groupPolicy": "open",
-      "allowBots": true,
+      "allowBots": "mentions",
       "accounts": {
         "ceo": {
           "appId": "YOUR_CEO_APP_ID",

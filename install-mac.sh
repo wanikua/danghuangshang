@@ -97,7 +97,7 @@ if command -v openclaw &>/dev/null; then
     echo -e "  ${GREEN}✓ OpenClaw $(openclaw --version 2>/dev/null) 已安装${NC}"
 else
     echo -e "  ${CYAN}→ 安装 OpenClaw...${NC}"
-    npm install -g openclaw 2>/dev/null
+    npm install -g openclaw 2>/dev/null || true
     if command -v openclaw &>/dev/null; then
         CLI_CMD="openclaw"
         CONFIG_DIR="$HOME/.openclaw"

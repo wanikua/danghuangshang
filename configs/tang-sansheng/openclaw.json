@@ -291,7 +291,7 @@
       "enabled": true,
       "dmPolicy": "open",
       "groupPolicy": "open",
-      "allowBots": false,
+      "allowBots": "mentions",
       "accounts": {
         "silijian": {
           "name": "司礼监",
@@ -374,7 +374,7 @@
       "enabled": false,
       "dmPolicy": "open",
       "groupPolicy": "open",
-      "allowBots": false,
+      "allowBots": "mentions",
       "accounts": {
         "silijian": {
           "appId": "YOUR_FEISHU_APP_ID",

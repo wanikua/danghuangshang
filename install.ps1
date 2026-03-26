@@ -278,13 +278,13 @@ Get-Content $env:APPDATA\..\Local\openclaw\logs\gateway.log -Tail 50
 
 **方式 A：使用 WSL2（推荐）**
 \`\`\`powershell
-wsl bash -c "$(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install-lite.sh)"
+wsl bash -c "`$(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install-lite.sh)"
 \`\`\`
 
 **方式 B：使用 Git Bash**
 安装 Git for Windows 后，在 Git Bash 中运行：
 \`\`\`bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install-lite.sh)"
+bash -c "`$(curl -fsSL https://raw.githubusercontent.com/wanikua/danghuangshang/main/install-lite.sh)"
 \`\`\`
 
 > 详细说明见 [docs/windows-wsl.md](https://github.com/wanikua/danghuangshang/blob/main/docs/windows-wsl.md)

@@ -87,7 +87,7 @@ echo ""
 echo -e "${YELLOW}[1/5] 初始化朝廷工作区...${NC}"
 
 # 确保 HOME 变量有效（修复 Windows Git Bash 和非交互式 shell 环境）
-if [ -z "$HOME" ]; then
+if [ -z "${HOME:-}" ]; then
   HOME=$(getent passwd "$(id -un)" | cut -d: -f6)
   [ -z "$HOME" ] && HOME="/root"
   export HOME
