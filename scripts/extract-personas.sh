@@ -14,7 +14,6 @@ REGIME="${1:-ming-neige}"
 CONFIG_FILE="$DANGHUANGSHANG_ROOT/configs/$REGIME/openclaw.json"
 AGENTS_DIR="$DANGHUANGSHANG_ROOT/configs/$REGIME/agents"
 
-CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 

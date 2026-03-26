@@ -349,7 +349,6 @@ for g in guilds:
 
         # 用第一个有效 Token 获取服务器角色
         FIRST_TOKEN=""
-        FIRST_GUILD=""
         DISCORD_ACCOUNTS_2=$(json_keys "$CONFIG_FILE" "channels.discord.accounts")
         while IFS= read -r acct; do
             [ -z "$acct" ] && continue
@@ -386,7 +385,8 @@ try:
         if perm & MENTION_EVERYONE:
             managed = r.get('managed', False)
             tag = ' (Bot 托管角色)' if managed else ''
-            problems.append(f'{r["name"]}{tag}')
+            name = r.get('name', '?')
+            problems.append(name + tag)
     if problems:
         print('|'.join(problems))
 except: pass

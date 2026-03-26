@@ -94,8 +94,9 @@ backup_file() {
     return 0
   fi
   
-  local dest="$dest_dir/$(basename "$src").$TIMESTAMP"
-  
+  local dest
+  dest="$dest_dir/$(basename "$src").$TIMESTAMP"
+
   if cp -p "$src" "$dest" 2>/dev/null; then
     chmod 600 "$dest"
     echo -e "  ${GREEN}✓${NC} $desc → $dest"
@@ -122,8 +123,9 @@ backup_dir() {
     return 0
   fi
   
-  local dest="$dest_dir/$(basename "$src").$TIMESTAMP.tar.gz"
-  
+  local dest
+  dest="$dest_dir/$(basename "$src").$TIMESTAMP.tar.gz"
+
   if tar -czf "$dest" -C "$(dirname "$src")" "$(basename "$src")" 2>/dev/null; then
     chmod 600 "$dest"
     echo -e "  ${GREEN}✓${NC} $desc → $dest"

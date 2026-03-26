@@ -221,9 +221,6 @@ if [ -d "$BACKUP_DIR" ]; then
     echo -e "  最新备份：$backup_date"
     
     # 检查备份是否在 24 小时内
-    backup_timestamp=$(echo "$backup_date" | sed 's/_//g')
-    current_timestamp=$(date +%Y%m%d%H%M%S)
-    
     # 简化检查：如果是今天的备份
     backup_today=$(echo "$backup_date" | cut -d_ -f1)
     today=$(date +%Y%m%d)

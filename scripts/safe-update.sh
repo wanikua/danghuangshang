@@ -82,7 +82,8 @@ safety_check() {
     
     # 检查 1: allowBots 设置
     if [ -f "$OPENCLAW_CONFIG" ]; then
-        local allow_bots=$(grep -o '"allowBots"[[:space:]]*:[[:space:]]*"[^"]*"' "$OPENCLAW_CONFIG" | head -1)
+        local allow_bots
+        allow_bots=$(grep -o '"allowBots"[[:space:]]*:[[:space:]]*"[^"]*"' "$OPENCLAW_CONFIG" | head -1)
         if echo "$allow_bots" | grep -q '"mentions"'; then
             success "allowBots 配置正确：mentions"
         elif echo "$allow_bots" | grep -q 'true'; then
@@ -140,7 +141,8 @@ do_update() {
 
 # 回滚
 rollback() {
-    local latest_backup=$(cat "$BACKUP_DIR/latest" 2>/dev/null)
+    local latest_backup
+    latest_backup=$(cat "$BACKUP_DIR/latest" 2>/dev/null)
     
     if [ -z "$latest_backup" ] || [ ! -d "$latest_backup" ]; then
         error "未找到备份，无法回滚"

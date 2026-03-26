@@ -1,5 +1,4 @@
 #!/bin/bash
-AUTH_FILE="/home/ubuntu/.clawdbot/agents/main/agent/auth-profiles.json"
 LOG="/tmp/oauth-refresh.log"
 
 echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) Starting OAuth token refresh..." >> "$LOG"

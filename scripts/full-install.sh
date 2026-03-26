@@ -134,15 +134,14 @@ CLAWDBOT_CONFIG="$HOME/.clawdbot/openclaw.json"
 CONFIG_FILE="$CONFIG_DIR/openclaw.json"
 
 # 检测配置目录
-ACTUAL_CONFIG_DIR="$CONFIG_DIR"
 if [ -f "$CLAWDBOT_CONFIG" ] && [ ! -f "$CONFIG_FILE" ]; then
-  ACTUAL_CONFIG_DIR="$HOME/.clawdbot"
+  CONFIG_DIR="$HOME/.clawdbot"
   CONFIG_FILE="$CLAWDBOT_CONFIG"
   echo -e "  ${YELLOW}i${NC} 使用 .clawdbot 配置目录"
 elif [ -f "$CONFIG_FILE" ]; then
   echo -e "  ${YELLOW}i${NC} 使用 .openclaw 配置目录"
 elif [ -f "$CLAWDBOT_CONFIG" ]; then
-  ACTUAL_CONFIG_DIR="$HOME/.clawdbot"
+  CONFIG_DIR="$HOME/.clawdbot"
   CONFIG_FILE="$CLAWDBOT_CONFIG"
   echo -e "  ${YELLOW}i${NC} 使用 .clawdbot 配置目录"
 else
