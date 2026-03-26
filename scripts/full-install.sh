@@ -24,21 +24,29 @@ echo -e "${CYAN}╚════════════════════�
 echo ""
 
 # ============================================
-# 步骤 0: 克隆仓库（如果是远程执行）
+# 步骤 0: 准备源码（本地运行优先，远程执行时再克隆）
 # ============================================
 
 echo -e "${BLUE}[0/6] 准备环境...${NC}"
 
+SCRIPT_PATH="${BASH_SOURCE[0]}"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 INSTALL_DIR="$HOME/danghuangshang-installer"
 
-if [ -d "$INSTALL_DIR" ]; then
-  echo -e "  ${YELLOW}i${NC} 清理旧安装目录"
-  rm -rf "$INSTALL_DIR"
-fi
+if [ -f "$REPO_ROOT/openclaw.example.json" ] && [ -d "$REPO_ROOT/configs" ]; then
+  INSTALL_DIR="$REPO_ROOT"
+  echo -e "  ${GREEN}✓${NC} 使用当前本地仓库：$INSTALL_DIR"
+else
+  if [ -d "$INSTALL_DIR" ]; then
+    echo -e "  ${YELLOW}i${NC} 清理旧安装目录"
+    rm -rf "$INSTALL_DIR"
+  fi
 
-echo -e "  ${CYAN}正在克隆仓库...${NC}"
-git clone --depth 1 https://github.com/wanikua/danghuangshang.git "$INSTALL_DIR"
-echo -e "  ${GREEN}✓${NC} 仓库已克隆到：$INSTALL_DIR"
+  echo -e "  ${CYAN}正在克隆仓库...${NC}"
+  git clone --depth 1 https://github.com/wanikua/danghuangshang.git "$INSTALL_DIR"
+  echo -e "  ${GREEN}✓${NC} 仓库已克隆到：$INSTALL_DIR"
+fi
 
 cd "$INSTALL_DIR"
 
