@@ -172,9 +172,17 @@ echo ""
 
 echo -e "${BLUE}[4/6] 生成配置...${NC}"
 
-# 复制模板
-cp "$TEMPLATE_CONFIG" "$CONFIG_FILE"
-echo -e "  ${GREEN}✓${NC} 已复制配置模板"
+# 原子操作：先复制到临时文件
+TEMP_CONFIG="${CONFIG_FILE}.tmp.$$"
+cp "$TEMPLATE_CONFIG" "$TEMP_CONFIG" || {
+  echo -e "  ${RED}✗ 复制模板失败${NC}"
+  exit 1
+}
+echo -e "  ${GREEN}✓${NC} 已复制配置模板（临时）"
+
+# 保存原路径，后续操作在临时文件上
+CONFIG_FILE_ORIG="$CONFIG_FILE"
+CONFIG_FILE="$TEMP_CONFIG"
 
 # 注入人设
 if [ -d "$AGENTS_DIR" ]; then
