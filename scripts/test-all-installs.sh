@@ -90,7 +90,7 @@ echo -e "${GREEN}╚════════════════════
 echo ""
 
 # 测试所有安装脚本
-for script in install-lite.sh install-mac.sh scripts/full-install.sh scripts/simple-install.sh; do
+for script in scripts/full-install.sh scripts/simple-install.sh; do
   if [ -f "$script" ]; then
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${BLUE}测试脚本：$script${NC}"

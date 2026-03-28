@@ -24,7 +24,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # 路径配置
-CLAWD_DIR="${CLAWD_DIR:-$HOME/clawd}"
+CLAWD_DIR="${CLAWD_DIR:-$HOME/.openclaw}"
 BACKUP_DIR="${BACKUP_DIR:-$CLAWD_DIR/backups}"
 OPENCLAW_CONFIG="${OPENCLAW_CONFIG:-$HOME/.openclaw/openclaw.json}"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
@@ -150,7 +150,11 @@ rollback() {
     
     info "正在回滚到：$latest_backup"
     
-    # 恢复 openclaw.json
+    # 恢复 openclaw.json（先备份当前配置）
+    if [ -f "$OPENCLAW_CONFIG" ]; then
+        cp "$OPENCLAW_CONFIG" "$BACKUP_DIR/pre_rollback_$TIMESTAMP.json"
+        warn "已备份当前配置到：$BACKUP_DIR/pre_rollback_$TIMESTAMP.json"
+    fi
     if [ -f "$latest_backup/openclaw.json" ]; then
         cp "$latest_backup/openclaw.json" "$OPENCLAW_CONFIG"
         success "已恢复 openclaw.json"

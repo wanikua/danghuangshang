@@ -327,7 +327,13 @@ echo -e "${GREEN}✓ 安装完成！${NC}"
 echo ""
 echo -e "  制度：${GREEN}$TARGET_REGIME${NC}"
 echo -e "  配置：${CYAN}$CONFIG_FILE${NC}"
-echo -e "  临时安装目录：${YELLOW}$INSTALL_DIR${NC}（可手动删除）"
+echo -e "  临时安装目录：${YELLOW}$INSTALL_DIR${NC}"
+echo ""
+read -p "是否删除临时安装目录？(y/n) " CLEANUP
+if [ "$CLEANUP" = "y" ] || [ "$CLEANUP" = "Y" ]; then
+  rm -rf "$INSTALL_DIR"
+  echo -e "  ${GREEN}✓${NC} 已清理临时目录"
+fi
 echo ""
 echo "后续操作:"
 echo ""

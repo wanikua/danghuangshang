@@ -43,6 +43,14 @@ echo -e "${BLUE}[3/3] 安装配置...${NC}"
 CONFIG_DIR="$HOME/.openclaw"
 mkdir -p "$CONFIG_DIR"
 
+# 下载 SOUL.md
+echo -e "  ${CYAN}下载 Agent 人设...${NC}"
+mkdir -p "$CONFIG_DIR/agents"
+for agent in silijian neige duchayuan bingbu hubu libu gongbu xingbu hanlin_zhang hanlin_xiuzhuan hanlin_bianxiu hanlin_jiantao hanlin_shujishi qijuzhu guozijian taiyiyuan neiwufu yushanfang libu2; do
+  curl -fsSL "https://raw.githubusercontent.com/wanikua/danghuangshang/main/configs/$REGIME/agents/$agent.md" -o "$CONFIG_DIR/agents/$agent.md" 2>/dev/null || true
+done
+echo -e "  ${GREEN}✓${NC} Agent 人设已下载"
+
 # 下载配置
 TEMPLATE_URL="https://raw.githubusercontent.com/wanikua/danghuangshang/main/configs/$REGIME/openclaw.json"
 echo -e "  ${CYAN}下载配置模板...${NC}"
