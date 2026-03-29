@@ -103,6 +103,10 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
 # 以非特权用户运行
 USER court
 
+# 复制入口脚本
+COPY --chown=court:court entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # 默认命令
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["openclaw", "gateway", "--verbose"]
