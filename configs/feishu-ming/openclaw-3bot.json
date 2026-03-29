@@ -1,0 +1,21 @@
+{
+  "_comment": "明朝飞书配置 - 3 Bot 核心版（推荐）",
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "defaultAccount": "silijian",
+      "dmPolicy": "pairing",
+      "groupPolicy": "open",
+      "accounts": {
+        "silijian": {"appId": "YOUR_SILIJIAN_APP_ID", "appSecret": "YOUR_SILIJIAN_APP_SECRET", "botName": "司礼监"},
+        "neige": {"appId": "YOUR_NEIGE_APP_ID", "appSecret": "YOUR_NEIGE_APP_SECRET", "botName": "内阁"},
+        "gongbu": {"appId": "YOUR_GONGBU_APP_ID", "appSecret": "YOUR_GONGBU_APP_SECRET", "botName": "工部"}
+      }
+    }
+  },
+  "bindings": [
+    {"agentId": "silijian", "match": {"channel": "feishu", "account": "silijian"}},
+    {"agentId": "neige", "match": {"channel": "feishu", "account": "neige"}},
+    {"agentId": "gongbu", "match": {"channel": "feishu", "account": "gongbu"}}
+  ]
+}
