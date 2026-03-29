@@ -722,3 +722,19 @@ Docker：`docker pull boluobobo/ai-court:latest && docker compose up -d`
 v3.5.3 | MIT License | [User Agreement](./docs/user-agreement.md) | [Privacy Policy](./docs/privacy-policy.md)
 
 > 📜 Licensed under MIT. Credit: [danghuangshang](https://github.com/wanikua/danghuangshang) by [@wanikua](https://github.com/wanikua)
+
+## 🔌 连接外部 OpenClaw
+
+如果本地已有 OpenClaw 服务，可以使用外部模式（只运行 GUI，不启动内部 Gateway）：
+
+```bash
+docker run -d \
+  --name ai-court-external \
+  -p 127.0.0.1:18796:18795 \
+  -e ENABLE_EXTERNAL_CLAW=true \
+  -e OPENCLAW_HOST=host.docker.internal \
+  -e OPENCLAW_PORT=18789 \
+  boluobobo/ai-court:latest
+```
+
+详细文档：[EXTERNAL_CLAW.md](./EXTERNAL_CLAW.md)

@@ -1,0 +1,57 @@
+# AI Court - 连接外部 OpenClaw 配置示例
+# 使用方法：docker compose -f docker-compose.external-claw.yml up -d
+
+services:
+  court:
+    image: boluobobo/ai-court:latest
+    container_name: ai-court-external
+    restart: unless-stopped
+    
+    # 只暴露 GUI 端口，不暴露 Gateway 端口（避免冲突）
+    ports:
+      - "127.0.0.1:18796:18795"   # GUI 端口（改为 18796 避免冲突）
+    
+    # 数据持久化
+    volumes:
+      - court-external-config:/home/court/.openclaw
+      - court-external-workspace:/home/court/clawd
+    
+    # 环境变量 - 连接外部 OpenClaw
+    environment:
+      - TZ=Asia/Shanghai
+      - NODE_ENV=production
+      
+      # ⭐ 关键配置：启用外部 OpenClaw 模式
+      - ENABLE_EXTERNAL_CLAW=true
+      # 或
+      # - ENABLE_INTERNAL_CLAW=false
+      
+      # ⭐ 外部 OpenClaw 服务地址
+      # Linux 宿主机：使用宿主机 IP 或 host.docker.internal
+      # macOS/Windows: 使用 host.docker.internal
+      - OPENCLAW_HOST=host.docker.internal
+      - OPENCLAW_PORT=18789
+      
+      # ⭐ API Token（如果外部 OpenClaw 启用了认证）
+      # - OPENCLAW_API_TOKEN=your-api-token-here
+      
+      # GUI 配置
+      - GUI_PORT=18795
+      - GUI_HOST=0.0.0.0
+    
+    # 网络配置
+    extra_hosts:
+      # Linux 需要添加此行才能访问宿主机网络
+      - "host.docker.internal:host-gateway"
+    
+    # 依赖检查（可选）
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:18795/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  court-external-config:
+  court-external-workspace:
