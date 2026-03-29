@@ -428,134 +428,64 @@
     {
       "agentId": "silijian",
       "match": {
-        "channel": "discord",
-        "accountId": "silijian"
+        "channel": "feishu",
+        "account": "silijian"
       }
     },
     {
       "agentId": "neige",
       "match": {
-        "channel": "discord",
-        "accountId": "neige"
+        "channel": "feishu",
+        "account": "neige"
       }
     },
     {
       "agentId": "duchayuan",
       "match": {
-        "channel": "discord",
-        "accountId": "duchayuan"
+        "channel": "feishu",
+        "account": "duchayuan"
       }
     },
     {
       "agentId": "bingbu",
       "match": {
-        "channel": "discord",
-        "accountId": "bingbu"
+        "channel": "feishu",
+        "account": "bingbu"
       }
     },
     {
       "agentId": "hubu",
       "match": {
-        "channel": "discord",
-        "accountId": "hubu"
+        "channel": "feishu",
+        "account": "hubu"
       }
     },
     {
       "agentId": "libu",
       "match": {
-        "channel": "discord",
-        "accountId": "libu"
+        "channel": "feishu",
+        "account": "libu"
       }
     },
     {
       "agentId": "gongbu",
       "match": {
-        "channel": "discord",
-        "accountId": "gongbu"
+        "channel": "feishu",
+        "account": "gongbu"
       }
     },
     {
       "agentId": "libu2",
       "match": {
-        "channel": "discord",
-        "accountId": "libu2"
+        "channel": "feishu",
+        "account": "libu2"
       }
     },
     {
       "agentId": "xingbu",
       "match": {
-        "channel": "discord",
-        "accountId": "xingbu"
-      }
-    },
-    {
-      "agentId": "hanlin_zhang",
-      "match": {
-        "channel": "discord",
-        "accountId": "hanlin_zhang"
-      }
-    },
-    {
-      "agentId": "hanlin_xiuzhuan",
-      "match": {
-        "channel": "discord",
-        "accountId": "hanlin_xiuzhuan"
-      }
-    },
-    {
-      "agentId": "hanlin_bianxiu",
-      "match": {
-        "channel": "discord",
-        "accountId": "hanlin_bianxiu"
-      }
-    },
-    {
-      "agentId": "hanlin_jiantao",
-      "match": {
-        "channel": "discord",
-        "accountId": "hanlin_jiantao"
-      }
-    },
-    {
-      "agentId": "hanlin_shujishi",
-      "match": {
-        "channel": "discord",
-        "accountId": "hanlin_shujishi"
-      }
-    },
-    {
-      "agentId": "qijuzhu",
-      "match": {
-        "channel": "discord",
-        "accountId": "qijuzhu"
-      }
-    },
-    {
-      "agentId": "guozijian",
-      "match": {
-        "channel": "discord",
-        "accountId": "guozijian"
-      }
-    },
-    {
-      "agentId": "taiyiyuan",
-      "match": {
-        "channel": "discord",
-        "accountId": "taiyiyuan"
-      }
-    },
-    {
-      "agentId": "neiwufu",
-      "match": {
-        "channel": "discord",
-        "accountId": "neiwufu"
-      }
-    },
-    {
-      "agentId": "yushanfang",
-      "match": {
-        "channel": "discord",
-        "accountId": "yushanfang"
+        "channel": "feishu",
+        "account": "xingbu"
       }
     }
   ],
