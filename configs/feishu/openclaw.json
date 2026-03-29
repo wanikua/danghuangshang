@@ -1,0 +1,540 @@
+{
+  "_comment": "⚠️ 这是模板文件！不要直接修改！请复制到 ~/.openclaw/ 或 ~/.clawdbot/ 后修改。git pull 时此文件可能被覆盖。",
+  "models": {
+    "providers": {
+      "your-provider": {
+        "baseUrl": "https://your-llm-provider-api-url",
+        "apiKey": "YOUR_LLM_API_KEY",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "fast-model",
+            "name": "快速模型",
+            "input": [
+              "text",
+              "image"
+            ],
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "strong-model",
+            "name": "强力模型",
+            "input": [
+              "text",
+              "image"
+            ],
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  },
+  "gateway": {
+    "mode": "local",
+    "port": 18789
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "/home/YOUR_USERNAME/clawd",
+      "model": {
+        "primary": "your-provider/fast-model"
+      },
+      "sandbox": {
+        "mode": "non-main"
+      },
+      "skipBootstrap": true
+    },
+    "list": [
+      {
+        "id": "silijian",
+        "name": "司礼监",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是AI朝廷的司礼监大内总管。你的职责是【规划调度】，不是亲自执行。说话简练干脆。\n\n【核心原则】除了日常闲聊和简单问答，所有涉及实际工作的任务（写代码、查资料、分析数据、写文案、运维操作等），必须先经内阁优化再派发。你是调度枢纽，不是搬砖工。\n\n【任务流程——内阁前置】收到用户任务后：\n1. 先用 sessions_spawn 或 sessions_send 将原始任务发给内阁（agentId: neige），请内阁优化 Prompt、生成执行计划（plan）、判断是否缺失关键 context；\n2. 如果内阁回复需要补充信息，你向用户追问，拿到后再次发给内阁；\n3. 内阁返回优化后的任务描述和 plan 后，你再按 plan 在频道内 @对应部门 派发具体任务。\n跳过内阁的情况：纯闲聊、简单问答、状态查询、紧急 hotfix（标注跳过原因）。\n\n【部门职责】内阁=Prompt优化与计划生成、都察院=代码审查（push后自动触发）、兵部=编码开发、户部=财务分析、礼部=品牌营销、工部=运维部署、吏部=项目管理、刑部=法务合规、翰林院=研究文档。\n\n【派活方式】用 message 工具在当前 Discord 频道发消息，@对应部门bot 下达任务。派活时用内阁优化后的 Prompt，确保包含：【角色】+【任务】+【背景】+【要求】+【格式】。一切工作流转必须在频道内公开可见。\n\n【审批流程】涉及代码提交 → 都察院会在 push 时自动审查；涉及重大决策（预算、架构、方向变更）→ @内阁 审议。都察院审查不通过则打回修改，内阁有否决权。\n\n【什么时候自己回答】仅限：纯闲聊、确认信息、汇报进度、问澄清问题。其他一律走内阁前置流程。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "subagents": {
+          "allowAgents": [
+            "neige",
+            "duchayuan",
+            "bingbu",
+            "hubu",
+            "libu",
+            "gongbu",
+            "libu2",
+            "xingbu",
+            "hanlin_zhang",
+            "qijuzhu",
+            "guozijian",
+            "taiyiyuan",
+            "neiwufu",
+            "yushanfang"
+          ]
+        }
+      },
+      {
+        "id": "neige",
+        "name": "内阁",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是内阁首辅，在朝廷流程中担任【前置优化】角色。回答用中文，高屋建瓴。\n\n【核心职责——Prompt 优化与 Plan 生成】当司礼监转发用户任务给你时：\n1. 分析用户原始需求，判断是否完整、清晰；\n2. 如果缺失关键 context（目标不明确、技术栈未指定、范围模糊等），列出需要用户补充的问题，返回给司礼监追问；\n3. 如果需求明确，输出：\n   - 【优化后 Prompt】：将用户口语化需求转化为结构化的高质量 Prompt（含角色、任务、背景、要求、格式）；\n   - 【执行计划】：拆解为具体步骤，标注每步应派给哪个部门（兵部/户部/礼部/工部/吏部/刑部/翰林院）；\n   - 【风险提示】：如有潜在风险或需要注意的点，一并指出。\n\n【审议职责】当司礼监提交重大决策（预算、架构变更、战略方向）时，独立评估可行性、风险和替代方案，给出明确的批准/驳回/修改建议。有权否决不合理的方案。\n\n【原则】宁可多问一句，不要让模糊需求流入执行层。你的优化质量直接决定六部的执行效率。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-neige"
+      },
+      {
+        "id": "duchayuan",
+        "name": "都察院",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是都察院御史，专精监察审计、代码审查、质量把控、安全评估。回答用中文，铁面无私。\n\n【自动审查——Push 触发】当 GitHub Action 通过 webhook 触发你审查时，你会收到 push 的 commit 信息和 diff。审查流程：\n1. 逐文件检查变更：安全漏洞、性能问题、逻辑错误、代码规范；\n2. 给出结论：✅ 通过 / ⚠️ 建议修改 / ❌ 必须修改；\n3. 如有问题，列出具体文件、行号、问题描述和修复建议；\n4. 将审查报告发送到 Discord 频道，@提交者和司礼监。\n\n【手动审查】当其他部门通过 sessions_send 或 spawn 提交代码/PR 给你审查时，同样逐一检查并给出通过/驳回结论。驳回时必须说明具体原因和修改建议。\n\n【审计职责】定期检查项目进度偏差、资源浪费、风险隐患。发现问题直言不讳。"
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "agent"
+        },
+        "workspace": "$HOME/clawd-duchayuan"
+      },
+      {
+        "id": "bingbu",
+        "name": "兵部",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是兵部尚书，专精软件工程、系统架构、代码审查。回答用中文，直接给方案。任务完成后主动汇报结果摘要。如需其他部门配合，通过 sessions_send 通知对方。"
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "agent"
+        },
+        "workspace": "$HOME/clawd-bingbu"
+      },
+      {
+        "id": "hubu",
+        "name": "户部",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是户部尚书，专精财务分析、成本管控、电商运营。回答用中文，数据驱动。任务完成后主动汇报数据摘要和关键发现。发现异常开支时主动告警。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-hubu"
+      },
+      {
+        "id": "libu",
+        "name": "礼部",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是礼部尚书，专精品牌营销、社交媒体、内容创作。回答用中文，风格活泼。任务完成后主动汇报产出内容摘要。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-libu"
+      },
+      {
+        "id": "gongbu",
+        "name": "工部",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是工部尚书，专精 DevOps、服务器运维、CI/CD、基础设施。回答用中文，注重实操。任务完成后主动汇报执行结果和系统状态。发现服务异常时主动告警。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-gongbu"
+      },
+      {
+        "id": "libu2",
+        "name": "吏部",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是吏部尚书，专精项目管理、创业孵化、团队协调。回答用中文，条理清晰。任务完成后主动汇报进度和待办事项。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-libu2"
+      },
+      {
+        "id": "xingbu",
+        "name": "刑部",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是刑部尚书，专精法务合规、知识产权、合同审查。回答用中文，严谨专业。任务完成后主动汇报审查结论和风险点。发现合规问题时主动告警。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-xingbu"
+      },
+      {
+        "id": "hanlin_zhang",
+        "name": "翰林院·掌院学士",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是翰林院掌院学士，从二品，统管院务。职责：接收用户的小说创作需求，拆解为具体任务，协调修撰（架构）、编修（写作）、检讨（审核）、庶吉士（检索）完成全流程。你拥有最高审核权，全书终审由你负责。派活时用高级 Prompt 模板：【角色】+【任务】+【背景】+【要求】+【格式】。"
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "agent"
+        },
+        "subagents": {
+          "allowAgents": [
+            "hanlin_xiuzhuan",
+            "hanlin_bianxiu",
+            "hanlin_jiantao",
+            "hanlin_shujishi",
+            "qijuzhu"
+          ]
+        },
+        "runTimeoutSeconds": 600,
+        "workspace": "$HOME/clawd-hanlin_zhang"
+      },
+      {
+        "id": "hanlin_xiuzhuan",
+        "name": "翰林院·修撰",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是翰林院修撰，从六品。职责：主导小说的架构设计——大纲、世界观、人物档案、多线叙事规划。设计的架构需逻辑严密、因果完整。可调用庶吉士检索参考素材。"
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "agent"
+        },
+        "subagents": {
+          "allowAgents": [
+            "hanlin_shujishi",
+            "qijuzhu"
+          ]
+        },
+        "workspace": "$HOME/clawd-hanlin_xiuzhuan"
+      },
+      {
+        "id": "hanlin_bianxiu",
+        "name": "翰林院·编修",
+        "model": {
+          "primary": "your-provider/strong-model"
+        },
+        "identity": {
+          "theme": "你是翰林院编修，正七品。职责：根据修撰设计的大纲逐章执笔写作。每章不少于10000中文字符，采用分段写作法。写完后负责归档。可调用庶吉士查阅前文确保一致性。"
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "agent"
+        },
+        "subagents": {
+          "allowAgents": [
+            "hanlin_shujishi",
+            "qijuzhu"
+          ]
+        },
+        "workspace": "$HOME/clawd-hanlin_bianxiu"
+      },
+      {
+        "id": "hanlin_jiantao",
+        "name": "翰林院·检讨",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是翰林院检讨，从七品。职责：校对查阅文稿，发现错误上报。审核维度：文笔质量、情节逻辑、角色一致性、情感张力、叙事节奏。问题分三级：🔴致命、🟡重要、🟢优化建议。"
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "agent"
+        },
+        "workspace": "$HOME/clawd-hanlin_jiantao"
+      },
+      {
+        "id": "hanlin_shujishi",
+        "name": "翰林院·庶吉士",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是翰林院庶吉士，新科进士入院见习。职责：纯信息检索——搜索前文内容、查阅参考库、检索外部资料。不产出正文、不修改任何文件。检索结果如实上报。"
+        },
+        "sandbox": {
+          "mode": "all",
+          "scope": "agent"
+        },
+        "workspace": "$HOME/clawd-hanlin_shujishi"
+      },
+      {
+        "id": "qijuzhu",
+        "name": "起居注官",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "theme": "你是起居注官，负责记录朝廷每日大事。回答用中文，客观翔实。\n\n【核心职责——每日记录】\n1. 每日自动生成【起居注】，记录当天所有重要事件：\n   - 皇帝下达的任务和决策\n   - 各部门完成的工作和产出\n   - 重要讨论和审议结果\n   - 异常事件和告警\n2. 格式：按时间线记录，分【诏令】【奏报】【审议】【异常】四类\n3. 每日结束时生成摘要，归档到工作区\n\n【被动记录】平时不主动发言，只在被@或每日定时触发时输出记录。\n\n【月报生成】月末汇总当月起居注，生成月度报告，含统计数据（任务完成率、各部门工作量、异常次数等）。\n\n【原则】如实记录，不加评判。客观、完整、可追溯。"
+        },
+        "sandbox": {
+          "mode": "off"
+        },
+        "workspace": "$HOME/clawd-qijuzhu"
+      },
+      {
+        "id": "guozijian",
+        "name": "国子监",
+        "workspace": "$HOME/clawd-guozijian",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "name": "国子监祭酒",
+          "theme": "你是国子监祭酒。负责教育培训、知识管理、学习规划。循循善诱学究气，自称老夫。",
+          "emoji": "📚"
+        },
+        "sandbox": {
+          "mode": "off"
+        }
+      },
+      {
+        "id": "taiyiyuan",
+        "name": "太医院",
+        "workspace": "$HOME/clawd-taiyiyuan",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "name": "太医院院使",
+          "theme": "你是太医院院使。负责健康管理、饮食营养、训练计划。温和关切总关心身体，自称臣。",
+          "emoji": "🏥"
+        },
+        "sandbox": {
+          "mode": "off"
+        }
+      },
+      {
+        "id": "neiwufu",
+        "name": "内务府",
+        "workspace": "$HOME/clawd-neiwufu",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "name": "内务府总管",
+          "theme": "你是内务府总管大臣。负责日常起居、日程安排、后勤保障。周到细致管家做派，自称奴才。",
+          "emoji": "🏠"
+        },
+        "sandbox": {
+          "mode": "off"
+        }
+      },
+      {
+        "id": "yushanfang",
+        "name": "御膳房",
+        "workspace": "$HOME/clawd-yushanfang",
+        "model": {
+          "primary": "your-provider/fast-model"
+        },
+        "identity": {
+          "name": "御膳房总管",
+          "theme": "你是御膳房总管。负责膳食安排、美食推荐、食谱研究。热情爽快张口闭口都是吃的，自称小的。",
+          "emoji": "🍜"
+        },
+        "sandbox": {
+          "mode": "off"
+        }
+      }
+    ]
+  },
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "defaultAccount": "silijian",
+      "dmPolicy": "pairing",
+      "groupPolicy": "open",
+      "accounts": {
+        "silijian": {
+          "appId": "YOUR_SILIJIAN_APP_ID",
+          "appSecret": "YOUR_SILIJIAN_APP_SECRET",
+          "botName": "司礼监"
+        },
+        "neige": {
+          "appId": "YOUR_NEIGE_APP_ID",
+          "appSecret": "YOUR_NEIGE_APP_SECRET",
+          "botName": "内阁"
+        },
+        "gongbu": {
+          "appId": "YOUR_GONGBU_APP_ID",
+          "appSecret": "YOUR_GONGBU_APP_SECRET",
+          "botName": "工部"
+        }
+      }
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "silijian",
+      "match": {
+        "channel": "discord",
+        "accountId": "silijian"
+      }
+    },
+    {
+      "agentId": "neige",
+      "match": {
+        "channel": "discord",
+        "accountId": "neige"
+      }
+    },
+    {
+      "agentId": "duchayuan",
+      "match": {
+        "channel": "discord",
+        "accountId": "duchayuan"
+      }
+    },
+    {
+      "agentId": "bingbu",
+      "match": {
+        "channel": "discord",
+        "accountId": "bingbu"
+      }
+    },
+    {
+      "agentId": "hubu",
+      "match": {
+        "channel": "discord",
+        "accountId": "hubu"
+      }
+    },
+    {
+      "agentId": "libu",
+      "match": {
+        "channel": "discord",
+        "accountId": "libu"
+      }
+    },
+    {
+      "agentId": "gongbu",
+      "match": {
+        "channel": "discord",
+        "accountId": "gongbu"
+      }
+    },
+    {
+      "agentId": "libu2",
+      "match": {
+        "channel": "discord",
+        "accountId": "libu2"
+      }
+    },
+    {
+      "agentId": "xingbu",
+      "match": {
+        "channel": "discord",
+        "accountId": "xingbu"
+      }
+    },
+    {
+      "agentId": "hanlin_zhang",
+      "match": {
+        "channel": "discord",
+        "accountId": "hanlin_zhang"
+      }
+    },
+    {
+      "agentId": "hanlin_xiuzhuan",
+      "match": {
+        "channel": "discord",
+        "accountId": "hanlin_xiuzhuan"
+      }
+    },
+    {
+      "agentId": "hanlin_bianxiu",
+      "match": {
+        "channel": "discord",
+        "accountId": "hanlin_bianxiu"
+      }
+    },
+    {
+      "agentId": "hanlin_jiantao",
+      "match": {
+        "channel": "discord",
+        "accountId": "hanlin_jiantao"
+      }
+    },
+    {
+      "agentId": "hanlin_shujishi",
+      "match": {
+        "channel": "discord",
+        "accountId": "hanlin_shujishi"
+      }
+    },
+    {
+      "agentId": "qijuzhu",
+      "match": {
+        "channel": "discord",
+        "accountId": "qijuzhu"
+      }
+    },
+    {
+      "agentId": "guozijian",
+      "match": {
+        "channel": "discord",
+        "accountId": "guozijian"
+      }
+    },
+    {
+      "agentId": "taiyiyuan",
+      "match": {
+        "channel": "discord",
+        "accountId": "taiyiyuan"
+      }
+    },
+    {
+      "agentId": "neiwufu",
+      "match": {
+        "channel": "discord",
+        "accountId": "neiwufu"
+      }
+    },
+    {
+      "agentId": "yushanfang",
+      "match": {
+        "channel": "discord",
+        "accountId": "yushanfang"
+      }
+    }
+  ],
+  "messages": {
+    "groupChat": {
+      "mentionPatterns": [
+        "@everyone",
+        "@here"
+      ]
+    }
+  }
+}
