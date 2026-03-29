@@ -1,0 +1,37 @@
+{
+  "_comment": "唐朝飞书配置 - 11 Bot 完整版",
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "defaultAccount": "zhongshu",
+      "dmPolicy": "pairing",
+      "groupPolicy": "open",
+      "accounts": {
+        "zhongshu": {"appId": "YOUR_ZHONGSHU_APP_ID", "appSecret": "YOUR_ZHONGSHU_APP_SECRET", "botName": "中书省"},
+        "menxia": {"appId": "YOUR_MENXIA_APP_ID", "appSecret": "YOUR_MENXIA_APP_SECRET", "botName": "门下省"},
+        "shangshu": {"appId": "YOUR_SHANGSHU_APP_ID", "appSecret": "YOUR_SHANGSHU_APP_SECRET", "botName": "尚书省"},
+        "yushitai": {"appId": "YOUR_YUSHITAI_APP_ID", "appSecret": "YOUR_YUSHITAI_APP_SECRET", "botName": "御史台"},
+        "shiguan": {"appId": "YOUR_SHIGUAN_APP_ID", "appSecret": "YOUR_SHIGUAN_APP_SECRET", "botName": "史官"},
+        "bingbu": {"appId": "YOUR_BINGBU_APP_ID", "appSecret": "YOUR_BINGBU_APP_SECRET", "botName": "兵部"},
+        "hubu": {"appId": "YOUR_HUBU_APP_ID", "appSecret": "YOUR_HUBU_APP_SECRET", "botName": "户部"},
+        "libu": {"appId": "YOUR_LIBU_APP_ID", "appSecret": "YOUR_LIBU_APP_SECRET", "botName": "礼部"},
+        "gongbu": {"appId": "YOUR_GONGBU_APP_ID", "appSecret": "YOUR_GONGBU_APP_SECRET", "botName": "工部"},
+        "libu2": {"appId": "YOUR_LIBU2_APP_ID", "appSecret": "YOUR_LIBU2_APP_SECRET", "botName": "吏部"},
+        "xingbu": {"appId": "YOUR_XINGBU_APP_ID", "appSecret": "YOUR_XINGBU_APP_SECRET", "botName": "刑部"}
+      }
+    }
+  },
+  "bindings": [
+    {"agentId": "zhongshu", "match": {"channel": "feishu", "account": "zhongshu"}},
+    {"agentId": "menxia", "match": {"channel": "feishu", "account": "menxia"}},
+    {"agentId": "shangshu", "match": {"channel": "feishu", "account": "shangshu"}},
+    {"agentId": "yushitai", "match": {"channel": "feishu", "account": "yushitai"}},
+    {"agentId": "shiguan", "match": {"channel": "feishu", "account": "shiguan"}},
+    {"agentId": "bingbu", "match": {"channel": "feishu", "account": "bingbu"}},
+    {"agentId": "hubu", "match": {"channel": "feishu", "account": "hubu"}},
+    {"agentId": "libu", "match": {"channel": "feishu", "account": "libu"}},
+    {"agentId": "gongbu", "match": {"channel": "feishu", "account": "gongbu"}},
+    {"agentId": "libu2", "match": {"channel": "feishu", "account": "libu2"}},
+    {"agentId": "xingbu", "match": {"channel": "feishu", "account": "xingbu"}}
+  ]
+}

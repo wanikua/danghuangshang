@@ -1,0 +1,33 @@
+{
+  "_comment": "现代飞书配置 - 9 Bot 完整版",
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "defaultAccount": "ceo",
+      "dmPolicy": "pairing",
+      "groupPolicy": "open",
+      "accounts": {
+        "ceo": {"appId": "YOUR_CEO_APP_ID", "appSecret": "YOUR_CEO_APP_SECRET", "botName": "CEO"},
+        "board": {"appId": "YOUR_BOARD_APP_ID", "appSecret": "YOUR_BOARD_APP_SECRET", "botName": "Board"},
+        "qa": {"appId": "YOUR_QA_APP_ID", "appSecret": "YOUR_QA_APP_SECRET", "botName": "QA"},
+        "cto": {"appId": "YOUR_CTO_APP_ID", "appSecret": "YOUR_CTO_APP_SECRET", "botName": "CTO"},
+        "cfo": {"appId": "YOUR_CFO_APP_ID", "appSecret": "YOUR_CFO_APP_SECRET", "botName": "CFO"},
+        "cmo": {"appId": "YOUR_CMO_APP_ID", "appSecret": "YOUR_CMO_APP_SECRET", "botName": "CMO"},
+        "coo": {"appId": "YOUR_COO_APP_ID", "appSecret": "YOUR_COO_APP_SECRET", "botName": "COO"},
+        "clo": {"appId": "YOUR_CLO_APP_ID", "appSecret": "YOUR_CLO_APP_SECRET", "botName": "CLO"},
+        "cos": {"appId": "YOUR_COS_APP_ID", "appSecret": "YOUR_COS_APP_SECRET", "botName": "CoS"}
+      }
+    }
+  },
+  "bindings": [
+    {"agentId": "ceo", "match": {"channel": "feishu", "account": "ceo"}},
+    {"agentId": "board", "match": {"channel": "feishu", "account": "board"}},
+    {"agentId": "qa", "match": {"channel": "feishu", "account": "qa"}},
+    {"agentId": "cto", "match": {"channel": "feishu", "account": "cto"}},
+    {"agentId": "cfo", "match": {"channel": "feishu", "account": "cfo"}},
+    {"agentId": "cmo", "match": {"channel": "feishu", "account": "cmo"}},
+    {"agentId": "coo", "match": {"channel": "feishu", "account": "coo"}},
+    {"agentId": "clo", "match": {"channel": "feishu", "account": "clo"}},
+    {"agentId": "cos", "match": {"channel": "feishu", "account": "cos"}}
+  ]
+}
