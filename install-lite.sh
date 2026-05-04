@@ -12,6 +12,35 @@
 
 set -e
 
+
+# 保存终端状态，避免 read -s 被中断后出现“无回显/无反应”
+ORIGINAL_STTY_SETTINGS=""
+LOCK_FILE=""
+if [ -t 0 ] && command -v stty >/dev/null 2>&1; then
+    ORIGINAL_STTY_SETTINGS=$(stty -g 2>/dev/null || true)
+fi
+
+restore_terminal_state() {
+    if [ -n "$ORIGINAL_STTY_SETTINGS" ] && command -v stty >/dev/null 2>&1; then
+        stty "$ORIGINAL_STTY_SETTINGS" 2>/dev/null || stty echo 2>/dev/null || true
+    fi
+}
+cleanup_install_runtime() {
+    restore_terminal_state
+    if [ -n "$LOCK_FILE" ]; then
+        rm -f "$LOCK_FILE"
+    fi
+}
+
+handle_install_interrupt() {
+    cleanup_install_runtime
+    echo ""
+    echo "⚠ 安装已中断。可直接重新运行 install-lite.sh。"
+    exit 130
+}
+trap cleanup_install_runtime EXIT
+trap handle_install_interrupt INT TERM
+
 # 颜色定义
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -32,6 +61,34 @@ CONFIG_FILE="openclaw.json"
 
 # 创建配置目录
 mkdir -p "$CONFIG_DIR"
+
+# install-lite.sh 是交互式向导，非 TTY 环境下会出现“无响应/无输入”错觉
+if [ ! -t 0 ] || [ ! -t 1 ]; then
+    echo -e "${RED}✗ 当前不是交互式终端，install-lite.sh 需要可交互输入${NC}"
+    echo "请改用："
+    echo "  1) git clone 后本地执行：bash install-lite.sh"
+    echo "  2) 或使用支持交互的命令：bash <(curl -fsSL .../install-lite.sh)"
+    exit 1
+fi
+
+# 若上次被强制中断，优先恢复终端回显状态
+if [ -n "$ORIGINAL_STTY_SETTINGS" ]; then
+    stty echo 2>/dev/null || true
+fi
+
+# 防止并发执行；如果是陈旧锁文件则自动清理，确保可重入
+LOCK_FILE="$CONFIG_DIR/.install-lite.lock"
+if [ -f "$LOCK_FILE" ]; then
+    EXISTING_PID="$(cat "$LOCK_FILE" 2>/dev/null || true)"
+    if [ -n "$EXISTING_PID" ] && kill -0 "$EXISTING_PID" 2>/dev/null; then
+        echo -e "${RED}✗ 检测到 install-lite.sh 正在运行（PID: $EXISTING_PID）${NC}"
+        echo "请等待当前安装结束后再试。"
+        exit 1
+    fi
+    echo -e "${YELLOW}⚠ 检测到上次安装中断，正在恢复后重试...${NC}"
+    rm -f "$LOCK_FILE"
+fi
+echo "$$" > "$LOCK_FILE"
 
 # ========================================
 # 步骤 1: 配置 LLM API
