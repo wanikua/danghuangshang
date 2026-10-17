@@ -241,6 +241,7 @@ hermes model auth      # 看 token 是否有效
 
 ## 相关文档
 
+- [Parallel 网页搜索（可选 MCP 工具）](./docs/parallel-search.md)
 - [Hermes 官方文档](https://hermes-agent.nousresearch.com/docs/)
 - [Hermes GitHub](https://github.com/NousResearch/hermes-agent)
 - [OpenClaw 文档](https://docs.openclaw.ai)

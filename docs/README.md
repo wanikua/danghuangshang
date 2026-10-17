@@ -36,6 +36,7 @@
 |------|------|
 | [Notion 接入](./notion-setup.md) | 自动日报/周报/知识库归档 |
 | [语义记忆搜索](./memory-search.md) | Embedding 配置（DashScope / OpenAI / Gemini） |
+| [Parallel 网页搜索](./parallel-search.md) | Hermes 可选 MCP 工具：免 Parallel API Key 搜索网页、提取页面内容 |
 | [GUI 管理界面](./gui.md) | Web Dashboard + Discord + Notion 三层 GUI |
 | [安全须知](./security.md) | Workspace 权限 + Sandbox 沙箱配置 |
 | [Discord 安全指南](./discord-safety.md) | Token 安全 + 权限最小化 + @everyone 防护 |
